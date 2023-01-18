@@ -22,6 +22,12 @@ if (isset($_POST['sensor'])) {
   $checkexists = $db_handle->runQuery("SELECT * FROM users WHERE sensor='$sensor'  ");
   if (!empty($checkexists)) {
     array_push($errors, "Sensor name already exists");
+    echo '<script type="text/javascript">
+    const toastLiveExample = document.getElementById("liveToast");
+    const toast = new coreui.Toast(toastLiveExample);
+    toast.show();
+    </script>';
+        // echo '<script type="text/javascript">alert("gasgas");</script>';
 
   }
 
@@ -369,6 +375,7 @@ if (isset($_POST['sensor'])) {
     <div class="body flex-grow-1 px-3">
       <div class="container-lg">
         <div class="row">
+          
           <div class="col-sm-12 col-lg-6">
             <div class="card mb-4">
               <div class="card-body">
@@ -438,30 +445,41 @@ if (isset($_POST['sensor'])) {
           </div>
           <form action="index.php" method="post">
 
-          <div class="modal fade" id="Sensor" data-coreui-backdrop="static" data-coreui-keyboard="false" tabindex="-1"
-            aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="staticBackdropLabel">Sensor</h5>
-                  <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-             
-                <div class="input-group mb-3"><span class="input-group-text">
-                      <svg class="icon">
-                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
-                      </svg></span>
-                    <input name="sensorname" class="form-control" type="text" placeholder="Sensor Name">
+            <div class="modal fade" id="Sensor" data-coreui-backdrop="static" data-coreui-keyboard="false" tabindex="-1"
+              aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Sensor</h5>
+                    <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
                   </div>
-                </div>
-                <div class="modal-footer">
-                <button class="btn btn-primary px-4" type="submit" name="sensor">Apply</button>
+                  <div class="modal-body">
+
+                    <div class="input-group mb-3"><span class="input-group-text">
+                        <svg class="icon">
+                          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
+                        </svg></span>
+                      <input name="sensorname" class="form-control" type="text" placeholder="Sensor Name">
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button class="btn btn-primary px-4" type="submit" name="sensor">Apply</button>
+                  </div>
                 </div>
               </div>
             </div>
+          </form>
+          <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="toast-header">
+                <img src="..." class="rounded me-2" alt="...">
+                <strong class="me-auto">Oximeter</strong>
+                <button type="button" class="btn-close" data-coreui-dismiss="toast" aria-label="Close"></button>
+              </div>
+              <div class="toast-body">
+                Sensor name already exist </div>
+            </div>
           </div>
-  </form>
         </div>
         <!-- /.row-->
         <!-- /.card.mb-4-->
@@ -518,8 +536,20 @@ if (isset($_POST['sensor'])) {
     setInterval(function () {
       table();
     }, 1000);
-  </script>
 
+
+  </script>
+<script> 
+const toastTrigger = document.getElementById('liveToastBtn')
+const toastLiveExample = document.getElementById('liveToast')
+if (toastTrigger) {
+  toastTrigger.addEventListener('click', () => {
+    const toast = new coreui.Toast(toastLiveExample)
+    toast.show()
+  })
+}
+    
+    </script>
 </body>
 
 </html>
