@@ -11,9 +11,8 @@
 // Replace with your network credentials
 const char *ssid = "";
 const char *password = "";
-
 // REPLACE with your Domain name and URL path or IP address with path
-const char *serverName = "http://192.168.0.101/oximeter2/public/index";
+const char *serverName = "ip/oximeterserver/insert.php";
 
 // Keep this API Key value to be compatible with the PHP code provided in the project page.
 // If you change the apiKeyValue value, the PHP file /post-esp-data.php also needs to have the same key
@@ -88,26 +87,29 @@ void loop()
       Serial.println("%");
 
       tsLastReport = millis();
-      String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(pox.getHeartRate()) + "&o2=" + String(pox.getSpO2() + "";
+      String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(pox.getHeartRate()) + "&o2=" + String(pox.getSpO2()) + "";
       Serial.print("httpRequestData: ");
       Serial.println(httpRequestData);
 
       int httpResponseCode = http.POST(httpRequestData);
-      
-          if (httpResponseCode > 0) {
+
+      if (httpResponseCode > 0)
+      {
         Serial.print("HTTP Response code: ");
         Serial.println(httpResponseCode);
-    } else {
+      }
+      else
+      {
         Serial.print("Error code: ");
         Serial.println(httpResponseCode);
+      }
+      // Free resources
+      http.end();
     }
-    // Free resources
-    http.end();
-    }
-    else
-    {
-      Serial.println("WiFi Disconnected");
-    }
+  }
+  else
+  {
+    Serial.println("WiFi Disconnected");
   }
   // Prepare your HTTP POST request data
 
