@@ -9,8 +9,8 @@
 #define REPORTING_PERIOD_MS 1000
 
 // Replace with your network credentials
-const char* ssid = "Azure4as";
-const char* password = "sarimah78";
+const char* ssid = "";
+const char* password = "";
 
 // REPLACE with your Domain name and URL path or IP address with path
 const char* serverName = "http://192.168.0.101/oximeter2/public/index";
@@ -57,7 +57,7 @@ void setup() {
   pox.setIRLedCurrent(MAX30100_LED_CURR_7_6MA);
 
   // Register a callback routine
-  pox.setOnBeatDetectedCallback(onBeatDetected);
+  // pox.setOnBeatDetectedCallback(onBeatDetected);
 }
 
 void loop() {
