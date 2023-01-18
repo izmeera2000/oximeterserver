@@ -16,6 +16,7 @@ if (isset($_POST['lgn'])) {
 
     if (mysqli_num_rows($results) == 1) {
       $_SESSION['username'] = $username;
+      
       header('location: index.php');
     } else {
       array_push($errors, "Wrong username/password combination");

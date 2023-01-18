@@ -11,6 +11,16 @@ if (isset($_GET['logout'])) {
   unset($_SESSION['username']);
   header("location: login.php");
 }
+if (!isset($_SESSION['sensor'])) {
+  $username = $_SESSION['username'];
+  $results = $db_handle->runQuery("SELECT * FROM users WHERE username='$username' ");
+
+  // echo '<pre>'; print_r($results[0]["sensor"]); echo '</pre>';
+    $_SESSION['sensor'] = $results[0]["sensor"];
+
+  
+
+}
 if (isset($_POST['sensor'])) {
 
   $username = $_SESSION['username'];
