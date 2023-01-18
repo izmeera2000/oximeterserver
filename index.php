@@ -4,13 +4,41 @@ require_once("controller/dbcontroller.php");
 $db_handle = new DBController();
 
 if (!isset($_SESSION['username'])) {
-    header('location: login.php');
+  header('location: login.php');
 }
 if (isset($_GET['logout'])) {
-    session_destroy();
-    unset($_SESSION['username']);
-    header("location: login.php");
+  session_destroy();
+  unset($_SESSION['username']);
+  header("location: login.php");
 }
+if (isset($_POST['sensor'])) {
+
+  $username = $_SESSION['username'];
+
+  $sensor = $db_handle->escstring($_POST['sensorname']);
+
+
+
+  $checkexists = $db_handle->runQuery("SELECT * FROM users WHERE sensor='$sensor'  ");
+  if (!empty($checkexists)) {
+    array_push($errors, "Sensor name already exists");
+
+  }
+
+  if (count($errors) == 0) {
+
+
+
+    $result = $db_handle->uploadFOrder("UPDATE users SET sensor='$sensor' WHERE username='$username' ");
+    if (!$result) {
+      echo "Error updating record: " . $conn->error;
+    }
+
+    $_SESSION['sensor'] = $sensor;
+
+  }
+}
+
 ?>
 <!DOCTYPE html>
 <!--
@@ -270,12 +298,13 @@ if (isset($_GET['logout'])) {
         <ul class="header-nav ms-3">
           <li class="nav-item dropdown"><a class="nav-link py-0" data-coreui-toggle="dropdown" href="#" role="button"
               aria-haspopup="true" aria-expanded="false">
-              <div class="avatar avatar-md"><img class="avatar-img" src="assets/img/avatars/8.jpg" alt="user@email.com">
-              </div>
+              <!-- <div class="avatar avatar-md"><img class="avatar-img" src="assets/img/avatars/8.jpg" alt="user@email.com">
+              </div> -->
+              <?php echo $_SESSION['username'] ?>
             </a>
             <div class="dropdown-menu dropdown-menu-end pt-0">
               <div class="dropdown-header bg-light py-2">
-                <div class="fw-semibold">Account</div>
+                <!-- <div class="fw-semibold">Account</div>
               </div><a class="dropdown-item" href="#">
                 <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-bell"></use>
@@ -290,26 +319,34 @@ if (isset($_GET['logout'])) {
                 <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-comment-square"></use>
                 </svg> Comments<span class="badge badge-sm bg-warning ms-2">42</span></a>
-              <div class="dropdown-header bg-light py-2">
+              <div class="dropdown-header bg-light py-2"> -->
                 <div class="fw-semibold">Settings</div>
-              </div><a class="dropdown-item" href="#">
+              </div>
+
+              <button type="button" class="dropdown-item" data-coreui-toggle="modal" data-coreui-target="#Sensor">
                 <svg class="icon me-2">
-                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
-                </svg> Profile</a><a class="dropdown-item" href="#">
+                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-heart"></use>
+                </svg> Sensor
+              </button>
+              <a class="dropdown-item" href="#">
                 <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
-                </svg> Settings</a><a class="dropdown-item" href="#">
+                </svg> Settings</a>
+              <!-- <a class="dropdown-item" href="#">
                 <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-credit-card"></use>
-                </svg> Payments<span class="badge badge-sm bg-secondary ms-2">42</span></a><a class="dropdown-item"
+                </svg> Payments<span class="badge badge-sm bg-secondary ms-2">42</span></a> -->
+              <!-- <a class="dropdown-item"
                 href="#">
                 <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-file"></use>
                 </svg> Projects<span class="badge badge-sm bg-primary ms-2">42</span></a>
-              <div class="dropdown-divider"></div><a class="dropdown-item" href="#">
+              <div class="dropdown-divider"></div> -->
+              <!-- <a class="dropdown-item" href="#">
                 <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
-                </svg> Lock Account</a><a class="dropdown-item" href="?logout='1'">
+                </svg> Lock Account</a> -->
+              <a class="dropdown-item" href="?logout='1'">
                 <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-account-logout"></use>
                 </svg> Logout</a>
@@ -333,16 +370,16 @@ if (isset($_GET['logout'])) {
       <div class="container-lg">
         <div class="row">
           <div class="col-sm-12 col-lg-6">
-          <div class="card mb-4">
-          <div class="card-body">
+            <div class="card mb-4">
+              <div class="card-body">
 
-            <div class="d-flex justify-content-between">
-              <div id="test">
-                <h4  class="card-title mb-0">Beats Per Minute (BPM)</h4>
+                <div class="d-flex justify-content-between">
+                  <div id="test">
+                    <h4 class="card-title mb-0">Beats Per Minute (BPM)</h4>
 
-              </div>
-              <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
-                <!-- <div class="btn-group btn-group-toggle mx-3" data-coreui-toggle="buttons">
+                  </div>
+                  <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
+                    <!-- <div class="btn-group btn-group-toggle mx-3" data-coreui-toggle="buttons">
                   <input class="btn-check" id="option1" type="radio" name="options" autocomplete="off">
                   <label class="btn btn-outline-secondary"> Day</label>
                   <input class="btn-check" id="option2" type="radio" name="options" autocomplete="off" checked="">
@@ -350,33 +387,33 @@ if (isset($_GET['logout'])) {
                   <input class="btn-check" id="option3" type="radio" name="options" autocomplete="off">
                   <label class="btn btn-outline-secondary"> Year</label>
                 </div> -->
-                <!-- <button class="btn btn-primary" type="button">
+                    <!-- <button class="btn btn-primary" type="button">
                   <svg class="icon">
                     <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-cloud-download"></use>
                   </svg>
                 </button> -->
+                  </div>
+                </div>
+                <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
+                  <canvas class="chart" id="main-chart1" height="300"></canvas>
+                </div>
               </div>
-            </div>
-            <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-              <canvas class="chart" id="main-chart1" height="300"></canvas>
-            </div>
-          </div>
 
-        </div>
-       
+            </div>
+
           </div>
 
           <div class="col-sm-12 col-lg-6">
-          <div class="card mb-4">
-          <div class="card-body">
+            <div class="card mb-4">
+              <div class="card-body">
 
-            <div class="d-flex justify-content-between">
-              <div>
-                <h4 class="card-title mb-0">Oxygen (%)</h4>
+                <div class="d-flex justify-content-between">
+                  <div>
+                    <h4 class="card-title mb-0">Oxygen (%)</h4>
 
-              </div>
-              <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
-                <!-- <div class="btn-group btn-group-toggle mx-3" data-coreui-toggle="buttons">
+                  </div>
+                  <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
+                    <!-- <div class="btn-group btn-group-toggle mx-3" data-coreui-toggle="buttons">
                   <input class="btn-check" id="option1" type="radio" name="options" autocomplete="off">
                   <label class="btn btn-outline-secondary"> Day</label>
                   <input class="btn-check" id="option2" type="radio" name="options" autocomplete="off" checked="">
@@ -384,27 +421,52 @@ if (isset($_GET['logout'])) {
                   <input class="btn-check" id="option3" type="radio" name="options" autocomplete="off">
                   <label class="btn btn-outline-secondary"> Year</label>
                 </div> -->
-                <!-- <button class="btn btn-primary" type="button">
+                    <!-- <button class="btn btn-primary" type="button">
                   <svg class="icon">
                     <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-cloud-download"></use>
                   </svg>
                 </button> -->
+                  </div>
+                </div>
+                <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
+                  <canvas class="chart" id="main-chart2" height="300"></canvas>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+          <form action="index.php" method="post">
+
+          <div class="modal fade" id="Sensor" data-coreui-backdrop="static" data-coreui-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="staticBackdropLabel">Sensor</h5>
+                  <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+             
+                <div class="input-group mb-3"><span class="input-group-text">
+                      <svg class="icon">
+                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
+                      </svg></span>
+                    <input name="sensorname" class="form-control" type="text" placeholder="Sensor Name">
+                  </div>
+                </div>
+                <div class="modal-footer">
+                <button class="btn btn-primary px-4" type="submit" name="sensor">Apply</button>
+                </div>
               </div>
             </div>
-            <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-              <canvas class="chart" id="main-chart2" height="300"></canvas>
-            </div>
           </div>
-
-        </div>
-       
-          </div>
-       
+  </form>
         </div>
         <!-- /.row-->
         <!-- /.card.mb-4-->
-       
-       </div>
+
+      </div>
     </div>
     <footer class="footer">
       <div>Impeccable Vision Sdn Bhd © 2022</div>
@@ -429,7 +491,7 @@ if (isset($_GET['logout'])) {
         const bpm = [];
         const o2 = [];
         for (var i = 0; i < data.length; i++) {
-          
+
           labelsc.push(data[i]["DATE_FORMAT(reading_time, '%H:%i:%s')"]);
           bpm.push(data[i]["bpm"]);
           o2.push(data[i]["o2"]);
