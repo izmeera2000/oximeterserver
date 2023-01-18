@@ -9,11 +9,11 @@
 #define REPORTING_PERIOD_MS 1000
 
 // Replace with your network credentials
-const char* ssid = "";
-const char* password = "";
+const char *ssid = "";
+const char *password = "";
 
 // REPLACE with your Domain name and URL path or IP address with path
-const char* serverName = "http://192.168.0.101/oximeter2/public/index";
+const char *serverName = "http://192.168.0.101/oximeter2/public/index";
 
 // Keep this API Key value to be compatible with the PHP code provided in the project page.
 // If you change the apiKeyValue value, the PHP file /post-esp-data.php also needs to have the same key
@@ -22,29 +22,33 @@ String apiKeyValue = "oxy1";
 PulseOximeter pox;
 uint32_t tsLastReport = 0;
 
-void onBeatDetected() {
+void onBeatDetected()
+{
   Serial.println("♥ Beat!");
 }
 
-
-
-void setup() {
+void setup()
+{
   Serial.begin(115200);
 
   Serial.print("Initializing pulse oximeter..");
 
   // Initialize sensor
-  if (!pox.begin()) {
+  if (!pox.begin())
+  {
     Serial.println("FAILED");
     for (;;)
       ;
-  } else {
+  }
+  else
+  {
     Serial.println("SUCCESS");
   }
 
   WiFi.begin(ssid, password);
   Serial.println("Connecting");
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     delay(500);
     Serial.print(".");
   }
@@ -60,11 +64,13 @@ void setup() {
   // pox.setOnBeatDetectedCallback(onBeatDetected);
 }
 
-void loop() {
+void loop()
+{
   pox.update();
 
-  //Check WiFi connection status
-  if (WiFi.status() == WL_CONNECTED) {
+  // Check WiFi connection status
+  if (WiFi.status() == WL_CONNECTED)
+  {
     WiFiClient client;
     HTTPClient http;
 
@@ -73,7 +79,8 @@ void loop() {
 
     // Specify content-type header
     http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-    if (millis() - tsLastReport > REPORTING_PERIOD_MS) {
+    if (millis() - tsLastReport > REPORTING_PERIOD_MS)
+    {
       Serial.print("Heart rate:");
       Serial.print(pox.getHeartRate());
       Serial.print("bpm / SpO2:");
@@ -86,36 +93,37 @@ void loop() {
       Serial.println(httpRequestData);
 
       int httpResponseCode = http.POST(httpRequestData);
-    }
-    // Prepare your HTTP POST request data
-
-
-    // You can comment the httpRequestData variable above
-    // then, use the httpRequestData variable below (for testing purposes without the BME280 sensor)
-    //String httpRequestData = "api_key=tPmAT5Ab3j7F9&sensor=BME280&location=Office&value1=24.75&value2=49.54&value3=1005.14";
-
-    // Send HTTP POST request
-
-    // If you need an HTTP request with a content type: text/plain
-    //http.addHeader("Content-Type", "text/plain");
-    //int httpResponseCode = http.POST("Hello, World!");
-
-    // If you need an HTTP request with a content type: application/json, use the following:
-    //http.addHeader("Content-Type", "application/json");
-    //int httpResponseCode = http.POST("{\"value1\":\"19\",\"value2\":\"67\",\"value3\":\"78\"}");
-
-    if (httpResponseCode > 0) {
-      Serial.print("HTTP Response code: ");
-      Serial.println(httpResponseCode);
+      
+          if (httpResponseCode > 0) {
+        Serial.print("HTTP Response code: ");
+        Serial.println(httpResponseCode);
     } else {
-      Serial.print("Error code: ");
-      Serial.println(httpResponseCode);
+        Serial.print("Error code: ");
+        Serial.println(httpResponseCode);
     }
     // Free resources
     http.end();
-  } else {
-    Serial.println("WiFi Disconnected");
+    }
+    else
+    {
+      Serial.println("WiFi Disconnected");
+    }
   }
-  //Send an HTTP POST request every 30 seconds
-  delay(30000);
+  // Prepare your HTTP POST request data
+
+  // You can comment the httpRequestData variable above
+  // then, use the httpRequestData variable below (for testing purposes without the BME280 sensor)
+  // String httpRequestData = "api_key=tPmAT5Ab3j7F9&sensor=BME280&location=Office&value1=24.75&value2=49.54&value3=1005.14";
+
+  // Send HTTP POST request
+
+  // If you need an HTTP request with a content type: text/plain
+  // http.addHeader("Content-Type", "text/plain");
+  // int httpResponseCode = http.POST("Hello, World!");
+
+  // If you need an HTTP request with a content type: application/json, use the following:
+  // http.addHeader("Content-Type", "application/json");
+  // int httpResponseCode = http.POST("{\"value1\":\"19\",\"value2\":\"67\",\"value3\":\"78\"}");
+
+  // Send an HTTP POST request every 30 seconds
 }
