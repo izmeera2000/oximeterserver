@@ -11,8 +11,8 @@
 #define REPORTING_PERIOD_MS 1000
 OakOLED oled;
 
-char ssid[] = "BYNARK"; // Your WiFi credentials.
-char pass[] = "bynark@123";
+char ssid[] = ""; // Your WiFi credentials.
+char pass[] = "";
 const char *serverName = "ip/oximeterserver/insert.php";
 String apiKeyValue = "oxy1";
 
