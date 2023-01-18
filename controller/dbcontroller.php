@@ -58,14 +58,14 @@ class DBController
 
 	function uploadFOrder($query)
 	{
+		$result = mysqli_query($this->conn, $query);
 
-		if (mysqli_query($this->conn, $query)) {
+		if ($result) {
 			// echo "New record created successfully";
 		} else {
 			echo "Error: " . $query . "<br>" . mysqli_error($this->conn);
 		}
 
-		$result = mysqli_query($this->conn, $query);
 		return $result;
 	}
 
