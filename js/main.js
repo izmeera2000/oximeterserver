@@ -283,7 +283,7 @@ const mainChart1 = new Chart(document.getElementById('main-chart1'), {
 
       segment: {
         borderColor: (ctx) => {
-          val = ctx.p1.parsed.y;
+          val = ctx.p0.parsed.y;
           if (val >= 90 && val <= 100 ){
             return 'green'
 

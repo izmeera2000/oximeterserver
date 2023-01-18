@@ -1,3 +1,17 @@
+<?php
+session_start();
+require_once("controller/dbcontroller.php");
+$db_handle = new DBController();
+
+if (!isset($_SESSION['username'])) {
+    header('location: login.php');
+}
+if (isset($_GET['logout'])) {
+    session_destroy();
+    unset($_SESSION['username']);
+    header("location: login.php");
+}
+?>
 <!DOCTYPE html>
 <!--
 * CoreUI - Free Bootstrap Admin Template
@@ -298,7 +312,7 @@
                 </svg> Lock Account</a><a class="dropdown-item" href="#">
                 <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-account-logout"></use>
-                </svg> Logout</a>
+                </svg> Logout<a class="dropdown-item" href="?logout='1'"></a>
             </div>
           </li>
         </ul>
@@ -323,8 +337,8 @@
           <div class="card-body">
 
             <div class="d-flex justify-content-between">
-              <div>
-                <h4 class="card-title mb-0">Beats Per Minute (BPM)</h4>
+              <div id="test">
+                <h4  class="card-title mb-0">Beats Per Minute (BPM)</h4>
 
               </div>
               <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
@@ -415,13 +429,14 @@
         const bpm = [];
         const o2 = [];
         for (var i = 0; i < data.length; i++) {
-          labelsc.push(data[i]["DATE_FORMAT(reading_time, '%h:%i %p')"]);
+          
+          labelsc.push(data[i]["DATE_FORMAT(reading_time, '%H:%i:%s')"]);
           bpm.push(data[i]["bpm"]);
           o2.push(data[i]["o2"]);
 
         }
 
-        // document.getElementById("test").innerHTML = bpm;
+        //  document.getElementById("test").innerHTML = this.responseText;
 
         mainChart1.data.labels = labelsc;
         mainChart1.data.datasets[0].data = bpm;
