@@ -31,7 +31,7 @@ uint32_t tsLastReport = 0;
 // wifi
 const char *ssid = "afa2020_2.4Ghz@unifi"; // afa2020_2.4Ghz@unifi , KOMPUTER, vivo1713
 const char *pass = "vae585910";            // vae585910 , NIL, vae585910
-const char *serverName = "ip/oximeterserver/insert.php";
+const char *serverName = "http://192.168.1.7/oximeterserver/insert.php";
 String apiKeyValue = "oxy1";
 char auth[] = BLYNK_AUTH_TOKEN;
 BlynkTimer timer;
