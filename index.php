@@ -16,44 +16,12 @@ if (!isset($_SESSION['sensor'])) {
   $results = $db_handle->runQuery("SELECT * FROM users WHERE username='$username' ");
 
   // echo '<pre>'; print_r($results[0]["sensor"]); echo '</pre>';
-    $_SESSION['sensor'] = $results[0]["sensor"];
+  $_SESSION['sensor'] = $results[0]["sensor"];
 
-  
+
 
 }
-if (isset($_POST['sensor'])) {
 
-  $username = $_SESSION['username'];
-
-  $sensor = $db_handle->escstring($_POST['sensorname']);
-
-
-
-  $checkexists = $db_handle->runQuery("SELECT * FROM users WHERE sensor='$sensor'  ");
-  if (!empty($checkexists)) {
-    array_push($errors, "Sensor name already exists");
-    echo '<script type="text/javascript">
-    const toastLiveExample = document.getElementById("liveToast");
-    const toast = new coreui.Toast(toastLiveExample);
-    toast.show();
-    </script>';
-        // echo '<script type="text/javascript">alert("gasgas");</script>';
-
-  }
-
-  if (count($errors) == 0) {
-
-
-
-    $result = $db_handle->uploadFOrder("UPDATE users SET sensor='$sensor' WHERE username='$username' ");
-    if (!$result) {
-      echo "Error updating record: " . $conn->error;
-    }
-
-    $_SESSION['sensor'] = $sensor;
-
-  }
-}
 
 ?>
 <!DOCTYPE html>
@@ -75,7 +43,7 @@ if (isset($_POST['sensor'])) {
   <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
   <meta name="author" content="Łukasz Holeczek">
   <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
-  <title>CoreUI Free Bootstrap Admin Template</title>
+  <title>Oximeter</title>
   <link rel="apple-touch-icon" sizes="57x57" href="assets/favicon/apple-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="60x60" href="assets/favicon/apple-icon-60x60.png">
   <link rel="apple-touch-icon" sizes="72x72" href="assets/favicon/apple-icon-72x72.png">
@@ -128,12 +96,12 @@ if (isset($_POST['sensor'])) {
             <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-menu"></use>
           </svg>
         </button> -->
-        <!-- <a class="header-brand d-md-none" href="#">
-          <svg width="118" height="46" alt="CoreUI Logo">
+        <a class="header-brand d-md-none" href="#">
+          <svg width="118" height="46" alt="Logo">
             <use xlink:href="assets/brand/coreui.svg#full"></use>
-          </svg></a> -->
+          </svg></a>
         <ul class="header-nav d-none d-md-flex">
-          <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Logo</a></li>
           <!-- <li class="nav-item"><a class="nav-link" href="#">Users</a></li>
           <li class="nav-item"><a class="nav-link" href="#">Settings</a></li> -->
         </ul>
@@ -224,8 +192,53 @@ if (isset($_POST['sensor'])) {
     </header>
     <div class="body flex-grow-1 px-3">
       <div class="container-lg">
+      <div class="row">
+            <div class="col-sm-6 col-lg-6">
+              <div class="card mb-4 text-white bg-primary">
+                <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+                  <div>
+                    
+                    <div class="fs-4 fw-semibold" ><asd id="latestbpm">26K</asd> 
+                    <svg class="icon">
+                          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-heart"></use>
+                        </svg>
+                      </div>     
+                      
+                    <div>BPM</div>
+                  </div>
+      
+                </div>
+                <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
+                  <canvas class="chart" id="card-chart1" height="70"></canvas>
+                </div>
+              </div>
+            </div>
+            <!-- /.col-->
+            <div class="col-sm-6 col-lg-6">
+              <div class="card mb-4 text-white bg-info">
+                <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+                <div>
+                    
+                    <div class="fs-4 fw-semibold" ><asd id="latesto2">26K</asd> 
+                    %
+                      </div>     
+                      
+                    <div>Oxygen</div>
+                  </div>
+      
+                </div>
+                <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
+                  <canvas class="chart" id="card-chart1" height="70"></canvas>
+                </div>
+              </div>
+            </div>
+            <!-- /.col-->
+
+          </div>
+          <!-- /.row-->
+
         <div class="row">
-          
+
           <div class="col-sm-12 col-lg-6">
             <div class="card mb-4">
               <div class="card-body">
@@ -297,7 +310,7 @@ if (isset($_POST['sensor'])) {
 
             <div class="modal fade" id="Sensor" data-coreui-backdrop="static" data-coreui-keyboard="false" tabindex="-1"
               aria-labelledby="staticBackdropLabel" aria-hidden="true">
-              <div class="modal-dialog">
+              <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title" id="staticBackdropLabel">Sensor</h5>
@@ -305,11 +318,16 @@ if (isset($_POST['sensor'])) {
                   </div>
                   <div class="modal-body">
 
-                    <div class="input-group mb-3"><span class="input-group-text">
+                    <label for="buatmodal" class="form-label">Sensor Name</label>
+
+                    <div class="input-group mb-3" id="buatmodal">
+
+                      <span class="input-group-text">
                         <svg class="icon">
-                          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
+                          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-heart"></use>
                         </svg></span>
-                      <input name="sensorname" class="form-control" type="text" placeholder="Sensor Name">
+                      <input name="sensorname" class="form-control" type="text"
+                        placeholder="<?php echo $_SESSION['sensor'] ?>">
                     </div>
                   </div>
                   <div class="modal-footer">
@@ -366,7 +384,8 @@ if (isset($_POST['sensor'])) {
 
         }
 
-        //  document.getElementById("test").innerHTML = this.responseText;
+         document.getElementById("latestbpm").innerHTML = bpm[0];
+         document.getElementById("latesto2").innerHTML = o2[0];
 
         mainChart1.data.labels = labelsc;
         mainChart1.data.datasets[0].data = bpm;
@@ -387,19 +406,49 @@ if (isset($_POST['sensor'])) {
       table();
     }, 1000);
 
+    function coretoast() {
+      const toastLiveExample = document.getElementById("liveToast");
+      const toast = new coreui.Toast(toastLiveExample);
+      toast.show();
 
+    }
   </script>
-<script> 
-const toastTrigger = document.getElementById('liveToastBtn')
-const toastLiveExample = document.getElementById('liveToast')
-if (toastTrigger) {
-  toastTrigger.addEventListener('click', () => {
-    const toast = new coreui.Toast(toastLiveExample)
-    toast.show()
-  })
-}
-    
-    </script>
+
+
+  <?php if (isset($_POST['sensor'])) {
+
+    $username = $_SESSION['username'];
+
+    $sensor = $db_handle->escstring($_POST['sensorname']);
+
+    if ($sensor) {
+      $checkexists = $db_handle->runQuery("SELECT * FROM users WHERE sensor='$sensor'  ");
+      if (!empty($checkexists)) {
+        array_push($errors, "Sensor name already exists");
+
+        // echo '<script type="text/javascript"> $("#liveToast").toast(show); </script>';
+  
+
+        echo '<script type="text/javascript">coretoast();</script>';
+
+      }
+
+      if (count($errors) == 0) {
+
+
+
+        $result = $db_handle->uploadFOrder("UPDATE users SET sensor='$sensor' WHERE username='$username' ");
+        if (!$result) {
+          echo "Error updating record: " . $conn->error;
+        }
+
+        $_SESSION['sensor'] = $sensor;
+
+      }
+    }
+
+
+  } ?>
 </body>
 
 </html>
