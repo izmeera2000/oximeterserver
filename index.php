@@ -192,50 +192,52 @@ if (!isset($_SESSION['sensor'])) {
     </header>
     <div class="body flex-grow-1 px-3">
       <div class="container-lg">
-      <div class="row">
-            <div class="col-sm-6 col-lg-6">
-              <div class="card mb-4 text-white bg-primary">
-                <div class="card-body pb-0 d-flex justify-content-between align-items-start">
-                  <div>
-                    
-                    <div class="fs-4 fw-semibold" ><asd id="latestbpm">26K</asd> 
-                    <svg class="icon">
-                          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-heart"></use>
-                        </svg>
-                      </div>     
-                      
-                    <div>BPM</div>
-                  </div>
-      
-                </div>
-                <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
-                  <canvas class="chart" id="card-chart1" height="70"></canvas>
-                </div>
-              </div>
-            </div>
-            <!-- /.col-->
-            <div class="col-sm-6 col-lg-6">
-              <div class="card mb-4 text-white bg-info">
-                <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+        <div class="row">
+          <div class="col-sm-6 col-lg-6">
+            <div class="card mb-4 text-white bg-primary">
+              <div class="card-body pb-0 d-flex justify-content-between align-items-start">
                 <div>
-                    
-                    <div class="fs-4 fw-semibold" ><asd id="latesto2">26K</asd> 
-                    %
-                      </div>     
-                      
-                    <div>Oxygen</div>
+
+                  <div class="fs-4 fw-semibold">
+                    <asd id="latestbpm">26K</asd>
+                    <svg class="icon">
+                      <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-heart"></use>
+                    </svg>
                   </div>
-      
+
+                  <div>BPM</div>
                 </div>
-                <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
-                  <canvas class="chart" id="card-chart1" height="70"></canvas>
-                </div>
+
+              </div>
+              <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
+                <canvas class="chart" id="card-chart1" height="70"></canvas>
               </div>
             </div>
-            <!-- /.col-->
-
           </div>
-          <!-- /.row-->
+          <!-- /.col-->
+          <div class="col-sm-6 col-lg-6">
+            <div class="card mb-4 text-white bg-info">
+              <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+                <div>
+
+                  <div class="fs-4 fw-semibold">
+                    <asd id="latesto2">26K</asd>
+                    %
+                  </div>
+
+                  <div>Oxygen</div>
+                </div>
+
+              </div>
+              <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
+                <canvas class="chart" id="card-chart1" height="70"></canvas>
+              </div>
+            </div>
+          </div>
+          <!-- /.col-->
+
+        </div>
+        <!-- /.row-->
 
         <div class="row">
 
@@ -348,6 +350,17 @@ if (!isset($_SESSION['sensor'])) {
                 Sensor name already exist </div>
             </div>
           </div>
+          <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="liveToast2" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="toast-header">
+                <img src="..." class="rounded me-2" alt="...">
+                <strong class="me-auto">Oximeter</strong>
+                <button type="button" class="btn-close" data-coreui-dismiss="toast" aria-label="Close"></button>
+              </div>
+              <div class="toast-body">
+                No data</div>
+            </div>
+          </div>
         </div>
         <!-- /.row-->
         <!-- /.card.mb-4-->
@@ -368,36 +381,47 @@ if (!isset($_SESSION['sensor'])) {
   <script src="vendors/@coreui/utils/js/coreui-utils.js"></script>
   <script src="js/main.js"></script>
   <script>
+
+
     function table() {
       const xhttp = new XMLHttpRequest();
+      xhttp.open("GET", "db.php", true);
+
       xhttp.onload = function () {
+      
+          var data = JSON.parse(this.responseText);
+          if (data.length !== 0) {
+          const labelsc = [];
+          const bpm = [];
+          const o2 = [];
+          for (var i = 0; i < data.length; i++) {
 
-        var data = JSON.parse(this.responseText);
-        const labelsc = [];
-        const bpm = [];
-        const o2 = [];
-        for (var i = 0; i < data.length; i++) {
+            labelsc.push(data[i]["DATE_FORMAT(reading_time, '%H:%i:%s')"]);
+            bpm.push(data[i]["bpm"]);
+            o2.push(data[i]["o2"]);
 
-          labelsc.push(data[i]["DATE_FORMAT(reading_time, '%H:%i:%s')"]);
-          bpm.push(data[i]["bpm"]);
-          o2.push(data[i]["o2"]);
+          }
+
+          document.getElementById("latestbpm").innerHTML = bpm[0];
+          document.getElementById("latesto2").innerHTML = o2[0];
+
+          mainChart1.data.labels = labelsc;
+          mainChart1.data.datasets[0].data = bpm;
+          mainChart1.update();
+          mainChart2.data.labels = labelsc;
+          mainChart2.data.datasets[0].data = o2;
+          mainChart2.update();
+          // var lineGraph = new CoreUI.LineGraph('main-chart', data);
 
         }
+        else {
 
-         document.getElementById("latestbpm").innerHTML = bpm[0];
-         document.getElementById("latesto2").innerHTML = o2[0];
-
-        mainChart1.data.labels = labelsc;
-        mainChart1.data.datasets[0].data = bpm;
-        mainChart1.update();
-        mainChart2.data.labels = labelsc;
-        mainChart2.data.datasets[0].data = o2;
-        mainChart2.update();
-        // var lineGraph = new CoreUI.LineGraph('main-chart', data);
+          // coretoast2();
+           }
 
 
       }
-      xhttp.open("GET", "db.php", true);
+
       xhttp.send();
 
     }
@@ -410,6 +434,12 @@ if (!isset($_SESSION['sensor'])) {
       const toastLiveExample = document.getElementById("liveToast");
       const toast = new coreui.Toast(toastLiveExample);
       toast.show();
+
+    }
+    function coretoast2() {
+      const toastLiveExample2 = document.getElementById("liveToast2");
+      const toast2 = new coreui.Toast(toastLiveExample2);
+      toast2.show();
 
     }
   </script>
