@@ -124,15 +124,25 @@ if (!isset($_SESSION['sensor'])) {
               aria-haspopup="true" aria-expanded="false">
               <!-- <div class="avatar avatar-md"><img class="avatar-img" src="assets/img/avatars/8.jpg" alt="user@email.com">
               </div> -->
-              <?php echo $_SESSION['username'] ?>
+              <div class="avatar bg-primary text-white">   <?php echo substr(ucfirst($_SESSION['username']), 0, 1);  ?></div>
+
+           
             </a>
             <div class="dropdown-menu dropdown-menu-end pt-0">
               <div class="dropdown-header bg-light py-2">
-                <!-- <div class="fw-semibold">Account</div>
-              </div><a class="dropdown-item" href="#">
+                <div class="fw-semibold">   <?php echo ucfirst($_SESSION['username'])?>'s Account</div>
+
+            </div>
+            <a class="dropdown-item" href="#">
+                  <svg class="icon me-2">
+                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
+                  </svg> Profile</a>
+            <!-- <a class="dropdown-item" href="#">
                 <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-bell"></use>
-                </svg> Updates<span class="badge badge-sm bg-info ms-2">42</span></a><a class="dropdown-item" href="#">
+                </svg> Updates<span class="badge badge-sm bg-info ms-2">42</span></a>
+                
+                <a class="dropdown-item" href="#">
                 <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-envelope-open"></use>
                 </svg> Messages<span class="badge badge-sm bg-success ms-2">42</span></a><a class="dropdown-item"
@@ -142,8 +152,8 @@ if (!isset($_SESSION['sensor'])) {
                 </svg> Tasks<span class="badge badge-sm bg-danger ms-2">42</span></a><a class="dropdown-item" href="#">
                 <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-comment-square"></use>
-                </svg> Comments<span class="badge badge-sm bg-warning ms-2">42</span></a>
-              <div class="dropdown-header bg-light py-2"> -->
+                </svg> Comments<span class="badge badge-sm bg-warning ms-2">42</span></a> -->
+              <div class="dropdown-header bg-light py-2"> 
                 <div class="fw-semibold">Settings</div>
               </div>
 
@@ -153,9 +163,9 @@ if (!isset($_SESSION['sensor'])) {
                 </svg> Sensor
               </button>
               <a class="dropdown-item" href="#">
-                <svg class="icon me-2">
+                <!-- <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
-                </svg> Settings</a>
+                </svg> Settings</a> -->
               <!-- <a class="dropdown-item" href="#">
                 <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-credit-card"></use>
@@ -251,6 +261,7 @@ if (!isset($_SESSION['sensor'])) {
 
                   </div>
                   <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
+
                     <!-- <div class="btn-group btn-group-toggle mx-3" data-coreui-toggle="buttons">
                   <input class="btn-check" id="option1" type="radio" name="options" autocomplete="off">
                   <label class="btn btn-outline-secondary"> Day</label>
@@ -264,6 +275,18 @@ if (!isset($_SESSION['sensor'])) {
                     <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-cloud-download"></use>
                   </svg>
                 </button> -->
+
+                    <div class="dropdown">
+                      <button class="btn btn-transparent " type="button" data-coreui-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <svg class="icon">
+                          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-options"></use>
+                        </svg>
+                      </button>
+                      <div class="dropdown-menu dropdown-menu-end">
+                        <a class="dropdown-item" href="#">See all data</a>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
@@ -388,9 +411,9 @@ if (!isset($_SESSION['sensor'])) {
       xhttp.open("GET", "db.php", true);
 
       xhttp.onload = function () {
-      
-          var data = JSON.parse(this.responseText);
-          if (data.length !== 0) {
+
+        var data = JSON.parse(this.responseText);
+        if (data.length !== 0) {
           const labelsc = [];
           const bpm = [];
           const o2 = [];
@@ -417,7 +440,7 @@ if (!isset($_SESSION['sensor'])) {
         else {
 
           // coretoast2();
-           }
+        }
 
 
       }
