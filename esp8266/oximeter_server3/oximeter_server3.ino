@@ -127,6 +127,8 @@ void loop()
   if (millis() - tsLastReport > REPORTING_PERIOD_MS)
   {
 
+    bpm = pox.getHeartRate();
+    spo = pox.getSpO2();
     tsLastReport = millis();
 
     display.clearDisplay(); // Clear the display
@@ -147,9 +149,9 @@ void loop()
     display.display();
 
     Serial.print("Heart rate:");
-    Serial.print(pox.getHeartRate());
+    Serial.print(bpm);
     Serial.print("bpm    SpO2:"); //"bpm / SpO2:"
-    Serial.print(pox.getSpO2());
+    Serial.print(spo);
     Serial.println("%");
 
     if (pox.getHeartRate() < 60)
@@ -203,7 +205,7 @@ void loop()
       // Specify content-type header
       http.addHeader("Content-Type", "application/x-www-form-urlencoded");
 
-      String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(pox.getHeartRate()) + "&o2=" + String(pox.getSpO2()) + "";
+      String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(bpm) + "&o2=" + String(spo) + "";
       Serial.print("httpRequestData: ");
       Serial.println(httpRequestData);
 
