@@ -1,4 +1,5 @@
 #include <Wire.h>
+#include "MAX30100.h"
 #include "MAX30100_PulseOximeter.h"
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
@@ -7,14 +8,15 @@
 
 // Create a PulseOximeter object
 PulseOximeter pox;
+MAX30100 maxim;
 
 // Time at which the last beat occurred
 uint32_t tsLastReport = 0;
 
 // Replace with your network credentials
-const char *ssid = "afa2020_2.4Ghz@unifi";  // afa2020_2.4Ghz@unifi , KOMPUTER, vivo1713
-const char *pass = "vae585910";             // vae585910 , NIL, vae585910
-const char *serverName = "http://192.168.1.7/oximeterserver/insert.php"; //check sebelum upload
+const char *ssid = "afa2020_2.4Ghz@unifi";                                // afa2020_2.4Ghz@unifi , KOMPUTER, vivo1713
+const char *pass = "vae585910";                                           // vae585910 , NIL, vae585910
+const char *serverName = "http://192.168.1.7/oximeterserver/insert.php";  //check sebelum upload
 String apiKeyValue = "oxytest";
 String sensorname = "oxy1";
 
@@ -33,7 +35,7 @@ void setup() {
     Serial.println("SUCCESS");
   }
 
-  WiFi.begin(ssid, password);
+  WiFi.begin(ssid, pass);
 
   Serial.println("Connecting");
   while (WiFi.status() != WL_CONNECTED) {
@@ -50,13 +52,16 @@ void setup() {
 
 void loop() {
   // Read from the sensor
-  pox.update();
 
+  WiFiClient client;
+  HTTPClient http;
+  pox.update();
+  int bpm = pox.getHeartRate();
+  int spo = pox.getSpO2();
   // Grab the updated heart rate and SpO2 levels
   if (millis() - tsLastReport > REPORTING_PERIOD_MS) {
 
-    int bpm = pox.getHeartRate();
-    int spo = pox.getSpO2();
+
 
     Serial.print("Heart rate:");
     Serial.print(bpm);
@@ -65,34 +70,23 @@ void loop() {
     Serial.println("%");
 
 
-    if (WiFi.status() == WL_CONNECTED) {
-      WiFiClient client;
-      HTTPClient http;
 
-      // Your Domain name with URL path or IP address with path
-      http.begin(client, serverName);
+    // Your Domain name with URL path or IP address with path
+    http.begin(client, serverName);
 
-      // Specify content-type header
-      http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+    // Specify content-type header
+    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
 
-      String httpRequestData = "api_key=" + apiKeyValue + "&sensorname=" + sensorname + "&bpm=" + String(bpm) + "&o2=" + String(spo) + "";
-      Serial.print("httpRequestData: ");
-      Serial.println(httpRequestData);
+    String httpRequestData = "api_key=" + apiKeyValue + "&sensorname=" + sensorname + "&bpm=" + String(bpm) + "&o2=" + String(spo) + "";
+    Serial.print("httpRequestData: ");
+    Serial.println(httpRequestData);
 
-      int httpResponseCode = http.POST(httpRequestData);
+    int httpResponseCode = http.POST(httpRequestData);
+      maxim.resetFifo();
 
-      if (httpResponseCode > 0) {
-        Serial.print("HTTP Response code: ");
-        Serial.println(httpResponseCode);
-      } else {
-        Serial.print("Error code: ");
-        Serial.println(httpResponseCode);
-      }
-      // Free resources
-      http.end();
-    } else {
-      Serial.println("WiFi Disconnected");
-    }
+   
+
+
 
     tsLastReport = millis();
   }
