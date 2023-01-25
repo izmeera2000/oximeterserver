@@ -1,5 +1,4 @@
 #include <Wire.h>
-#include "MAX30100.h"
 #include "MAX30100_PulseOximeter.h"
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
@@ -8,7 +7,6 @@
 
 // Create a PulseOximeter object
 PulseOximeter pox;
-MAX30100 maxim;
 
 // Time at which the last beat occurred
 uint32_t tsLastReport = 0;
@@ -79,7 +77,6 @@ void loop() {
     http.POST(httpRequestData);
     http.end();
 
-    maxim.resetFifo();  //disable ni kalau x dpt reading lg
 
 
 
