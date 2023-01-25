@@ -53,23 +53,18 @@ void setup() {
 void loop() {
   // Read from the sensor
 
-  WiFiClient client;
-  HTTPClient http;
   pox.update();
-  int bpm = pox.getHeartRate();
-  int spo = pox.getSpO2();
+
   // Grab the updated heart rate and SpO2 levels
   if (millis() - tsLastReport > REPORTING_PERIOD_MS) {
 
+    int bpm = pox.getHeartRate();
+    int spo = pox.getSpO2();
 
 
-    Serial.print("Heart rate:");
-    Serial.print(bpm);
-    Serial.print("bpm / SpO2:");
-    Serial.print(spo);
-    Serial.println("%");
 
-
+    WiFiClient client;
+    HTTPClient http;
 
     // Your Domain name with URL path or IP address with path
     http.begin(client, serverName);
@@ -81,10 +76,11 @@ void loop() {
     Serial.print("httpRequestData: ");
     Serial.println(httpRequestData);
 
-    int httpResponseCode = http.POST(httpRequestData);
-      maxim.resetFifo();
+    http.POST(httpRequestData);
+    http.end();
 
-   
+    maxim.resetFifo();  //disable ni kalau x dpt reading lg
+
 
 
 
