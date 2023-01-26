@@ -61,21 +61,11 @@ void loop() {
 
 
 
-    WiFiClient client;
-    HTTPClient http;
-
-    // Your Domain name with URL path or IP address with path
-    http.begin(client, serverName);
-
-    // Specify content-type header
-    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+  
 
     String httpRequestData = "api_key=" + apiKeyValue + "&sensorname=" + sensorname + "&bpm=" + String(bpm) + "&o2=" + String(spo) + "";
     Serial.print("httpRequestData: ");
     Serial.println(httpRequestData);
-
-    http.POST(httpRequestData);
-    http.end();
 
 
 
