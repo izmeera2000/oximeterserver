@@ -3,7 +3,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
-#define REPORTING_PERIOD_MS 1000
+#define REPORTING_PERIOD_MS 2000
 
 // Create a PulseOximeter object
 PulseOximeter pox;
@@ -61,11 +61,21 @@ void loop() {
 
 
 
-  
+    WiFiClient client;
+    HTTPClient http;
+
+    // Your Domain name with URL path or IP address with path
+    http.begin(client, serverName);
+
+    // Specify content-type header
+    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
 
     String httpRequestData = "api_key=" + apiKeyValue + "&sensorname=" + sensorname + "&bpm=" + String(bpm) + "&o2=" + String(spo) + "";
     Serial.print("httpRequestData: ");
     Serial.println(httpRequestData);
+
+    http.POST(httpRequestData);
+    http.end();
 
 
 
