@@ -1,30 +1,55 @@
+/*
+Arduino-MAX30100 oximetry / heart rate integrated sensor library
+Copyright (C) 2016  OXullo Intersecans <x@brainrapers.org>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include <Wire.h>
 #include "MAX30100_PulseOximeter.h"
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 #include <WiFiClient.h>
-#define REPORTING_PERIOD_MS 2000
+#define REPORTING_PERIOD_MS 1000
 
-// Create a PulseOximeter object
+// PulseOximeter is the higher level interface to the sensor
+// it offers:
+//  * beat detection reporting
+//  * heart rate calculation
+//  * SpO2 (oxidation level) calculation
 PulseOximeter pox;
 
-// Time at which the last beat occurred
 uint32_t tsLastReport = 0;
-
-// Replace with your network credentials
 const char *ssid = "afa2020_2.4Ghz@unifi";                                // afa2020_2.4Ghz@unifi , KOMPUTER, vivo1713
 const char *pass = "vae585910";                                           // vae585910 , NIL, vae585910
 const char *serverName = "http://192.168.1.7/oximeterserver/insert.php";  //check sebelum upload
 String apiKeyValue = "oxytest";
 String sensorname = "oxy1";
 
+// Callback (registered below) fired when a pulse is detected
+void onBeatDetected() {
+  Serial.println("Beat!");
+}
 
 void setup() {
   Serial.begin(115200);
 
   Serial.print("Initializing pulse oximeter..");
 
-  // Initialize sensor
+  // Initialize the PulseOximeter instance
+  // Failures are generally due to an improper I2C wiring, missing power supply
+  // or wrong target chip
   if (!pox.begin()) {
     Serial.println("FAILED");
     for (;;)
@@ -32,9 +57,7 @@ void setup() {
   } else {
     Serial.println("SUCCESS");
   }
-
   WiFi.begin(ssid, pass);
-
   Serial.println("Connecting");
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
@@ -43,31 +66,27 @@ void setup() {
   Serial.println("");
   Serial.print("Connected to WiFi network with IP Address: ");
   Serial.println(WiFi.localIP());
+  // The default current for the IR LED is 50mA and it could be changed
+  //   by uncommenting the following line. Check MAX30100_Registers.h for all the
+  //   available options.
+  // pox.setIRLedCurrent(MAX30100_LED_CURR_7_6MA);
 
-  // Configure sensor to use 7.6mA for LED drive
-  pox.setIRLedCurrent(MAX30100_LED_CURR_7_6MA);
+  // Register a callback for the beat detection
+  pox.setOnBeatDetectedCallback(onBeatDetected);
 }
 
 void loop() {
-  // Read from the sensor
-
+  // Make sure to call update as fast as possible
   pox.update();
 
-  // Grab the updated heart rate and SpO2 levels
+  // Asynchronously dump heart rate and oxidation levels to the serial
+  // For both, a value of 0 means "invalid"
   if (millis() - tsLastReport > REPORTING_PERIOD_MS) {
-
-    int bpm = pox.getHeartRate();
-    int spo = pox.getSpO2();
-
-
-
-
-    String httpRequestData = "api_key=" + apiKeyValue + "&sensorname=" + sensorname + "&bpm=" + String(bpm) + "&o2=" + String(spo) + "";
-    Serial.print("httpRequestData: ");
-    Serial.println(httpRequestData);
-
-
-
+    Serial.print("Heart rate:");
+    Serial.print(pox.getHeartRate());
+    Serial.print("bpm / SpO2:");
+    Serial.print(pox.getSpO2());
+    Serial.println("%");
 
     tsLastReport = millis();
   }
