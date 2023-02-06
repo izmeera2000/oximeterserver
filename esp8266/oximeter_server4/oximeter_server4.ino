@@ -18,9 +18,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <Wire.h>
 #include "MAX30100_PulseOximeter.h"
-#include <ESP8266WiFi.h>
-#include <ESP8266HTTPClient.h>
-#include <WiFiClient.h>
+// #include <ESP8266WiFi.h>
+// #include <ESP8266HTTPClient.h>
+// #include <WiFiClient.h>
 #define REPORTING_PERIOD_MS 1000
 
 // PulseOximeter is the higher level interface to the sensor
@@ -57,15 +57,15 @@ void setup() {
   } else {
     Serial.println("SUCCESS");
   }
-  WiFi.begin(ssid, pass);
-  Serial.println("Connecting");
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("");
-  Serial.print("Connected to WiFi network with IP Address: ");
-  Serial.println(WiFi.localIP());
+  // WiFi.begin(ssid, pass);
+  // Serial.println("Connecting");
+  // while (WiFi.status() != WL_CONNECTED) {
+  //   delay(500);
+  //   Serial.print(".");
+  // }
+  // Serial.println("");
+  // Serial.print("Connected to WiFi network with IP Address: ");
+  // Serial.println(WiFi.localIP());
   // The default current for the IR LED is 50mA and it could be changed
   //   by uncommenting the following line. Check MAX30100_Registers.h for all the
   //   available options.
