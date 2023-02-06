@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <Wire.h>
 #include "MAX30100_PulseOximeter.h"
 #include <ESP8266WiFi.h>
-#include <ESP8266HTTPClient.h>
+// #include <ESP8266HTTPClient.h>
 // #include <WiFiClient.h>
 #define REPORTING_PERIOD_MS 1000
 
