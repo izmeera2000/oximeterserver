@@ -15,11 +15,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+#include <Adafruit_GFX.h>  //OLED libraries
+#include <Adafruit_SSD1306.h>
 #include <Wire.h>
 #include "MAX30100_PulseOximeter.h"
 #include <ESP8266WiFi.h>
-// #include <ESP8266HTTPClient.h>
+#include <ESP8266HTTPClient.h>
 // #include <WiFiClient.h>
 #define REPORTING_PERIOD_MS 1000
 
@@ -31,11 +32,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 PulseOximeter pox;
 
 uint32_t tsLastReport = 0;
-const char *ssid = "afa2020_2.4Ghz@unifi";                                // afa2020_2.4Ghz@unifi , KOMPUTER, vivo1713
-const char *pass = "vae585910";                                           // vae585910 , NIL, vae585910
-const char *serverName = "http://192.168.1.7/oximeterserver/insert.php";  //check sebelum upload
+const char *ssid = "afa2020_2.4Ghz@unifi";                           // afa2020_2.4Ghz@unifi , KOMPUTER, vivo1713
+const char *pass = "vae585910";                                      // vae585910 , NIL, vae585910
+String serverName = "http://192.168.1.7/oximeterserver/insert.php";  //check sebelum upload
 String apiKeyValue = "oxytest";
 String sensorname = "oxy1";
+
+//OLED
+#define SCREEN_WIDTH 128                                                   // OLED display width, in pixels
+#define SCREEN_HEIGHT 32                                                   // OLED display height, in pixels 32
+#define OLED_RESET -1                                                      // Reset pin # (or -1 if sharing Arduino reset pin)
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);  //Declaring the display name (display)
 
 // Callback (registered below) fired when a pulse is detected
 void onBeatDetected() {
@@ -66,13 +73,20 @@ void setup() {
   Serial.println("");
   Serial.print("Connected to WiFi network with IP Address: ");
   Serial.println(WiFi.localIP());
+
+  //OLED
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  //Start the OLED display
+  display.display();
+  delay(3000);
+  //asalnya
+  Serial.print("Initializing pulse oximeter..");
   // The default current for the IR LED is 50mA and it could be changed
   //   by uncommenting the following line. Check MAX30100_Registers.h for all the
   //   available options.
   // pox.setIRLedCurrent(MAX30100_LED_CURR_7_6MA);
 
   // Register a callback for the beat detection
-  pox.setOnBeatDetectedCallback(onBeatDetected);
+  // pox.setOnBeatDetectedCallback(onBeatDetected);
 }
 
 void loop() {
