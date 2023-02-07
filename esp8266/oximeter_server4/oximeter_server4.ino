@@ -22,15 +22,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 // #include <WiFiClient.h>
-#include <Blynk.h>
-#include <TinyGPS++.h>
-#include <SoftwareSerial.h>
-#include <BlynkSimpleEsp8266.h>
-
 #define REPORTING_PERIOD_MS 1000
-#define BLYNK_TEMPLATE_ID "TMPLHQPlWoZS"
-#define BLYNK_DEVICE_NAME "REMOTE PATIENT MONITORING SYSTEM"
-#define BLYNK_AUTH_TOKEN "OOHrk_fEv6ftdQW4Y6mdqFDUSMf4QEP6"
+
 // PulseOximeter is the higher level interface to the sensor
 // it offers:
 //  * beat detection reporting
@@ -41,8 +34,6 @@ PulseOximeter pox;
 uint32_t tsLastReport = 0;
 const char *ssid = "afa2020_2.4Ghz@unifi";                           // afa2020_2.4Ghz@unifi , KOMPUTER, vivo1713
 const char *pass = "vae585910";                                      // vae585910 , NIL, vae585910
-char auth[] = BLYNK_AUTH_TOKEN;
-
 String serverName = "http://192.168.1.7/oximeterserver/insert.php";  //check sebelum upload
 String apiKeyValue = "oxytest";
 String sensorname = "oxy1";
@@ -73,16 +64,14 @@ void setup() {
   } else {
     Serial.println("SUCCESS");
   }
-    Blynk.begin(auth, ssid, pass);
-
   WiFi.begin(ssid, pass);
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    delay(200);
-    Serial.print("..");
+  Serial.println("Connecting");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
   }
-  Serial.println();
-  Serial.println("Congrats... NodeMCU is connected!");
+  Serial.println("");
+  Serial.print("Connected to WiFi network with IP Address: ");
   Serial.println(WiFi.localIP());
 
   //OLED
@@ -108,7 +97,7 @@ void loop() {
   // For both, a value of 0 means "invalid"
   if (millis() - tsLastReport > REPORTING_PERIOD_MS) {
 
-        display.clearDisplay();                                   //Clear the display
+            display.clearDisplay();                                   //Clear the display
     display.setTextSize(1);                                   //Near it display the average BPM you can display the BPM if you want
     display.setTextColor(WHITE);
     display.setCursor(30, 0);
@@ -119,7 +108,7 @@ void loop() {
     display.println("SpO2");
     display.setCursor(90, 8);   // 82,18
     display.println(pox.getSpO2());
-
+    
     Serial.print("Heart rate:");
     Serial.print(pox.getHeartRate());
     Serial.print("bpm / SpO2:");
