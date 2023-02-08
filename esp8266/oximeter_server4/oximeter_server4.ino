@@ -52,13 +52,16 @@ void onBeatDetected() {
 
 void setup() {
   Serial.begin(115200);
+    pinMode(16, OUTPUT);
+
   delay(100);
 
 
   WiFi.begin(ssid, pass);
   Serial.println("Connecting");
+
   while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
+    delay(1000);
     Serial.print(".");
   }
   Serial.println("");
