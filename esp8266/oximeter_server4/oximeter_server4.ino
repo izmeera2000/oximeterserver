@@ -46,16 +46,14 @@ float BPM, SpO2;
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);  //Declaring the display name (display)
 
 // Callback (registered below) fired when a pulse is detected
-void onBeatDetected() {
-  Serial.println("Beat!");
-}
 
 void setup() {
   Serial.begin(115200);
-    pinMode(16, OUTPUT);
-
+  pinMode(16, OUTPUT);
   delay(100);
 
+  Serial.println("Connecting to ");
+  Serial.println(ssid);
 
   WiFi.begin(ssid, pass);
   Serial.println("Connecting");
@@ -67,17 +65,11 @@ void setup() {
   Serial.println("");
   Serial.print("Connected to WiFi network with IP Address: ");
   Serial.println(WiFi.localIP());
+  
   // Initialize the PulseOximeter instance
   // Failures are generally due to an improper I2C wiring, missing power supply
   // or wrong target chip
-  Serial.print("Initializing pulse oximeter..");
-  if (!pox.begin()) {
-    Serial.println("FAILED");
-    for (;;)
-      ;
-  } else {
-    Serial.println("SUCCESS");
-  }
+
 
 
   //OLED
@@ -92,6 +84,15 @@ void setup() {
 
   // Register a callback for the beat detection
   // pox.setOnBeatDetectedCallback(onBeatDetected);
+
+    Serial.print("Initializing pulse oximeter..");
+  if (!pox.begin()) {
+    Serial.println("FAILED");
+    for (;;)
+      ;
+  } else {
+    Serial.println("SUCCESS");
+  }
 }
 
 void loop() {
@@ -102,7 +103,7 @@ void loop() {
   // For both, a value of 0 means "invalid"
   if (millis() - tsLastReport > REPORTING_PERIOD_MS) {
 
-    
+
     BPM = pox.getHeartRate();
     SpO2 = pox.getSpO2();
 
@@ -118,12 +119,17 @@ void loop() {
     display.setCursor(90, 8);  // 82,18
     display.println(SpO2);
 
-    Serial.print("Heart rate:");
-    Serial.print(BPM);
-    Serial.print("bpm / SpO2:");
+
+    Serial.print("BPM: ");
+    Serial.println(BPM);
+
+    Serial.print("SpO2: ");
     Serial.print(SpO2);
     Serial.println("%");
 
+    Serial.println("*********************************");
+    Serial.println();
     tsLastReport = millis();
+
   }
 }
