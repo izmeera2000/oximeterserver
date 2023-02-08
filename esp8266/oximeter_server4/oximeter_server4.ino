@@ -133,42 +133,8 @@ void loop()
     Serial.println("*********************************");
     Serial.println();
 
-    if (WiFi.status() == WL_CONNECTED)
-    {
-      WiFiClient client;
-      HTTPClient http;
 
-      // Your Domain name with URL path or IP address with path
-      http.begin(client, serverName);
 
-      // Specify content-type header
-      http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-
-      tsLastReport = millis();
-      String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(pox.getHeartRate()) + "&o2=" + String(pox.getSpO2()) + "";
-      Serial.print("httpRequestData: ");
-      Serial.println(httpRequestData);
-
-      int httpResponseCode = http.POST(httpRequestData);
-
-      if (httpResponseCode > 0)
-      {
-        Serial.print("HTTP Response code: ");
-        Serial.println(httpResponseCode);
-      }
-      else
-      {
-        Serial.print("Error code: ");
-        Serial.println(httpResponseCode);
-
-        // Free resources
-        http.end();
-      }
-    }
-    else
-    {
-      Serial.println("WiFi Disconnected");
-    }
     tsLastReport = millis();
   }
 }
