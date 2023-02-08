@@ -37,6 +37,7 @@ const char *pass = "vae585910";                                      // vae58591
 String serverName = "http://192.168.1.7/oximeterserver/insert.php";  //check sebelum upload
 String apiKeyValue = "oxytest";
 String sensorname = "oxy1";
+float BPM, SpO2;
 
 //OLED
 #define SCREEN_WIDTH 128                                                   // OLED display width, in pixels
@@ -51,19 +52,9 @@ void onBeatDetected() {
 
 void setup() {
   Serial.begin(115200);
+  delay(100);
 
-  Serial.print("Initializing pulse oximeter..");
 
-  // Initialize the PulseOximeter instance
-  // Failures are generally due to an improper I2C wiring, missing power supply
-  // or wrong target chip
-  if (!pox.begin()) {
-    Serial.println("FAILED");
-    for (;;)
-      ;
-  } else {
-    Serial.println("SUCCESS");
-  }
   WiFi.begin(ssid, pass);
   Serial.println("Connecting");
   while (WiFi.status() != WL_CONNECTED) {
@@ -73,13 +64,24 @@ void setup() {
   Serial.println("");
   Serial.print("Connected to WiFi network with IP Address: ");
   Serial.println(WiFi.localIP());
+  // Initialize the PulseOximeter instance
+  // Failures are generally due to an improper I2C wiring, missing power supply
+  // or wrong target chip
+  Serial.print("Initializing pulse oximeter..");
+  if (!pox.begin()) {
+    Serial.println("FAILED");
+    for (;;)
+      ;
+  } else {
+    Serial.println("SUCCESS");
+  }
+
 
   //OLED
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  //Start the OLED display
   display.display();
   delay(3000);
   //asalnya
-  Serial.print("Initializing pulse oximeter..");
   // The default current for the IR LED is 50mA and it could be changed
   //   by uncommenting the following line. Check MAX30100_Registers.h for all the
   //   available options.
@@ -97,22 +99,26 @@ void loop() {
   // For both, a value of 0 means "invalid"
   if (millis() - tsLastReport > REPORTING_PERIOD_MS) {
 
-            display.clearDisplay();                                   //Clear the display
-    display.setTextSize(1);                                   //Near it display the average BPM you can display the BPM if you want
+    
+    BPM = pox.getHeartRate();
+    SpO2 = pox.getSpO2();
+
+    display.clearDisplay();  //Clear the display
+    display.setTextSize(1);  //Near it display the average BPM you can display the BPM if you want
     display.setTextColor(WHITE);
     display.setCursor(30, 0);
     display.println("BPM");
     display.setCursor(30, 8);
-    display.println(pox.getHeartRate());
-    display.setCursor(90, 0);    //80,0
+    display.println(BPM);
+    display.setCursor(90, 0);  //80,0
     display.println("SpO2");
-    display.setCursor(90, 8);   // 82,18
-    display.println(pox.getSpO2());
-    
+    display.setCursor(90, 8);  // 82,18
+    display.println(SpO2);
+
     Serial.print("Heart rate:");
-    Serial.print(pox.getHeartRate());
+    Serial.print(BPM);
     Serial.print("bpm / SpO2:");
-    Serial.print(pox.getSpO2());
+    Serial.print(SpO2);
     Serial.println("%");
 
     tsLastReport = millis();
