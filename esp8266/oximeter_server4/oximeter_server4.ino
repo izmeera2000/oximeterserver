@@ -126,8 +126,18 @@ void loop() {
     Serial.println("*********************************");
     Serial.println();
 
-
+ if (WiFi.status() == WL_CONNECTED)
+    {
       Serial.println("still connected");
+
+    }
+    
+
+    tsLastReport = millis();
+  }
+}
+
+void sendData(){
 
       WiFiClient client;
       HTTPClient http;
@@ -140,8 +150,4 @@ void loop() {
       Serial.println(httpRequestData);
 
       http.end();
-    
-
-    tsLastReport = millis();
-  }
 }
