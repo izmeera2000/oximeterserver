@@ -145,6 +145,20 @@ void loop()
           String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(pox.getHeartRate()) + "&o2=" + String(pox.getSpO2()) + "";
   Serial.print("httpRequestData: ");
   Serial.println(httpRequestData);
+
+        int httpResponseCode = http.POST(httpRequestData);
+
+      if (httpResponseCode > 0)
+      {
+        Serial.print("HTTP Response code: ");
+        Serial.println(httpResponseCode);
+      }
+      else
+      {
+        Serial.print("Error code: ");
+        Serial.println(httpResponseCode);
+      }
+
   http.end();
 
     }
