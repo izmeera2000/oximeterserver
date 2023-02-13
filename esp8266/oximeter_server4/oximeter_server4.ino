@@ -15,7 +15,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include <Adafruit_GFX.h>  //OLED libraries
+#include <Adafruit_GFX.h> //OLED libraries
 #include <Adafruit_SSD1306.h>
 #include <Wire.h>
 #include "MAX30100_PulseOximeter.h"
@@ -32,22 +32,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 PulseOximeter pox;
 
 uint32_t tsLastReport = 0;
-const char *ssid = "afa2020_2.4Ghz@unifi";                           // afa2020_2.4Ghz@unifi , KOMPUTER, vivo1713
-const char *pass = "vae585910";                                      // vae585910 , NIL, vae585910
-String serverName = "http://192.168.1.7/oximeterserver/insert.php";  // check sebelum upload
+const char *ssid = "afa2020_2.4Ghz@unifi";                          // afa2020_2.4Ghz@unifi , KOMPUTER, vivo1713
+const char *pass = "vae585910";                                     // vae585910 , NIL, vae585910
+String serverName = "http://192.168.1.7/oximeterserver/insert.php"; // check sebelum upload
 String apiKeyValue = "oxytest";
 String sensorname = "oxy1";
 float BPM, SpO2;
 
 // OLED
-#define SCREEN_WIDTH 128                                                   // OLED display width, in pixels
-#define SCREEN_HEIGHT 32                                                   // OLED display height, in pixels 32
-#define OLED_RESET -1                                                      // Reset pin # (or -1 if sharing Arduino reset pin)
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);  // Declaring the display name (display)
+#define SCREEN_WIDTH 128                                                  // OLED display width, in pixels
+#define SCREEN_HEIGHT 32                                                  // OLED display height, in pixels 32
+#define OLED_RESET -1                                                     // Reset pin # (or -1 if sharing Arduino reset pin)
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET); // Declaring the display name (display)
 
 // Callback (registered below) fired when a pulse is detected
 
-void setup() {
+void setup()
+{
   Serial.begin(115200);
   pinMode(16, OUTPUT);
   delay(100);
@@ -58,7 +59,8 @@ void setup() {
   WiFi.begin(ssid, pass);
   Serial.println("Connecting");
 
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     delay(1000);
     Serial.print(".");
   }
@@ -71,7 +73,7 @@ void setup() {
   // or wrong target chip
 
   // OLED
-  display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // Start the OLED display
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C); // Start the OLED display
   display.display();
   delay(3000);
   // asalnya
@@ -84,36 +86,41 @@ void setup() {
   // pox.setOnBeatDetectedCallback(onBeatDetected);
 
   Serial.print("Initializing pulse oximeter..");
-  if (!pox.begin()) {
+  if (!pox.begin())
+  {
     Serial.println("FAILED");
     for (;;)
       ;
-  } else {
+  }
+  else
+  {
     Serial.println("SUCCESS");
   }
 }
 
-void loop() {
+void loop()
+{
   // Make sure to call update as fast as possible
   pox.update();
 
   // Asynchronously dump heart rate and oxidation levels to the serial
   // For both, a value of 0 means "invalid"
-  if (millis() - tsLastReport > REPORTING_PERIOD_MS) {
+  if (millis() - tsLastReport > REPORTING_PERIOD_MS)
+  {
 
     BPM = pox.getHeartRate();
     SpO2 = pox.getSpO2();
 
-    display.clearDisplay();  // Clear the display
-    display.setTextSize(1);  // Near it display the average BPM you can display the BPM if you want
+    display.clearDisplay(); // Clear the display
+    display.setTextSize(1); // Near it display the average BPM you can display the BPM if you want
     display.setTextColor(WHITE);
     display.setCursor(30, 0);
     display.println("BPM");
     display.setCursor(30, 8);
     display.println(BPM);
-    display.setCursor(90, 0);  // 80,0
+    display.setCursor(90, 0); // 80,0
     display.println("SpO2");
-    display.setCursor(90, 8);  // 82,18
+    display.setCursor(90, 8); // 82,18
     display.println(SpO2);
 
     Serial.print("BPM: ");
@@ -126,31 +133,33 @@ void loop() {
     Serial.println("*********************************");
     Serial.println();
 
- if (WiFi.status() == WL_CONNECTED)
+    if (WiFi.status() == WL_CONNECTED)
     {
       Serial.println("still connected");
 
       WiFiClient client;
       HTTPClient http;
+        http.begin(client, serverName);
+  http.end();
 
     }
-    
 
     tsLastReport = millis();
   }
 }
 
-void sendData(){
+void sendData()
+{
 
-      WiFiClient client;
-      HTTPClient http;
+  WiFiClient client;
+  HTTPClient http;
 
-      http.begin(client, serverName);
-      http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+  http.begin(client, serverName);
+  http.addHeader("Content-Type", "application/x-www-form-urlencoded");
 
-      String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(pox.getHeartRate()) + "&o2=" + String(pox.getSpO2()) + "";
-      Serial.print("httpRequestData: ");
-      Serial.println(httpRequestData);
-
-      http.end();
+  String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(pox.getHeartRate()) + "&o2=" + String(pox.getSpO2()) + "";
+  Serial.print("httpRequestData: ");
+  Serial.println(httpRequestData);
+  http.POST(httpRequestData);
+  http.end();
 }
