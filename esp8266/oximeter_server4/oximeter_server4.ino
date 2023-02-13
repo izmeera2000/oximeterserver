@@ -140,6 +140,9 @@ void loop()
       WiFiClient client;
       HTTPClient http;
         http.begin(client, serverName);
+          String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(pox.getHeartRate()) + "&o2=" + String(pox.getSpO2()) + "";
+  Serial.print("httpRequestData: ");
+  Serial.println(httpRequestData);
   http.end();
 
     }
