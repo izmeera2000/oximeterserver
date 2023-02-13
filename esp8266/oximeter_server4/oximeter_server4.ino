@@ -130,6 +130,9 @@ void loop() {
     {
       Serial.println("still connected");
 
+      WiFiClient client;
+      HTTPClient http;
+
     }
     
 
