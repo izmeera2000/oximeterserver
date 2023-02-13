@@ -148,7 +148,7 @@ void loop()
   if (millis() - tsLastReport > 2000)
   {
 
-      // http.POST(httpRequestData);
+      http.POST(httpRequestData);
 }
 
       http.end();
