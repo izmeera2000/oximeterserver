@@ -146,7 +146,7 @@ void loop()
       Serial.print("httpRequestData: ");
       Serial.println(httpRequestData);
 
-      http.POST(httpRequestData);
+      // http.POST(httpRequestData);
 
 
       http.end();
