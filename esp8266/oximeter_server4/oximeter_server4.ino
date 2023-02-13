@@ -145,9 +145,11 @@ void loop()
       String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(pox.getHeartRate()) + "&o2=" + String(pox.getSpO2()) + "";
       Serial.print("httpRequestData: ");
       Serial.println(httpRequestData);
+  if (millis() - tsLastReport > 2000)
+  {
 
       // http.POST(httpRequestData);
-
+}
 
       http.end();
     }
