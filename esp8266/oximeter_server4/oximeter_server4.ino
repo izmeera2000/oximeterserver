@@ -139,14 +139,14 @@ void loop()
 
       WiFiClient client;
       HTTPClient http;
-        http.begin(client, serverName);
-          http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+      http.begin(client, serverName);
+      http.addHeader("Content-Type", "application/x-www-form-urlencoded");
 
-          String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(pox.getHeartRate()) + "&o2=" + String(pox.getSpO2()) + "";
-  Serial.print("httpRequestData: ");
-  Serial.println(httpRequestData);
+      String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(pox.getHeartRate()) + "&o2=" + String(pox.getSpO2()) + "";
+      Serial.print("httpRequestData: ");
+      Serial.println(httpRequestData);
 
-        int httpResponseCode = http.POST(httpRequestData);
+      int httpResponseCode = http.POST(httpRequestData);
 
       if (httpResponseCode > 0)
       {
@@ -159,8 +159,7 @@ void loop()
         Serial.println(httpResponseCode);
       }
 
-  http.end();
-
+      http.end();
     }
 
     tsLastReport = millis();
