@@ -146,18 +146,8 @@ void loop()
       Serial.print("httpRequestData: ");
       Serial.println(httpRequestData);
 
-      int httpResponseCode = http.POST(httpRequestData);
+      http.POST(httpRequestData);
 
-      if (httpResponseCode > 0)
-      {
-        Serial.print("HTTP Response code: ");
-        Serial.println(httpResponseCode);
-      }
-      else
-      {
-        Serial.print("Error code: ");
-        Serial.println(httpResponseCode);
-      }
 
       http.end();
     }
