@@ -140,6 +140,8 @@ void loop()
       WiFiClient client;
       HTTPClient http;
         http.begin(client, serverName);
+          http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+
           String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(pox.getHeartRate()) + "&o2=" + String(pox.getSpO2()) + "";
   Serial.print("httpRequestData: ");
   Serial.println(httpRequestData);
