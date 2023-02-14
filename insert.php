@@ -6,7 +6,7 @@ $db_handle = new DBController();
 
 $api_key_value = "oxytest";
 
-$api_key = $bpm = $o2 = "";
+$api_key = $bpm = $o2 = $sensorname = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $api_key = test_input($_POST["api_key"]);

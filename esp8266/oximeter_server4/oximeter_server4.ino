@@ -146,7 +146,7 @@ void loop()
         //  http.addHeader("Content-Type", "text/plain");
         // String httpRequestData = "sensorname=" + apiKeyValue + "&bpm=99"  + "&o2=99";
 //asdasdas
-        String httpRequestData = "sensorname=" + apiKeyValue + "&bpm=" + String(pox.getHeartRate()) + "&o2=" + String(pox.getSpO2()) + "";
+        String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(pox.getHeartRate()) + "&o2=" + String(pox.getSpO2()) + "sensorname=" + sensorname;
         Serial.print("httpRequestData: ");
         Serial.println(httpRequestData);
         int httpResponseCode = http.POST(httpRequestData);
