@@ -137,7 +137,7 @@ void loop()
     {
       Serial.println("still connected");
 
-      if (millis() - tsLastReport > 5000)
+      if (millis() - tsLastReport > 10000)
       {
         WiFiClient client;
         HTTPClient http;
