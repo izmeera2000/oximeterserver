@@ -1,23 +1,54 @@
-//MAX30100 ESP8266 WebServer
-#include <ESP8266WebServer.h>
+/*
+Arduino-MAX30100 oximetry / heart rate integrated sensor library
+Copyright (C) 2016  OXullo Intersecans <x@brainrapers.org>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+*/
+#include <Adafruit_GFX.h> //OLED libraries
+#include <Adafruit_SSD1306.h>
 #include <Wire.h>
 #include "MAX30100_PulseOximeter.h"
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
+// #include <WiFiClient.h>
+#define REPORTING_PERIOD_MS 1000
 
+// PulseOximeter is the higher level interface to the sensor
+// it offers:
+//  * beat detection reporting
+//  * heart rate calculation
+//  * SpO2 (oxidation level) calculation
+PulseOximeter pox;
 
-#define REPORTING_PERIOD_MS     1000
-
+uint32_t tsLastReport = 0;
+const char *ssid = "afa2020_2.4Ghz@unifi";                          // afa2020_2.4Ghz@unifi , KOMPUTER, vivo1713
+const char *pass = "vae585910";                                     // vae585910 , NIL, vae585910
+String serverName = "http://192.168.1.7/oximeterserver/insert.php"; // check sebelum upload
+String apiKeyValue = "oxytest";
+String sensorname = "oxy1";
 float BPM, SpO2;
 
-/*Put your SSID & Password*/
-const char* ssid = "afa2020_2.4Ghz@unifi";  // Enter SSID here
-const char* password = "vae585910";  //Enter Password here
+// OLED
+#define SCREEN_WIDTH 128                                                  // OLED display width, in pixels
+#define SCREEN_HEIGHT 32                                                  // OLED display height, in pixels 32
+#define OLED_RESET -1                                                     // Reset pin # (or -1 if sharing Arduino reset pin)
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET); // Declaring the display name (display)
 
-PulseOximeter pox;
-uint32_t tsLastReport = 0;
+// Callback (registered below) fired when a pulse is detected
 
-ESP8266WebServer server(80);
-
-void setup() {
+void setup()
+{
   Serial.begin(115200);
   pinMode(16, OUTPUT);
   delay(100);
@@ -25,142 +56,100 @@ void setup() {
   Serial.println("Connecting to ");
   Serial.println(ssid);
 
-  //connect to your local wi-fi network
-  WiFi.begin(ssid, password);
-  
-  //check wi-fi is connected to wi-fi network
-  while (WiFi.status() != WL_CONNECTED) {
+  WiFi.begin(ssid, pass);
+  Serial.println("Connecting");
+
+  while (WiFi.status() != WL_CONNECTED)
+  {
     delay(1000);
     Serial.print(".");
   }
   Serial.println("");
-  Serial.println("WiFi connected..!");
-  Serial.print("Got IP: ");  Serial.println(WiFi.localIP());
-  
-  server.on("/", handle_OnConnect);
-  server.onNotFound(handle_NotFound);
+  Serial.print("Connected to WiFi network with IP Address: ");
+  Serial.println(WiFi.localIP());
 
-  server.begin();
-  Serial.println("HTTP server started");
-  
-  Serial.print("Initializing pulse oximeter..");
+  // Initialize the PulseOximeter instance
+  // Failures are generally due to an improper I2C wiring, missing power supply
+  // or wrong target chip
 
-  if (!pox.begin()) {
-    Serial.println("FAILED");
-    for (;;);
-  } else {
-    Serial.println("SUCCESS");
-    
-  }
+  // OLED
+  display.begin(SSD1306_SWITCHCAPVCC, 0x3C); // Start the OLED display
+  display.display();
+  delay(3000);
+  // asalnya
+  //  The default current for the IR LED is 50mA and it could be changed
+  //    by uncommenting the following line. Check MAX30100_Registers.h for all the
+  //    available options.
+  //  pox.setIRLedCurrent(MAX30100_LED_CURR_7_6MA);
+
+  // Register a callback for the beat detection
+  // pox.setOnBeatDetectedCallback(onBeatDetected);
 }
-void loop() {
-  server.handleClient();
+
+void loop()
+{
+  // Make sure to call update as fast as possible
   pox.update();
-  if (millis() - tsLastReport > REPORTING_PERIOD_MS) {
 
-    BPM = pox.getHeartRate();
-    SpO2 = pox.getSpO2();
+  // Asynchronously dump heart rate and oxidation levels to the serial
+  // For both, a value of 0 means "invalid"
+  if (millis() - tsLastReport > REPORTING_PERIOD_MS)
+  {
 
-    Serial.print("BPM: ");
-    Serial.println(BPM);
+    // display.clearDisplay(); // Clear the display
+    // display.setTextSize(1); // Near it display the average BPM you can display the BPM if you want
+    // display.setTextColor(WHITE);
+    // display.setCursor(30, 0);
+    // display.println("BPM");
+    // display.setCursor(30, 8);
+    // display.println(BPM);
+    // display.setCursor(90, 0); // 80,0
+    // display.println("SpO2");
+    // display.setCursor(90, 8); // 82,18
+    // display.println(SpO2);
 
-    Serial.print("SpO2: ");
-    Serial.print(SpO2);
-    Serial.println("%");
+    // Serial.print("BPM: ");
+    // Serial.println(BPM);
 
-    Serial.println("*********************************");
-    Serial.println();
+    // Serial.print("SpO2: ");
+    // Serial.print(SpO2);
+    // Serial.println("%");
+
+    // Serial.println("*********************************");
+    // Serial.println();
+
+    if (WiFi.status() == WL_CONNECTED)
+    {
+      Serial.println("still connected");
+
+      if (millis() - tsLastReport > 10000)
+      {
+        WiFiClient client;
+        HTTPClient http;
+        http.begin(client, serverName);
+        http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+        //  http.addHeader("Content-Type", "text/plain");
+        String httpRequestData = "api_key=" + apiKeyValue + "&bpm=99" + "&o2=99" + "sensorname=" + sensorname;
+        // asdasdas
+        // String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(pox.getHeartRate()) + "&o2=" + String(pox.getSpO2()) + "sensorname=" + sensorname;
+        Serial.print("httpRequestData: ");
+        Serial.println(httpRequestData);
+        int httpResponseCode = http.POST(httpRequestData);
+
+        if (httpResponseCode > 0)
+        {
+          Serial.print("HTTP Response code: ");
+          Serial.println(httpResponseCode);
+        }
+        else
+        {
+          Serial.print("Error code: ");
+          Serial.println(httpResponseCode);
+        }
+        http.end();
+      }
+    }
+
     tsLastReport = millis();
   }
-
-
-}
-
-void handle_OnConnect() {
-
-  server.send(200, "text/html", SendHTML(BPM, SpO2));
-}
-
-void handle_NotFound() {
-  server.send(404, "text/plain", "Not found");
-}
-
-String SendHTML(float BPM, float SpO2) {
-  String ptr = "<!DOCTYPE html>";
-  ptr += "<html>";
-  ptr += "<head>";
-  ptr += "<title>ESP8266 WebServer</title>";
-  ptr += "<meta name='viewport' content='width=device-width, initial-scale=1.0'>";
-  ptr += "<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.2/css/all.min.css'>";
-  ptr += "<link rel='stylesheet' type='text/css' href='styles.css'>";
-  ptr += "<style>";
-  ptr += "body { background-color: #fff; font-family: sans-serif; color: #333333; font: 14px Helvetica, sans-serif box-sizing: border-box;}";
-  ptr += "#page { margin: 20px; background-color: #fff;}";
-  ptr += ".container { height: inherit; padding-bottom: 20px;}";
-  ptr += ".header { padding: 20px;}";
-  ptr += ".header h1 { padding-bottom: 0.3em; color: #008080; font-size: 45px; font-weight: bold; font-family: Garmond, 'sans-serif'; text-align: center;}";
-  ptr += "h2 { padding-bottom: 0.2em; border-bottom: 1px solid #eee; margin: 2px; text-align: left;}";
-  ptr += ".header h3 { font-weight: bold; font-family: Arial, 'sans-serif'; font-size: 17px; color: #b6b6b6; text-align: center;}";
-  ptr += ".box-full { padding: 20px; border 1px solid #ddd; border-radius: 1em 1em 1em 1em; box-shadow: 1px 7px 7px 1px rgba(0,0,0,0.4); background: #fff; margin: 20px; width: 300px;}";
-  ptr += "@media (max-width: 494px) { #page { width: inherit; margin: 5px auto; } #content { padding: 1px;} .box-full { margin: 8px 8px 12px 8px; padding: 10px; width: inherit;; float: none; } }";
-  ptr += "@media (min-width: 494px) and (max-width: 980px) { #page { width: 465px; margin 0 auto; } .box-full { width: 380px; } }";
-  ptr += "@media (min-width: 980px) { #page { width: 930px; margin: auto; } }";
-  ptr += ".sensor { margin: 12px 0px; font-size: 2.5rem;}";
-  ptr += ".sensor-labels { font-size: 1rem; vertical-align: middle; padding-bottom: 15px;}";
-  ptr += ".units { font-size: 1.2rem;}";
-  ptr += "hr { height: 1px; color: #eee; background-color: #eee; border: none;}";
-  ptr += "</style>";
-
-  //Ajax Code Start
-  ptr += "<script>\n";
-  ptr += "setInterval(loadDoc,1000);\n";
-  ptr += "function loadDoc() {\n";
-  ptr += "var xhttp = new XMLHttpRequest();\n";
-  ptr += "xhttp.onreadystatechange = function() {\n";
-  ptr += "if (this.readyState == 4 && this.status == 200) {\n";
-  ptr += "document.body.innerHTML =this.responseText}\n";
-  ptr += "};\n";
-  ptr += "xhttp.open(\"GET\", \"/\", true);\n";
-  ptr += "xhttp.send();\n";
-  ptr += "}\n";
-  ptr += "</script>\n";
-  //Ajax Code END
-
-  ptr += "</head>";
-  ptr += "<body>";
-  ptr += "<div id='page'>";
-  ptr += "<div class='header'>";
-  ptr += "<h1>MAX30100 ESP8266 WebServer</h1>";
-  ptr += "<h3><a href='https://iotprojectsideas.com'>https://theiotprojects.com</a></h3>";
-  ptr += "</div>";
-  ptr += "<div id='content' align='center'>";
-  ptr += "<div class='box-full' align='left'>";
-  ptr += "<h2>Sensor Readings</h2>";
-  ptr += "<div class='sensors-container'>";
-
-  //For Heart Rate
-  ptr += "<p class='sensor'>";
-  ptr += "<i class='fas fa-heartbeat' style='color:#cc3300'></i>";
-  ptr += "<span class='sensor-labels'> Heart Rate </span>";
-  ptr += (int)BPM;
-  ptr += "<sup class='units'>BPM</sup>";
-  ptr += "</p>";
-  ptr += "<hr>";
-
-  //For Sp02
-  ptr += "<p class='sensor'>";
-  ptr += "<i class='fas fa-burn' style='color:#f7347a'></i>";
-  ptr += "<span class='sensor-labels'> Sp02 </span>";
-  ptr += (int)SpO2;
-  ptr += "<sup class='units'>%</sup>";
-  ptr += "</p>";
-
-  ptr += "</div>";
-  ptr += "</div>";
-  ptr += "</div>";
-  ptr += "</div>";
-  ptr += "</div>";
-  ptr += "</body>";
-  ptr += "</html>";
-  return ptr;
 }
