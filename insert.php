@@ -2,7 +2,7 @@
 
 session_start();
 require_once("controller/dbcontroller.php");
-$db_handle = new DBController();
+$db_handle = new DBController2();
 
 $api_key_value = "oxytest";
 
