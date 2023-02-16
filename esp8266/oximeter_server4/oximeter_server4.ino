@@ -34,7 +34,7 @@ PulseOximeter pox;
 uint32_t tsLastReport = 0;
 const char *ssid = "afa2020_2.4Ghz@unifi";                          // afa2020_2.4Ghz@unifi , KOMPUTER, vivo1713
 const char *pass = "vae585910";                                     // vae585910 , NIL, vae585910
-String serverName = "http://192.168.1.7/oximeterserver/insert.php"; // check sebelum upload
+String serverName = "http://192.168.1.5/oximeterserver/insert.php"; // check sebelum upload
 String apiKeyValue = "oxytest";
 String sensorname = "oxy1";
 float BPM, SpO2;
@@ -150,7 +150,9 @@ void loop()
         Serial.print("httpRequestData: ");
         Serial.println(httpRequestData);
         int httpResponseCode = http.POST(httpRequestData);
-
+        String payload = http.getString();
+        Serial.println("PAYLOAD");
+        Serial.println(payload);
         if (httpResponseCode > 0)
         {
           Serial.print("HTTP Response code: ");
