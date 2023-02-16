@@ -12,8 +12,8 @@ class DBController
 	// private $database = "id20052762_taipingytf";
 	// private $conn;
 
-	private $host = "localhost";
-	private $user = "root";
+	private $host = "192.168.0.101";
+	private $user = "izmeera";
 	private $password = "";
 	private $database = "oximeter_server";
 	private $conn;
@@ -103,8 +103,8 @@ class DBController2
 	// private $database = "id20052762_taipingytf";
 	// private $conn;
 
-	private $host = "192.168.1.5";
-	private $user = "root";
+	private $host = "192.168.0.101";
+	private $user = "izmeera";
 	private $password = "";
 	private $database = "oximeter_server";
 	private $conn;

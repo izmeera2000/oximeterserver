@@ -17,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $o2 = test_input($_POST["o2"]);
         
         $db_handle->uploadFOrder("INSERT INTO sensordata (sensor,bpm,o2) VALUES ('$sensorname','$bpm','$o2') ");
+        echo "data sent";
 
     }
     else {
