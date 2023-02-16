@@ -136,6 +136,11 @@ void loop()
         Serial.println(httpRequestData);
         int httpResponseCode = http.POST(httpRequestData);
 
+
+                String payload = http.getString();
+        Serial.println("PAYLOAD");
+        Serial.println(payload);
+
         if (httpResponseCode > 0)
         {
           Serial.print("HTTP Response code: ");
