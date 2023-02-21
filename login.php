@@ -98,7 +98,7 @@ if (isset($_POST['lgn'])) {
                   <p class="text-medium-emphasis">Sign In to your account</p>
                   <?php include('errors.php'); ?>
 
-                  <div class="input-group mb-3"><span class="input-group-text">
+                  <div class="input-group mb-3" ><span class="input-group-text">
                       <svg class="icon">
                         <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
                       </svg></span>

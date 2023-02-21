@@ -2,7 +2,7 @@
 
 session_start();
 require_once("controller/dbcontroller.php");
-$db_handle = new DBController2();
+$db_handle = new DBController();
 
 $api_key_value = "oxytest";
 
@@ -15,6 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sensorname = test_input($_POST["sensorname"]);
         $bpm = test_input($_POST["bpm"]);
         $o2 = test_input($_POST["o2"]);
+        
         
         $db_handle->uploadFOrder("INSERT INTO sensordata (sensor,bpm,o2) VALUES ('$sensorname','$bpm','$o2') ");
         echo "data sent";

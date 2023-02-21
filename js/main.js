@@ -401,4 +401,6 @@ const mainChart2 = new Chart(document.getElementById('main-chart2'), {
     }
   }
 });
+
+
 //# sourceMappingURL=main.js.map
