@@ -229,7 +229,7 @@ if (isset($_POST['findpatient'])) {
 
                 <div class="d-flex justify-content-between">
                   <div id="test">
-                    <h4 class="card-title mb-0">Beats Per Minute (BPM) </h4>
+                    <h4 class="card-title mb-0">Oxygen (%) </h4>
                   </div>
                   <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
 
@@ -258,7 +258,7 @@ if (isset($_POST['findpatient'])) {
             <div class="card mb-4 text-white bg-dark">
 
               <div class="card-body">
-                <form action="bpm.php" method="post">
+                <form action="o2.php" method="post">
 
                   <div class="d-flex justify-content-between">
                     <div>
@@ -280,7 +280,7 @@ if (isset($_POST['findpatient'])) {
                     <div class="btn-toolbar d-block d-md-block" role="toolbar" aria-label="Toolbar with buttons">
 
 
-                      <button class="btn btn-light" type="submit" name="bpmrange">
+                      <button class="btn btn-light" type="submit" name="o2range">
                         <svg class="icon">
                           <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-find-in-page"></use>
                         </svg>
@@ -295,7 +295,7 @@ if (isset($_POST['findpatient'])) {
                         <?php
                         if (isset($_SESSION['sensor'])) {
                           $sensor = $_SESSION['sensor'];
-                          $results = $db_handle->runQuery("SELECT DATE_FORMAT(reading_time, '%Y-%m-%d') FROM sensordata WHERE sensor='$sensor'ORDER BY id ASC ");
+                          $results = $db_handle->runQuery("SELECT DATE_FORMAT(reading_time, '%Y-%m-%d') FROM sensordata WHERE sensor='$sensor' ");
                           $min = $results[0]["DATE_FORMAT(reading_time, '%Y-%m-%d')"];
                           $max = end($results)["DATE_FORMAT(reading_time, '%Y-%m-%d')"];
                           echo '<input type="date" class="form-control text-center" name="daterange1" max=' . $max . ' min=' . $min . '>';
@@ -317,7 +317,7 @@ if (isset($_POST['findpatient'])) {
             </div>
           </div>
           <?php
-          if (isset($_POST['bpmrange'])) { ?>
+          if (isset($_POST['o2range'])) { ?>
             <div class="col-sm-12 col-lg-12">
               <div class="card mb-4">
                 <div class="card-body">
@@ -331,7 +331,7 @@ if (isset($_POST['findpatient'])) {
 
                     <div class="btn-toolbar d-block d-md-block" role="toolbar" aria-label="Toolbar with buttons">
 
-                      <a class="btn btn-light" href="bpmpdf.php" target="_blank">
+                      <a class="btn btn-light" href="o2pdf.php" target="_blank">
                         <svg class="icon">
                           <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-print"></use>
                         </svg>
@@ -353,7 +353,7 @@ if (isset($_POST['findpatient'])) {
                       </thead>
                       <tbody>
                         <?php
-                        if (isset($_POST['bpmrange'])) {
+                        if (isset($_POST['o2range'])) {
                           $sensor = $_SESSION['sensor'];
                           $max = $_POST['daterange2'];
                           $min = $_POST['daterange1'];
@@ -363,31 +363,31 @@ if (isset($_POST['findpatient'])) {
                           $newmax = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes + 59 seconds', strtotime($max)));
                           // echo $newmax;
                           $newmin = date("Y-m-d H:i:s", (strtotime($min)));
-                          $_SESSION["minrangebpm"] = $newmin;
-                          $_SESSION["maxrangebpm"] = $newmax;
-                          $results = $db_handle->runQuery("SELECT sensor,bpm,DATE_FORMAT(reading_time,  '%H:%i:%s %d-%m-%Y') FROM sensordata WHERE sensor='$sensor ' AND reading_time BETWEEN '$newmin' AND '$newmax'");
+                          $_SESSION["minrangeo2"] = $newmin;
+                          $_SESSION["maxrangeo2"] = $newmax;
+                          $results = $db_handle->runQuery("SELECT sensor,o2,DATE_FORMAT(reading_time,  '%H:%i:%s %d-%m-%Y') FROM sensordata WHERE sensor='$sensor ' AND reading_time BETWEEN '$newmin' AND '$newmax' ORDER BY id ASC");
 
                           if ($results) {
-                            $bpm = array_column($results, 'bpm');
-                            $minbpm = min($bpm);
-                            $maxbpm = max($bpm);
+                            $o2 = array_column($results, 'o2');
+                            $mino2 = min($o2);
+                            $maxo2 = max($o2);
                             $answer = 55 / 160 * 100;
                             // echo $answer;
                       
                             foreach ($results as $element) {
                               echo '<tr class="align-middle">';
                               echo '    <td> <div>' . $element["sensor"] . '</div></td>';
-                              $barwidth = $element["bpm"] / $maxbpm * 100;
+                              $barwidth = (int)$element["o2"] /  100;
 
-                              if ($element["bpm"] >= 90 && $element["bpm"] <= 100) {
-                                echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["bpm"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-success" style="width: ' . $barwidth . '%"></div></div></td>';
+                              if ($element["o2"]>= 97 && $element["o2"] <= 100) {
+                                echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["o2"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-success" style="width: ' . $barwidth . '%"></div></div></td>';
 
-                              } else if (($element["bpm"] >= 70 && $element["bpm"] < 90) || ($element["bpm"] > 100 && $element["bpm"] <= 120)) {
-                                echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["bpm"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-warning" style="width: ' . $barwidth . '%"></div></div></td>';
+                              } else if (($element["o2"] >= 95)  && ($element["o2"] < 97)) {
+                                echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["o2"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-warning" style="width: ' . $barwidth . '%"></div></div></td>';
 
                               } else {
 
-                                echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["bpm"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-danger" style="width: ' . $barwidth . '%"></div></div></td>';
+                                echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["o2"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-danger" style="width: ' . $barwidth . '%"></div></div></td>';
 
                               }
                               // echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["bpm"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-success" style="width: '. $barwidth. '%"></div></div></td>';
@@ -466,18 +466,18 @@ if (isset($_POST['findpatient'])) {
         var data = JSON.parse(this.responseText);
         if (data.length !== 0) {
           const labelsc = [];
-          const bpm = [];
+          const o2 = [];
           for (var i = 0; i < data.length; i++) {
 
             labelsc.push(data[i]["DATE_FORMAT(reading_time, '%H:%i:%s')"]);
-            bpm.push(data[i]["bpm"]);
+            o2.push(data[i]["o2"]);
 
 
           }
 
 
           mainChart1.data.labels = labelsc;
-          mainChart1.data.datasets[0].data = bpm;
+          mainChart1.data.datasets[0].data = o2;
           mainChart1.update();
 
         }

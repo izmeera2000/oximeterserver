@@ -94,11 +94,11 @@ if (isset($_POST['findpatient'])) {
             <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-speedometer"></use>
           </svg> Dashboard</a></li>
       <li class="nav-title">Page</li>
-      <li class="nav-item"><a class="nav-link" href="colors.html">
+      <li class="nav-item"><a class="nav-link" href="bpm.php">
           <svg class="nav-icon">
             <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-graph"></use>
           </svg> Beats Per Minute</a></li>
-      <li class="nav-item"><a class="nav-link" href="typography.html">
+      <li class="nav-item"><a class="nav-link" href="o2.php">
           <svg class="nav-icon">
             <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-chart"></use>
           </svg> Oxygen</a></li>
@@ -160,11 +160,10 @@ if (isset($_POST['findpatient'])) {
                 </div>
 
               </div>
-              <a class="dropdown-item" href="#">
-                <!-- <svg class="icon me-2">
+              <!-- <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
                 </svg> Profile</a> -->
-                <!-- <a class="dropdown-item" href="#">
+              <!-- <a class="dropdown-item" href="#">
                 <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-bell"></use>
                 </svg> Updates<span class="badge badge-sm bg-info ms-2">42</span></a>
@@ -180,33 +179,32 @@ if (isset($_POST['findpatient'])) {
                 <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-comment-square"></use>
                 </svg> Comments<span class="badge badge-sm bg-warning ms-2">42</span></a> -->
-                <!-- <div class="dropdown-header bg-light py-2">
+              <!-- <div class="dropdown-header bg-light py-2">
                 <div class="fw-semibold">Settings</div>
               </div> -->
 
 
-                <a class="dropdown-item" href="#">
-                  <!-- <svg class="icon me-2">
+              <!-- <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
                 </svg> Settings</a> -->
-                  <!-- <a class="dropdown-item" href="#">
+              <!-- <a class="dropdown-item" href="#">
                 <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-credit-card"></use>
                 </svg> Payments<span class="badge badge-sm bg-secondary ms-2">42</span></a> -->
-                  <!-- <a class="dropdown-item"
+              <!-- <a class="dropdown-item"
                 href="#">
                 <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-file"></use>
                 </svg> Projects<span class="badge badge-sm bg-primary ms-2">42</span></a>
               <div class="dropdown-divider"></div> -->
-                  <!-- <a class="dropdown-item" href="#">
+              <!-- <a class="dropdown-item" href="#">
                 <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
                 </svg> Lock Account</a> -->
-                  <a class="dropdown-item" href="?logout='1'">
-                    <svg class="icon me-2">
-                      <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-account-logout"></use>
-                    </svg> Logout</a>
+              <a class="dropdown-item" href="?logout='1'">
+                <svg class="icon me-2">
+                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-account-logout"></use>
+                </svg> Logout</a>
             </div>
           </li>
         </ul>
@@ -295,122 +293,129 @@ if (isset($_POST['findpatient'])) {
 
         </div>
       </div>
-      <!-- /.col-->
-      <div class="col-sm-6 col-lg-6">
-        <div class="card mb-4 text-white bg-primary">
-          <div class="card-body pb-0 d-flex justify-content-between align-items-start">
-            <div>
 
-              <div class="fs-4 fw-semibold">
-                <asd id="latestbpm">26K</asd>
-                <svg class="icon">
-                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-heart"></use>
-                </svg>
+      <?php
+      if (isset($_SESSION['sensor'])) { ?>
+        <!-- /.col-->
+        <div class="col-sm-6 col-lg-6">
+          <div class="card mb-4 text-white bg-primary">
+            <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+              <div>
+
+                <div class="fs-4 fw-semibold">
+                  <asd id="latestbpm">26K</asd>
+                  <svg class="icon">
+                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-heart"></use>
+                  </svg>
+                </div>
+
+                <div>BPM</div>
               </div>
 
-              <div>BPM</div>
             </div>
-
-          </div>
-          <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
-            <canvas class="chart" id="card-chart1" height="70"></canvas>
+            <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
+              <canvas class="chart" id="card-chart1" height="70"></canvas>
+            </div>
           </div>
         </div>
-      </div>
-      <!-- /.col-->
-      <div class="col-sm-6 col-lg-6">
-        <div class="card mb-4 text-white bg-info">
-          <div class="card-body pb-0 d-flex justify-content-between align-items-start">
-            <div>
+        <!-- /.col-->
+        <div class="col-sm-6 col-lg-6">
+          <div class="card mb-4 text-white bg-info">
+            <div class="card-body pb-0 d-flex justify-content-between align-items-start">
+              <div>
 
-              <div class="fs-4 fw-semibold">
-                <asd id="latesto2">26K</asd>
-                %
+                <div class="fs-4 fw-semibold">
+                  <asd id="latesto2">26K</asd>
+                  %
+                </div>
+
+                <div>Oxygen</div>
               </div>
 
-              <div>Oxygen</div>
             </div>
-
-          </div>
-          <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
-            <canvas class="chart" id="card-chart1" height="70"></canvas>
+            <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
+              <canvas class="chart" id="card-chart1" height="70"></canvas>
+            </div>
           </div>
         </div>
-      </div>
-      <!-- /.col-->
-
+        <!-- /.col-->
+      <?php } ?>
     </div>
     <!-- /.row-->
 
     <div class="row">
+      <?php
+      if (isset($_SESSION['sensor'])) { ?>
 
-      <div class="col-sm-12 col-lg-6">
-        <div class="card mb-4">
-          <div class="card-body">
+        <div class="col-sm-12 col-lg-6">
+          <div class="card mb-4">
+            <div class="card-body">
 
-            <div class="d-flex justify-content-between">
-              <div id="test">
-                <h4 class="card-title mb-0">Beats Per Minute (BPM)</h4>
-              </div>
+              <div class="d-flex justify-content-between">
+                <div id="test">
+                  <h4 class="card-title mb-0">Beats Per Minute (BPM)</h4>
+                </div>
 
-              <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
-                <div class="dropdown">
+                <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
+                  <div class="dropdown">
 
-                  <button class="btn btn-transparent " type="button" data-coreui-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
-                    <svg class="icon">
-                      <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-options"></use>
-                    </svg>
-                  </button>
-                  <div class="dropdown-menu dropdown-menu-end">
-                    <a class="dropdown-item" href="bpm.php">See more</a>
+                    <button class="btn btn-transparent " type="button" data-coreui-toggle="dropdown" aria-haspopup="true"
+                      aria-expanded="false">
+                      <svg class="icon">
+                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-options"></use>
+                      </svg>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end">
+                      <a class="dropdown-item" href="bpm.php">See more</a>
+                    </div>
                   </div>
                 </div>
-              </div>
 
+              </div>
+              <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
+                <canvas class="chart" id="main-chart1" height="300"></canvas>
+              </div>
             </div>
-            <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-              <canvas class="chart" id="main-chart1" height="300"></canvas>
-            </div>
+
           </div>
 
         </div>
 
-      </div>
+        <div class="col-sm-12 col-lg-6">
+          <div class="card mb-4">
+            <div class="card-body">
 
-      <div class="col-sm-12 col-lg-6">
-        <div class="card mb-4">
-          <div class="card-body">
+              <div class="d-flex justify-content-between">
+                <div>
+                  <h4 class="card-title mb-0">Oxygen (%)</h4>
 
-            <div class="d-flex justify-content-between">
-              <div>
-                <h4 class="card-title mb-0">Oxygen (%)</h4>
+                </div>
 
-              </div>
-
-              <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
-                <div class="dropdown">
-                  <button class="btn btn-transparent " type="button" data-coreui-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
-                    <svg class="icon">
-                      <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-options"></use>
-                    </svg>
-                  </button>
-                  <div class="dropdown-menu dropdown-menu-end">
-                    <a class="dropdown-item" href="#">See more</a>
+                <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
+                  <div class="dropdown">
+                    <button class="btn btn-transparent " type="button" data-coreui-toggle="dropdown" aria-haspopup="true"
+                      aria-expanded="false">
+                      <svg class="icon">
+                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-options"></use>
+                      </svg>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end">
+                      <a class="dropdown-item" href="o2.php">See more</a>
+                    </div>
                   </div>
                 </div>
-              </div>
 
+              </div>
+              <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
+                <canvas class="chart" id="main-chart2" height="300"></canvas>
+              </div>
             </div>
-            <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-              <canvas class="chart" id="main-chart2" height="300"></canvas>
-            </div>
+
           </div>
 
         </div>
+      <?php } ?>
 
-      </div>
       <form action="index.php" method="post">
 
         <div class="modal fade" id="Sensor" data-coreui-backdrop="static" data-coreui-keyboard="false" tabindex="-1"
