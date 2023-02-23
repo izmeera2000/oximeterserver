@@ -335,6 +335,8 @@ const mainChart1 = new Chart(document.getElementById('main-chart1'), {
     }
   }
 });
+
+
 const mainChart2 = new Chart(document.getElementById('main-chart2'), {
   type: 'line',
   data: {
@@ -348,8 +350,8 @@ const mainChart2 = new Chart(document.getElementById('main-chart2'), {
       data: [],
       fill: true,
       segment: {
-        borderColor: (ctx) => {
-          val = ctx.p0.parsed.y;
+        borderColor: (ctx2) => {
+          val = ctx2.p0.parsed.y;
           if (val >= 97 && val <= 100 ){
             return 'green'
 

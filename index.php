@@ -11,13 +11,7 @@ if (isset($_GET['logout'])) {
   unset($_SESSION['username']);
   header("location: login.php");
 }
-// if (!isset($_SESSION['sensor'])) {
-//   $username = $_SESSION['username'];
-//   $results = $db_handle->runQuery("SELECT * FROM users WHERE username='$username' ");
 
-//   // echo '<pre>'; print_r($results[0]["sensor"]); echo '</pre>';
-//   $_SESSION['sensor'] = $results[0]["sensor"];
-// }
 if (isset($_POST['findpatient'])) {
   $username = $_POST['patientname'];
   $results = $db_handle->runQuery("SELECT * FROM users WHERE username='$username' ");
@@ -31,7 +25,6 @@ if (isset($_POST['findpatient'])) {
 ?>
 <!DOCTYPE html>
 
-<!-- Breadcrumb-->
 <html lang="en">
 
 <head>
@@ -68,20 +61,7 @@ if (isset($_POST['findpatient'])) {
   <!-- We use those styles to show code examples, you should remove them in your application.-->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism.css">
   <link href="css/examples.css" rel="stylesheet">
-  <!-- Global site tag (gtag.js) - Google Analytics-->
-  <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
 
-    function gtag() {
-      dataLayer.push(arguments);
-    }
-    gtag('js', new Date());
-    // Shared ID
-    gtag('config', 'UA-118965717-3');
-    // Bootstrap ID
-    gtag('config', 'UA-118965717-5');
-  </script>
   <link href="vendors/@coreui/chartjs/css/coreui-chartjs.css" rel="stylesheet">
 </head>
 
@@ -125,28 +105,15 @@ if (isset($_POST['findpatient'])) {
                 class="img" alt="Oximeter Logo">Oximeter
             </a>
           </li>
-          <!-- <li class="nav-item"><a class="nav-link" href="#">Users</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Settings</a></li> -->
+
         </ul>
         <ul class="header-nav ms-auto">
-          <!-- <li class="nav-item"><a class="nav-link" href="#">
-              <svg class="icon icon-lg">
-                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-bell"></use>
-              </svg></a></li>
-          <li class="nav-item"><a class="nav-link" href="#">
-              <svg class="icon icon-lg">
-                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-list-rich"></use>
-              </svg></a></li>
-          <li class="nav-item"><a class="nav-link" href="#">
-              <svg class="icon icon-lg">
-                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-envelope-open"></use>
-              </svg></a></li> -->
+
         </ul>
         <ul class="header-nav ms-3">
           <li class="nav-item dropdown"><a class="nav-link py-0" data-coreui-toggle="dropdown" href="#" role="button"
               aria-haspopup="true" aria-expanded="false">
-              <!-- <div class="avatar avatar-md"><img class="avatar-img" src="assets/img/avatars/8.jpg" alt="user@email.com">
-              </div> -->
+     
               <div class="avatar bg-primary text-white">
                 <?php echo substr(ucfirst($_SESSION['username']), 0, 1); ?>
               </div>
@@ -160,47 +127,7 @@ if (isset($_POST['findpatient'])) {
                 </div>
 
               </div>
-              <!-- <svg class="icon me-2">
-                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
-                </svg> Profile</a> -->
-              <!-- <a class="dropdown-item" href="#">
-                <svg class="icon me-2">
-                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-bell"></use>
-                </svg> Updates<span class="badge badge-sm bg-info ms-2">42</span></a>
-                
-                <a class="dropdown-item" href="#">
-                <svg class="icon me-2">
-                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-envelope-open"></use>
-                </svg> Messages<span class="badge badge-sm bg-success ms-2">42</span></a><a class="dropdown-item"
-                href="#">
-                <svg class="icon me-2">
-                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-task"></use>
-                </svg> Tasks<span class="badge badge-sm bg-danger ms-2">42</span></a><a class="dropdown-item" href="#">
-                <svg class="icon me-2">
-                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-comment-square"></use>
-                </svg> Comments<span class="badge badge-sm bg-warning ms-2">42</span></a> -->
-              <!-- <div class="dropdown-header bg-light py-2">
-                <div class="fw-semibold">Settings</div>
-              </div> -->
 
-
-              <!-- <svg class="icon me-2">
-                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
-                </svg> Settings</a> -->
-              <!-- <a class="dropdown-item" href="#">
-                <svg class="icon me-2">
-                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-credit-card"></use>
-                </svg> Payments<span class="badge badge-sm bg-secondary ms-2">42</span></a> -->
-              <!-- <a class="dropdown-item"
-                href="#">
-                <svg class="icon me-2">
-                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-file"></use>
-                </svg> Projects<span class="badge badge-sm bg-primary ms-2">42</span></a>
-              <div class="dropdown-divider"></div> -->
-              <!-- <a class="dropdown-item" href="#">
-                <svg class="icon me-2">
-                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
-                </svg> Lock Account</a> -->
               <a class="dropdown-item" href="?logout='1'">
                 <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-account-logout"></use>
@@ -540,7 +467,6 @@ if (isset($_POST['findpatient'])) {
       if (!empty($checkexists)) {
         array_push($errors, "Sensor name already used by other patient");
 
-        echo '<script type="text/javascript">coretoast("Sensor name already used by other patient");</script>';
 
       }
 
@@ -549,9 +475,7 @@ if (isset($_POST['findpatient'])) {
 
 
         $result = $db_handle->uploadFOrder("UPDATE users SET sensor='$sensor' WHERE username='$patient' ");
-        // if (!$result) {
-        //   echo "Error updating record: " . $conn->error;
-        // }
+   
         echo '<script type="text/javascript">coretoast("Sensor name changed");</script>';
 
         $_SESSION['sensor'] = $sensor;
@@ -560,7 +484,15 @@ if (isset($_POST['findpatient'])) {
     }
 
 
-  } ?>
+  }
+  
+  if (!count($errors) == 0) {
+
+    foreach ($errors as $error) {
+
+   echo '<script type="text/javascript">coretoast("'.$error.'")</script>';
+ }
+ }?>
 
 
 </body>
