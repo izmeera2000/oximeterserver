@@ -85,7 +85,7 @@ if (isset($_POST['findpatient'])) {
 <body>
   <div class="sidebar sidebar-dark sidebar-fixed" id="sidebar">
 
-  <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="">
+    <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="">
       <li class="nav-item"><a class="nav-link" href="index.php">
           <svg class="nav-icon">
             <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-speedometer"></use>
@@ -291,25 +291,37 @@ if (isset($_POST['findpatient'])) {
 
                   <div class="c-chart-wrapper">
                     <div class="tab-pane p-3 active preview" role="tabpanel" id="preview-83">
-                      <div class="input-group">
-                        <?php
-                        if (isset($_SESSION['sensor'])) {
-                          $sensor = $_SESSION['sensor'];
-                          $results = $db_handle->runQuery("SELECT DATE_FORMAT(reading_time, '%Y-%m-%d') FROM sensordata WHERE sensor='$sensor' ");
-                          $min = $results[0]["DATE_FORMAT(reading_time, '%Y-%m-%d')"];
-                          $max = end($results)["DATE_FORMAT(reading_time, '%Y-%m-%d')"];
-                          echo '<input type="date" class="form-control text-center" name="daterange1" max=' . $max . ' min=' . $min . '>';
-                          echo '<span class="input-group-text">-</span>';
-                          echo '<input type="date" class="form-control text-center" name="daterange2" max=' . $max . ' min=' . $min . '>';
+                      <div class="row g-3">
+
+                        <div class="input-group">
+                          <?php
+                          if (isset($_SESSION['sensor'])) {
+                            $sensor = $_SESSION['sensor'];
+                            $results = $db_handle->runQuery("SELECT DATE_FORMAT(reading_time, '%Y-%m-%d') FROM sensordata WHERE sensor='$sensor' ");
+                            $min = $results[0]["DATE_FORMAT(reading_time, '%Y-%m-%d')"];
+                            $max = end($results)["DATE_FORMAT(reading_time, '%Y-%m-%d')"];
+                            echo '<input type="date" class="form-control text-center" name="daterange1" max=' . $max . ' min=' . $min . '>';
+                            echo '<span class="input-group-text">-</span>';
+                            echo '<input type="date" class="form-control text-center" name="daterange2" max=' . $max . ' min=' . $min . '>';
 
 
-                        }
-                        ?>
+                          }
+                          ?>
 
+
+                        </div>
 
                       </div>
+                      <div class="input-group">
+                        <?php
+                        echo '<input type="time" class="form-control text-center" name="timerange1" >';
+                        echo '<span class="input-group-text">-</span>';
+                        echo '<input type="time" class="form-control text-center" name="timerange2" >';
 
+                        ?>
+                      </div>
                     </div>
+
 
                   </div>
                 </form>
@@ -357,12 +369,14 @@ if (isset($_POST['findpatient'])) {
                           $sensor = $_SESSION['sensor'];
                           $max = $_POST['daterange2'];
                           $min = $_POST['daterange1'];
+                          $maxtime = $_POST['timerange2'];
+                          $mintime = $_POST['timerange1'];
 
-
-                          // echo $newmin;
-                          $newmax = date("Y-m-d H:i:s", strtotime('+23 hours +59 minutes + 59 seconds', strtotime($max)));
+                          $newmax = date("Y-m-d H:i:s", strtotime($maxtime, strtotime($max)));
                           // echo $newmax;
-                          $newmin = date("Y-m-d H:i:s", (strtotime($min)));
+                          $newmin = date("Y-m-d H:i:s", strtotime($mintime, strtotime($min)));
+                          // echo $newmin;
+                      
                           $_SESSION["minrangeo2"] = $newmin;
                           $_SESSION["maxrangeo2"] = $newmax;
                           $results = $db_handle->runQuery("SELECT sensor,o2,DATE_FORMAT(reading_time,  '%H:%i:%s %d-%m-%Y') FROM sensordata WHERE sensor='$sensor ' AND reading_time BETWEEN '$newmin' AND '$newmax' ORDER BY id ASC");
@@ -377,12 +391,12 @@ if (isset($_POST['findpatient'])) {
                             foreach ($results as $element) {
                               echo '<tr class="align-middle">';
                               echo '    <td> <div>' . $element["sensor"] . '</div></td>';
-                              $barwidth = (int)$element["o2"] /  100;
+                              $barwidth = (int) $element["o2"] / 100;
 
-                              if ($element["o2"]>= 97 && $element["o2"] <= 100) {
+                              if ($element["o2"] >= 97 && $element["o2"] <= 100) {
                                 echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["o2"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-success" style="width: ' . $barwidth . '%"></div></div></td>';
 
-                              } else if (($element["o2"] >= 95)  && ($element["o2"] < 97)) {
+                              } else if (($element["o2"] >= 95) && ($element["o2"] < 97)) {
                                 echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["o2"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-warning" style="width: ' . $barwidth . '%"></div></div></td>';
 
                               } else {
