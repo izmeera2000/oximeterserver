@@ -7,6 +7,7 @@ if (isset($_POST['rgt'])) {
 
   $username = $db_handle->escstring($_POST['username']);
   $name = $db_handle->escstring($_POST['name']);
+  $email = $db_handle->escstring($_POST['email']);
   $password_1 = $db_handle->escstring($_POST['password_1']);
   $password_2 = $db_handle->escstring($_POST['password_2']);
 
@@ -26,7 +27,7 @@ if (isset($_POST['rgt'])) {
 
 
 
-    $db_handle->uploadFOrder("INSERT INTO users (username,name,password) VALUES ('$username','$name','$password') ");
+    $db_handle->uploadFOrder("INSERT INTO users (username,name,email,password) VALUES ('$username','$name','$email','$password') ");
 
     $_SESSION['username'] = $username;
     header('location: index.php');
@@ -52,7 +53,7 @@ if (isset($_POST['rgt'])) {
   <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
   <meta name="author" content="Łukasz Holeczek">
   <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
-  <title>CoreUI Free Bootstrap Admin Template</title>
+  <title>Oximeter</title>
   <link rel="apple-touch-icon" sizes="57x57" href="assets/favicon/apple-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="60x60" href="assets/favicon/apple-icon-60x60.png">
   <link rel="apple-touch-icon" sizes="72x72" href="assets/favicon/apple-icon-72x72.png">
@@ -116,9 +117,15 @@ if (isset($_POST['rgt'])) {
                 </div>
                 <div class="input-group mb-3"><span class="input-group-text">
                     <svg class="icon">
+                      <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
+                    </svg></span>
+                  <input name="name" class="form-control" type="text" placeholder="Name" required>
+                </div>
+                <div class="input-group mb-3"><span class="input-group-text">
+                    <svg class="icon">
                       <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-envelope-open"></use>
                     </svg></span>
-                  <input name="name" class="form-control" type="text" placeholder="Email" required>
+                  <input name="email" class="form-control" type="text" placeholder="Email" required>
                 </div>
                 <div class="input-group mb-3"><span class="input-group-text">
                     <svg class="icon">

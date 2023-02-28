@@ -20,7 +20,39 @@ if (isset($_POST['findpatient'])) {
 
 
 }
+if (($_SESSION["accesslevel"] == 1)) {
+  header('location: index2.php');
+}
 
+if (isset($_POST['sensor'])) {
+
+  $patient = $_SESSION['patient_username'];
+
+  $sensor = $db_handle->escstring($_POST['sensorname']);
+
+  if ($sensor) {
+    $checkexists = $db_handle->runQuery("SELECT * FROM users WHERE sensor='$sensor'  ");
+    if (!empty($checkexists)) {
+      array_push($errors, "Sensor name already used by other patient");
+
+
+    }
+
+    if (count($errors) == 0) {
+
+
+
+      $result = $db_handle->uploadFOrder("UPDATE users SET sensor='$sensor' WHERE username='$patient' ");
+ 
+      array_push($errors, "Sensor name changed");
+
+      $_SESSION['sensor'] = $sensor;
+
+    }
+  }
+
+
+}
 
 ?>
 <!DOCTYPE html>
@@ -49,7 +81,6 @@ if (isset($_POST['findpatient'])) {
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon/favicon-96x96.png">
   <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
-  <link rel="manifest" href="assets/favicon/manifest.json">
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="msapplication-TileImage" content="assets/favicon/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
@@ -74,6 +105,10 @@ if (isset($_POST['findpatient'])) {
             <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-speedometer"></use>
           </svg> Dashboard</a></li>
       <li class="nav-title">Page</li>
+      <li class="nav-item"><a class="nav-link" href="list.php">
+          <svg class="nav-icon">
+            <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-list"></use>
+          </svg> Patient List</a></li>
       <li class="nav-item"><a class="nav-link" href="bpm.php">
           <svg class="nav-icon">
             <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-graph"></use>
@@ -341,6 +376,7 @@ if (isset($_POST['findpatient'])) {
           </div>
 
         </div>
+
       <?php } ?>
 
       <form action="index.php" method="post">
@@ -386,6 +422,7 @@ if (isset($_POST['findpatient'])) {
             Sensor name has already been used</div>
         </div>
       </div>
+
     </div>
     <!-- /.row-->
     <!-- /.card.mb-4-->
@@ -405,87 +442,13 @@ if (isset($_POST['findpatient'])) {
   <script src="vendors/@coreui/chartjs/js/coreui-chartjs.js"></script>
   <script src="vendors/@coreui/utils/js/coreui-utils.js"></script>
   <script src="js/main.js"></script>
-  <script>
 
 
-    function table() {
-      const xhttp = new XMLHttpRequest();
-      xhttp.open("GET", "db.php", true);
+<?php 
+   if (isset($_SESSION['sensor'])) {
+echo "<script>indexchart();</script>";
 
-      xhttp.onload = function () {
-
-        var data = JSON.parse(this.responseText);
-        if (data.length !== 0) {
-          const labelsc = [];
-          const bpm = [];
-          const o2 = [];
-          for (var i = 0; i < data.length; i++) {
-
-            labelsc.push(data[i]["DATE_FORMAT(reading_time, '%H:%i:%s')"]);
-            bpm.push(data[i]["bpm"]);
-            o2.push(data[i]["o2"]);
-
-          }
-
-          document.getElementById("latestbpm").innerHTML = bpm[0];
-          document.getElementById("latesto2").innerHTML = o2[0];
-
-          mainChart1.data.labels = labelsc;
-          mainChart1.data.datasets[0].data = bpm;
-          mainChart1.update();
-          mainChart2.data.labels = labelsc;
-          mainChart2.data.datasets[0].data = o2;
-          mainChart2.update();
-        }
-      }
-      xhttp.send();
-    }
-    setInterval(function () {
-      table();
-    }, 1000);
-
-    function coretoast($content) {
-      const toastLiveExample = document.getElementById("liveToast");
-      const toastcontent = document.getElementById("content");
-      toastcontent.innerHTML = $content;
-      const toast = new coreui.Toast(toastLiveExample);
-      toast.show();
-
-    }
-
-  </script>
-
-
-  <?php if (isset($_POST['sensor'])) {
-
-    $patient = $_SESSION['patient_username'];
-
-    $sensor = $db_handle->escstring($_POST['sensorname']);
-
-    if ($sensor) {
-      $checkexists = $db_handle->runQuery("SELECT * FROM users WHERE sensor='$sensor'  ");
-      if (!empty($checkexists)) {
-        array_push($errors, "Sensor name already used by other patient");
-
-
-      }
-
-      if (count($errors) == 0) {
-
-
-
-        $result = $db_handle->uploadFOrder("UPDATE users SET sensor='$sensor' WHERE username='$patient' ");
-   
-        echo '<script type="text/javascript">coretoast("Sensor name changed");</script>';
-
-        $_SESSION['sensor'] = $sensor;
-
-      }
-    }
-
-
-  }
-  
+   }
   if (!count($errors) == 0) {
 
     foreach ($errors as $error) {

@@ -19,7 +19,9 @@ if (!isset($_SESSION['sensor'])) {
   $_SESSION['sensor'] = $results[0]["sensor"];
 }
 
-
+if (($_SESSION["accesslevel"] == 0)) {
+  header('location: index.php');
+}
 ?>
 <!DOCTYPE html>
 <!--
@@ -87,19 +89,11 @@ if (!isset($_SESSION['sensor'])) {
 <div class="sidebar sidebar-dark sidebar-fixed" id="sidebar">
 
       <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="">
-        <li class="nav-item"><a class="nav-link" href="index.php">
+        <li class="nav-item"><a class="nav-link" href="index2.php">
             <svg class="nav-icon">
               <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-speedometer"></use>
             </svg> Dashboard</a></li>
-        <li class="nav-title">Page</li>
-        <li class="nav-item"><a class="nav-link" href="colors.html">
-            <svg class="nav-icon">
-              <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-graph"></use>
-            </svg> Beats Per Minute</a></li>
-        <li class="nav-item"><a class="nav-link" href="typography.html">
-            <svg class="nav-icon">
-              <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-chart"></use>
-            </svg> Oxygen</a></li>
+
 
        
       </ul>
@@ -119,31 +113,18 @@ if (!isset($_SESSION['sensor'])) {
           <img style="height:48px" src="assets/favicon/android-icon-144x144.png" class="img" alt="Oximeter Logo"></a>
         <ul class="header-nav d-none d-md-flex">
           <li class="nav-item">
-            <a class="nav-link" href="#"><img style="height:48px" src="assets/favicon/android-icon-144x144.png" class="img" alt="Oximeter Logo">Oximeter
+            <a class="nav-link" href="index2.php"><img style="height:48px" src="assets/favicon/android-icon-144x144.png" class="img" alt="Oximeter Logo">Oximeter
             </a>
           </li>
-          <!-- <li class="nav-item"><a class="nav-link" href="#">Users</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Settings</a></li> -->
+
         </ul>
         <ul class="header-nav ms-auto">
-          <!-- <li class="nav-item"><a class="nav-link" href="#">
-              <svg class="icon icon-lg">
-                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-bell"></use>
-              </svg></a></li>
-          <li class="nav-item"><a class="nav-link" href="#">
-              <svg class="icon icon-lg">
-                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-list-rich"></use>
-              </svg></a></li>
-          <li class="nav-item"><a class="nav-link" href="#">
-              <svg class="icon icon-lg">
-                <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-envelope-open"></use>
-              </svg></a></li> -->
+
         </ul>
         <ul class="header-nav ms-3">
           <li class="nav-item dropdown"><a class="nav-link py-0" data-coreui-toggle="dropdown" href="#" role="button"
               aria-haspopup="true" aria-expanded="false">
-              <!-- <div class="avatar avatar-md"><img class="avatar-img" src="assets/img/avatars/8.jpg" alt="user@email.com">
-              </div> -->
+
               <div class="avatar bg-primary text-white">
                 <?php echo substr(ucfirst($_SESSION['username']), 0, 1); ?>
               </div>
@@ -155,53 +136,12 @@ if (!isset($_SESSION['sensor'])) {
                 <div class="fw-semibold"> <?php echo ucfirst($_SESSION['username']) ?>'s Account</div>
 
               </div>
-              <a class="dropdown-item" href="#">
-                <svg class="icon me-2">
-                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
-                </svg> Profile</a>
-              <!-- <a class="dropdown-item" href="#">
-                <svg class="icon me-2">
-                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-bell"></use>
-                </svg> Updates<span class="badge badge-sm bg-info ms-2">42</span></a>
-                
-                <a class="dropdown-item" href="#">
-                <svg class="icon me-2">
-                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-envelope-open"></use>
-                </svg> Messages<span class="badge badge-sm bg-success ms-2">42</span></a><a class="dropdown-item"
-                href="#">
-                <svg class="icon me-2">
-                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-task"></use>
-                </svg> Tasks<span class="badge badge-sm bg-danger ms-2">42</span></a><a class="dropdown-item" href="#">
-                <svg class="icon me-2">
-                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-comment-square"></use>
-                </svg> Comments<span class="badge badge-sm bg-warning ms-2">42</span></a> -->
-              <div class="dropdown-header bg-light py-2">
-                <div class="fw-semibold">Settings</div>
-              </div>
+ 
 
-              <button type="button" class="dropdown-item" data-coreui-toggle="modal" data-coreui-target="#Sensor">
-                <svg class="icon me-2">
-                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-heart"></use>
-                </svg> Sensor
-              </button>
+
+
               <a class="dropdown-item" href="#">
-                <!-- <svg class="icon me-2">
-                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
-                </svg> Settings</a> -->
-                <!-- <a class="dropdown-item" href="#">
-                <svg class="icon me-2">
-                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-credit-card"></use>
-                </svg> Payments<span class="badge badge-sm bg-secondary ms-2">42</span></a> -->
-                <!-- <a class="dropdown-item"
-                href="#">
-                <svg class="icon me-2">
-                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-file"></use>
-                </svg> Projects<span class="badge badge-sm bg-primary ms-2">42</span></a>
-              <div class="dropdown-divider"></div> -->
-                <!-- <a class="dropdown-item" href="#">
-                <svg class="icon me-2">
-                  <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
-                </svg> Lock Account</a> -->
+
                 <a class="dropdown-item" href="?logout='1'">
                   <svg class="icon me-2">
                     <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-account-logout"></use>
@@ -297,17 +237,7 @@ if (!isset($_SESSION['sensor'])) {
                   </svg>
                 </button> -->
 
-                    <div class="dropdown">
-                      <button class="btn btn-transparent " type="button" data-coreui-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        <svg class="icon">
-                          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-options"></use>
-                        </svg>
-                      </button>
-                      <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item" href="#">See all data</a>
-                      </div>
-                    </div>
+     
                   </div>
                 </div>
                 <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
@@ -352,7 +282,7 @@ if (!isset($_SESSION['sensor'])) {
             </div>
 
           </div>
-          <form action="index.php" method="post">
+          <form action="index2.php" method="post">
 
             <div class="modal fade" id="Sensor" data-coreui-backdrop="static" data-coreui-keyboard="false" tabindex="-1"
               aria-labelledby="staticBackdropLabel" aria-hidden="true">

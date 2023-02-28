@@ -34,6 +34,7 @@ function Footer()
     // Page number
     $this->Cell(0,10,'Page '.$this->PageNo().'/{nb}',0,0,'C');
 }
+
 }
 
 // Instanciation of inherited class

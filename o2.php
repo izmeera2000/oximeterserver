@@ -12,7 +12,11 @@ if (isset($_GET['logout'])) {
   header("location: login.php");
 }
 
+if (isset($_POST['o2rangereset'])) {
+  unset($_SESSION["minrangeo2"]);
+  unset($_SESSION["maxrangeo2"]);
 
+}
 
 
 if (isset($_POST['findpatient'])) {
@@ -53,7 +57,6 @@ if (isset($_POST['findpatient'])) {
   <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="96x96" href="assets/favicon/favicon-96x96.png">
   <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
-  <link rel="manifest" href="assets/favicon/manifest.json">
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="msapplication-TileImage" content="assets/favicon/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
@@ -67,6 +70,7 @@ if (isset($_POST['findpatient'])) {
   <link href="css/examples.css" rel="stylesheet">
 
   <link href="vendors/@coreui/chartjs/css/coreui-chartjs.css" rel="stylesheet">
+
 </head>
 
 <body>
@@ -78,6 +82,10 @@ if (isset($_POST['findpatient'])) {
             <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-speedometer"></use>
           </svg> Dashboard</a></li>
       <li class="nav-title">Page</li>
+      <li class="nav-item"><a class="nav-link" href="list.php">
+          <svg class="nav-icon">
+            <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-list"></use>
+          </svg> Patient List</a></li>
       <li class="nav-item"><a class="nav-link" href="bpm.php">
           <svg class="nav-icon">
             <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-graph"></use>
@@ -131,7 +139,6 @@ if (isset($_POST['findpatient'])) {
                 </div>
 
               </div>
-
               <a class="dropdown-item" href="?logout='1'">
                 <svg class="icon me-2">
                   <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-account-logout"></use>
@@ -147,7 +154,7 @@ if (isset($_POST['findpatient'])) {
             <li class="breadcrumb-item">
               <!-- if breadcrumb is single--><span>Home</span>
             </li>
-            <li class="breadcrumb-item active"><span>Dashboard</span></li>
+            <li class="breadcrumb-item active"><span>Oxygen</span></li>
           </ol>
         </nav>
       </div>
@@ -166,16 +173,15 @@ if (isset($_POST['findpatient'])) {
                     <h4 class="card-title mb-0">Oxygen (%) </h4>
                   </div>
                   <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
-
-                    <div class="dropdown">
-                      <button class="btn btn-transparent " type="button" data-coreui-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
+                    <?php
+                    if (isset($_SESSION['sensor'])) {
+                      ?>
+                      <button type="button" class="btn btn-light" data-coreui-toggle="modal" data-coreui-target="#Sensor">
                         <svg class="icon">
-                          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-options"></use>
+                          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
                         </svg>
                       </button>
-
-                    </div>
+                    <?php } ?>
 
                   </div>
                 </div>
@@ -188,80 +194,8 @@ if (isset($_POST['findpatient'])) {
 
           </div>
 
-          <div class="col-sm-12 col-lg-12">
-            <div class="card mb-4 text-white bg-dark">
-
-              <div class="card-body">
-                <form action="o2.php" method="post">
-
-                  <div class="d-flex justify-content-between">
-                    <div>
-                      <h4 class="card-title mb-0">Patient
-                        <?php
-
-                        if (isset($_SESSION['patient_username'])) {
-
-                          $patientname = ($_SESSION['patient_username']);
-                          echo "($patientname)";
-                        }
-
-                        ?>
-                      </h4>
-                    </div>
 
 
-
-                    <div class="btn-toolbar d-block d-md-block" role="toolbar" aria-label="Toolbar with buttons">
-
-
-                      <button class="btn btn-light" type="submit" name="o2range">
-                        <svg class="icon">
-                          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-find-in-page"></use>
-                        </svg>
-                      </button>
-
-                    </div>
-                  </div>
-
-                  <div class="c-chart-wrapper">
-                    <div class="tab-pane p-3 active preview" role="tabpanel" id="preview-83">
-                      <div class="row g-3">
-
-                        <div class="input-group">
-                          <?php
-                          if (isset($_SESSION['sensor'])) {
-                            $sensor = $_SESSION['sensor'];
-                            $results = $db_handle->runQuery("SELECT DATE_FORMAT(reading_time, '%Y-%m-%d') FROM sensordata WHERE sensor='$sensor' ");
-                            $min = $results[0]["DATE_FORMAT(reading_time, '%Y-%m-%d')"];
-                            $max = end($results)["DATE_FORMAT(reading_time, '%Y-%m-%d')"];
-                            echo '<input type="date" class="form-control text-center" name="daterange1" max=' . $max . ' min=' . $min . '>';
-                            echo '<span class="input-group-text">-</span>';
-                            echo '<input type="date" class="form-control text-center" name="daterange2" max=' . $max . ' min=' . $min . '>';
-
-
-                          }
-                          ?>
-
-
-                        </div>
-
-                      </div>
-                      <div class="input-group">
-                        <?php
-                        echo '<input type="time" class="form-control text-center" name="timerange1" >';
-                        echo '<span class="input-group-text">-</span>';
-                        echo '<input type="time" class="form-control text-center" name="timerange2" >';
-
-                        ?>
-                      </div>
-                    </div>
-
-
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
           <?php
           if (isset($_POST['o2range'])) { ?>
             <div class="col-sm-12 col-lg-12">
@@ -270,14 +204,30 @@ if (isset($_POST['findpatient'])) {
 
                   <div class="d-flex justify-content-between mb-4">
                     <div>
+                      <h4 class="card-title mb-0">
+                        <?php
 
+
+
+                        $max = $_POST['daterange2'];
+                        $min = $_POST['daterange1'];
+                        $maxtime = $_POST['timerange2'];
+                        $mintime = $_POST['timerange1'];
+                        echo "From " . $mintime . " " . $min;
+                        echo " To " . $maxtime . " " . $max;
+
+
+
+                        ?>
+                      </h4>
                     </div>
 
 
 
                     <div class="btn-toolbar d-block d-md-block" role="toolbar" aria-label="Toolbar with buttons">
+                      <a href="o2pdf.php" target="_blank" class="btn btn-light">
 
-                      <a class="btn btn-light" href="o2pdf.php" target="_blank">
+                        <!-- <a class="btn btn-light" href="bpmpdf.php" target="_blank"> -->
                         <svg class="icon">
                           <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-print"></use>
                         </svg>
@@ -287,67 +237,69 @@ if (isset($_POST['findpatient'])) {
                     </div>
                   </div>
                   <div class="table-responsive">
-                    <table class="table border mb-0">
+                    <table class="table border mb-0" id="tableo2">
                       <thead class="table-light fw-semibold">
                         <tr class="align-middle">
 
                           <th>Patient Username</th>
-                          <th>Beats Per Minute (BPM)</th>
+                          <th>Oxygen (%)</th>
                           <th>Date And Time</th>
 
                         </tr>
                       </thead>
                       <tbody>
                         <?php
-                        if (isset($_POST['o2range'])) {
-                          $sensor = $_SESSION['sensor'];
-                          $max = $_POST['daterange2'];
-                          $min = $_POST['daterange1'];
-                          $maxtime = $_POST['timerange2'];
-                          $mintime = $_POST['timerange1'];
+                        $sensor = $_SESSION['sensor'];
+                        $max = $_POST['daterange2'];
+                        $min = $_POST['daterange1'];
+                        $maxtime = $_POST['timerange2'];
+                        $mintime = $_POST['timerange1'];
+                        $_SESSION["max"] = $max;
+                        $_SESSION["min"] = $min;
+                        $_SESSION["maxtime"] = $maxtime;
+                        $_SESSION["mintime"] = $mintime;
 
-                          $newmax = date("Y-m-d H:i:s", strtotime($maxtime, strtotime($max)));
-                          // echo $newmax;
-                          $newmin = date("Y-m-d H:i:s", strtotime($mintime, strtotime($min)));
-                          // echo $newmin;
+
+
+                        $newmax = date("Y-m-d H:i:s", strtotime($maxtime, strtotime($max)));
+                        // echo $newmax;
+                        $newmin = date("Y-m-d H:i:s", strtotime($mintime, strtotime($min)));
+                        // echo $newmin;
                       
-                          $_SESSION["minrangeo2"] = $newmin;
-                          $_SESSION["maxrangeo2"] = $newmax;
-                          $results = $db_handle->runQuery("SELECT sensor,o2,DATE_FORMAT(reading_time,  '%H:%i:%s %d-%m-%Y') FROM sensordata WHERE sensor='$sensor ' AND reading_time BETWEEN '$newmin' AND '$newmax' ORDER BY id ASC");
+                        $_SESSION["minrangeo2"] = $newmin;
+                        $_SESSION["maxrangeo2"] = $newmax;
+                        $results = $db_handle->runQuery("SELECT sensor,o2,DATE_FORMAT(reading_time,  '%H:%i:%s %d-%m-%Y') FROM sensordata WHERE sensor='$sensor ' AND reading_time BETWEEN '$newmin' AND '$newmax'");
 
-                          if ($results) {
-                            $o2 = array_column($results, 'o2');
-                            $mino2 = min($o2);
-                            $maxo2 = max($o2);
-                            $answer = 55 / 160 * 100;
-                            // echo $answer;
+                        if ($results) {
+                          $o2 = array_column($results, 'o2');
+                          $mino2 = min($o2);
+                          $maxo2 = max($o2);
                       
-                            foreach ($results as $element) {
-                              echo '<tr class="align-middle">';
-                              echo '    <td> <div>' . $element["sensor"] . '</div></td>';
-                              $barwidth = (int) $element["o2"] / 100;
+                          foreach ($results as $element) {
+                            echo '<tr class="align-middle">';
+                            echo '    <td> <div>' . $element["sensor"] . '</div></td>';
+                            $barwidth = $element["o2"] /  100;
 
-                              if ($element["o2"] >= 97 && $element["o2"] <= 100) {
-                                echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["o2"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-success" style="width: ' . $barwidth . '%"></div></div></td>';
+                            if ($element["o2"] >= 90 && $element["o2"] <= 100) {
+                              echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["o2"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-success" style="width: ' . $barwidth . '%"></div></div></td>';
 
-                              } else if (($element["o2"] >= 95) && ($element["o2"] < 97)) {
-                                echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["o2"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-warning" style="width: ' . $barwidth . '%"></div></div></td>';
+                            } else if (($element["o2"] >= 70 && $element["o2"] < 90) || ($element["o2"] > 100 && $element["o2"] <= 120)) {
+                              echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["o2"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-warning" style="width: ' . $barwidth . '%"></div></div></td>';
 
-                              } else {
+                            } else {
 
-                                echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["o2"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-danger" style="width: ' . $barwidth . '%"></div></div></td>';
+                              echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["o2"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-danger" style="width: ' . $barwidth . '%"></div></div></td>';
 
-                              }
-                      
-                              echo '<td><div class="fw-semibold">' . $element["DATE_FORMAT(reading_time,  '%H:%i:%s %d-%m-%Y')"] . '</div></td>';
-                              echo '</tr>';
                             }
 
-                          } else {
-                            array_push($errors, "No Data Found From Time And Date Range Of Sensor");
-
+                            echo '<td><div class="fw-semibold">' . $element["DATE_FORMAT(reading_time,  '%H:%i:%s %d-%m-%Y')"] . '</div></td>';
+                            echo '</tr>';
                           }
+                        } else {
+                          array_push($errors, "No Data Found From Time And Date Range Of Sensor");
+
                         }
+
 
 
                         ?>
@@ -360,7 +312,126 @@ if (isset($_POST['findpatient'])) {
               </div>
             </div>
 
-          <?php } ?>
+          <?php } else {
+
+
+            if (isset($_SESSION['maxrangeo2']) &&isset($_SESSION['minrangeo2']) ) { ?>
+              <div class="col-sm-12 col-lg-12">
+                <div class="card mb-4">
+                  <div class="card-body">
+
+                    <div class="d-flex justify-content-between mb-4">
+                      <div>
+                        <h4 class="card-title mb-0">
+                          <?php
+
+
+
+                          $max = $_SESSION["max"];
+                          $min = $_SESSION["min"];
+                          $maxtime = $_SESSION["maxtime"];
+                          $mintime = $_SESSION["mintime"];
+                          echo "From " . $mintime . " " . $min;
+                          echo " To " . $maxtime . " " . $max;
+
+
+
+                          ?>
+                        </h4>
+                      </div>
+
+
+
+                      <div class="btn-toolbar d-block d-md-block" role="toolbar" aria-label="Toolbar with buttons">
+                        <a href="o2pdf.php" target="_blank" class="btn btn-light">
+
+                          <!-- <a class="btn btn-light" href="bpmpdf.php" target="_blank"> -->
+                          <svg class="icon">
+                            <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-print"></use>
+                          </svg>
+                        </a>
+
+
+                      </div>
+                    </div>
+                    <div class="table-responsive">
+                      <table class="table border mb-0" id="tableo2">
+                        <thead class="table-light fw-semibold">
+                          <tr class="align-middle">
+
+                            <th>Patient Username</th>
+                            <th>Oxygen (%)</th>
+                            <th>Date And Time</th>
+
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <?php
+                          $sensor = $_SESSION['sensor'];
+    
+                          $max = $_SESSION["max"];
+                          $min = $_SESSION["min"];
+                          $maxtime = $_SESSION["maxtime"];
+                          $mintime = $_SESSION["mintime"];
+
+
+
+                          $newmax = date("Y-m-d H:i:s", strtotime($maxtime, strtotime($max)));
+                          // echo $newmax;
+                          $newmin = date("Y-m-d H:i:s", strtotime($mintime, strtotime($min)));
+                          // echo $newmin;
+                      
+                          $_SESSION["minrangeo2"] = $newmin;
+                          $_SESSION["maxrangeo2"] = $newmax;
+                          $results = $db_handle->runQuery("SELECT sensor,o2,DATE_FORMAT(reading_time,  '%H:%i:%s %d-%m-%Y') FROM sensordata WHERE sensor='$sensor ' AND reading_time BETWEEN '$newmin' AND '$newmax'");
+
+                          if ($results) {
+                            $o2 = array_column($results, 'o2');
+                            $mino2 = min($o2);
+                            $maxo2 = max($o2);
+                        
+                      
+                            foreach ($results as $element) {
+                              echo '<tr class="align-middle">';
+                              echo '    <td> <div>' . $element["sensor"] . '</div></td>';
+                              $barwidth = $element["o2"] / 100;
+
+                              if ($element["o2"] >= 90 && $element["o2"] <= 100) {
+                                echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["o2"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-success" style="width: ' . $barwidth . '%"></div></div></td>';
+
+                              } else if (($element["o2"] >= 70 && $element["o2"] < 90) || ($element["o2"] > 100 && $element["o2"] <= 120)) {
+                                echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["o2"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-warning" style="width: ' . $barwidth . '%"></div></div></td>';
+
+                              } else {
+
+                                echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["o2"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-danger" style="width: ' . $barwidth . '%"></div></div></td>';
+
+                              }
+
+                              echo '<td><div class="fw-semibold">' . $element["DATE_FORMAT(reading_time,  '%H:%i:%s %d-%m-%Y')"] . '</div></td>';
+                              echo '</tr>';
+                            }
+                          } else {
+                            array_push($errors, "No Data Found From Time And Date Range Of Sensor");
+
+                          }
+
+
+
+                          ?>
+
+
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            <?php }
+
+
+          } ?>
 
 
           <div class="toast-container position-fixed bottom-0 end-0 p-3">
@@ -386,7 +457,57 @@ if (isset($_POST['findpatient'])) {
     </div>
     <!-- /.row-->
 
+    <form action="o2.php?rangeset='1'" method="post">
 
+      <div class="modal fade" id="Sensor" data-coreui-backdrop="static" data-coreui-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="staticBackdropLabel">Settings</h5>
+              <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+              <label for="buatmodal" class="form-label">Date And Time Range</label>
+
+
+
+              <div class="input-group mb-3" id="buatmodal">
+                <?php
+                if (isset($_SESSION['sensor'])) {
+                  $sensor = $_SESSION['sensor'];
+                  $results = $db_handle->runQuery("SELECT DATE_FORMAT(reading_time, '%Y-%m-%d') FROM sensordata WHERE sensor='$sensor'ORDER BY id ASC ");
+                  $min = $results[0]["DATE_FORMAT(reading_time, '%Y-%m-%d')"];
+                  $max = end($results)["DATE_FORMAT(reading_time, '%Y-%m-%d')"];
+                  echo '<input type="date" class="form-control text-center" name="daterange1" max=' . $max . ' min=' . $min . '>';
+
+                  echo '<span class="input-group-text">-</span>';
+                  echo '<input type="date" class="form-control text-center" name="daterange2" max=' . $max . ' min=' . $min . '>';
+
+
+                }
+                ?>
+
+
+              </div>
+              <div class="input-group">
+                <?php
+                echo '<input type="time" class="form-control text-center" name="timerange1" >';
+                echo '<span class="input-group-text">-</span>';
+                echo '<input type="time" class="form-control text-center" name="timerange2" >';
+
+                ?>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-primary px-4" type="submit" name="o2rangereset">Reset Range</button>
+              <button class="btn btn-primary px-4" type="submit" name="o2range">Apply</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
 
     <footer class="footer">
       <div>Impeccable Vision Sdn Bhd © 2022</div>
@@ -400,57 +521,52 @@ if (isset($_POST['findpatient'])) {
   <script src="vendors/chart.js/js/chart.min.js"></script>
   <script src="vendors/@coreui/chartjs/js/coreui-chartjs.js"></script>
   <script src="vendors/@coreui/utils/js/coreui-utils.js"></script>
+
   <script src="js/main.js"></script>
-  <script>
 
 
-    function table() {
-      const xhttp = new XMLHttpRequest();
-      xhttp.open("GET", "db.php", true);
-
-      xhttp.onload = function () {
-
-        var data = JSON.parse(this.responseText);
-        if (data.length !== 0) {
-          const labelsc = [];
-          const o2 = [];
-          for (var i = 0; i < data.length; i++) {
-
-            labelsc.push(data[i]["DATE_FORMAT(reading_time, '%H:%i:%s')"]);
-            o2.push(data[i]["o2"]);
 
 
-          }
 
 
-          mainChart1.data.labels = labelsc;
-          mainChart1.data.datasets[0].data = o2;
-          mainChart1.update();
-
-        }
-      }
-      xhttp.send();
-    }
-    setInterval(function () {
-      table();
-    }, 1000);
-
-    function coretoast($content) {
-      const toastLiveExample = document.getElementById("liveToast");
-      const toastcontent = document.getElementById("content");
-      toastcontent.innerHTML = $content;
-      const toast = new coreui.Toast(toastLiveExample);
-      toast.show();
-
-    }
-
-  </script>
   <?php
   if (!isset($_SESSION['sensor'])) {
     array_push($errors, "Sensor not found");
 
-  }
+  } else {
 
+    if (!isset($_POST['o2rangereset'])) {
+
+
+
+      if (!isset($_POST['o2range'])) {
+        if (isset($_SESSION["maxrangeo2"])) {
+
+          echo "<script>o22();</script>";
+          echo "<script>console.log('o22');</script>";
+        } else {
+          echo "<script>o21();</script>";
+
+        }
+
+      } else {
+        echo "<script>o22();</script>";
+        array_push($errors, "Date and time range has been set");
+
+      }
+    } else {
+
+      echo "<script>o21();</script>";
+      echo "<script>console.log('reset');</script>";
+
+      array_push($errors, "Date and time range has been reset");
+
+
+
+    }
+
+
+  }
   ?>
 
   <?php if (isset($_POST['sensor'])) {
@@ -472,19 +588,20 @@ if (isset($_POST['findpatient'])) {
 
 
         $result = $db_handle->uploadFOrder("UPDATE users SET sensor='$sensor'   WHERE username='$patient' ");
-  
+
       }
     }
 
 
-  } 
+  }
+
   if (!count($errors) == 0) {
 
     foreach ($errors as $error) {
 
-   echo '<script type="text/javascript">coretoast("'.$error.'")</script>';
- }
- }
+      echo '<script type="text/javascript">coretoast("' . $error . '")</script>';
+    }
+  }
   ?>
 
 

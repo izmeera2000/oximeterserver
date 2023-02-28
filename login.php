@@ -3,6 +3,9 @@ session_start();
 require_once("controller/dbcontroller.php");
 $db_handle = new DBController();
 
+
+
+
 if (isset($_POST['lgn'])) {
 
   $username = $db_handle->escstring($_POST['username']);
@@ -14,13 +17,62 @@ if (isset($_POST['lgn'])) {
 
     $results = $db_handle->uploadFOrder("SELECT * FROM users WHERE username='$username' AND password='$password'  ");
 
-    if (mysqli_num_rows($results) == 1) {
+    if (mysqli_num_rows($results) == 1 && $password != md5("oximeter")) {
       $_SESSION['username'] = $username;
-      
-      header('location: index.php');
+
+      while ($row = $results->fetch_array()) {
+        if ($row["accesslevel"] == 0) {
+          header('location: index.php');
+
+        } else {
+
+          header('location: index2.php');
+
+        }
+        $_SESSION['accesslevel'] = $row["accesslevel"];
+
+      }
+
+    } else if (mysqli_num_rows($results) == 1 && $password == md5("oximeter")) {
+      $_SESSION['usernamenew'] = $username;
+
+      array_push($errors, "New patient, please insert new password");
+
+
     } else {
       array_push($errors, "Wrong username/password combination");
     }
+  }
+}
+
+
+if (isset($_POST['newuser'])) {
+
+  $username = $_SESSION['usernamenew'];
+  // $name = $db_handle->escstring($_POST['name']);
+  // $email = $db_handle->escstring($_POST['email']);
+  $password_1 = $db_handle->escstring($_POST['password_1']);
+  $password_2 = $db_handle->escstring($_POST['password_2']);
+
+
+  if ($password_1 != $password_2) {
+    array_push($errors, "The two passwords do not match");
+  }
+
+
+
+  if (count($errors) == 0) {
+    $passwordnew = md5($password_1); //encrypt the password before saving in the database
+
+
+
+    $db_handle->uploadFOrder("UPDATE SET password='$passwordnew' WHERE  username='$username' ");
+    unset($_SESSION['usernamenew']);
+    $_SESSION['username'] = $username;
+    $_SESSION['accesslevel'] = $row["accesslevel"];
+
+    header('location: index2.php');
+
   }
 }
 ?>
@@ -42,7 +94,7 @@ if (isset($_POST['lgn'])) {
   <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
   <meta name="author" content="Łukasz Holeczek">
   <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
-  <title>CoreUI Free Bootstrap Admin Template</title>
+  <title>Oximeter</title>
   <link rel="apple-touch-icon" sizes="57x57" href="assets/favicon/apple-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="60x60" href="assets/favicon/apple-icon-60x60.png">
   <link rel="apple-touch-icon" sizes="72x72" href="assets/favicon/apple-icon-72x72.png">
@@ -97,27 +149,55 @@ if (isset($_POST['lgn'])) {
                   <h1>Login</h1>
                   <p class="text-medium-emphasis">Sign In to your account</p>
                   <?php include('errors.php'); ?>
-
-                  <div class="input-group mb-3" ><span class="input-group-text">
-                      <svg class="icon">
-                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
-                      </svg></span>
-                    <input name="username" class="form-control" type="text" placeholder="Username">
-                  </div>
-                  <div class="input-group mb-4"><span class="input-group-text">
-                      <svg class="icon">
-                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
-                      </svg></span>
-                    <input name="password" class="form-control" type="password" placeholder="Password">
-                  </div>
-                  <div class="row">
-                    <div class="col-6">
-                      <button class="btn btn-primary px-4" type="submit" name="lgn">Login</button>
+                  <?php
+                  if (!isset($_SESSION['usernamenew'])) { ?>
+                    <div class="input-group mb-3"><span class="input-group-text">
+                        <svg class="icon">
+                          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
+                        </svg></span>
+                      <input name="username" class="form-control" type="text" placeholder="Username">
                     </div>
-                    <!-- <div class="col-6 text-end">
-                      <button class="btn btn-link px-0" type="button">Forgot password?</button>
-                    </div> -->
-                  </div>
+                    <div class="input-group mb-4"><span class="input-group-text">
+                        <svg class="icon">
+                          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
+                        </svg></span>
+                      <input name="password" class="form-control" type="password" placeholder="Password">
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                        <button class="btn btn-primary px-4" type="submit" name="lgn">Login</button>
+                      </div>
+                      <!-- <div class="col-6 text-end">
+                          <button class="btn btn-link px-0" type="button">Forgot password?</button>
+                        </div> -->
+                    </div>
+                  <?php } else { ?>
+
+                    <div class="input-group mb-4"><span class="input-group-text">
+                        <svg class="icon">
+                          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
+                        </svg></span>
+                      <input name="password_1" class="form-control" type="password" placeholder="Password">
+                    </div>
+                    <div class="input-group mb-4"><span class="input-group-text">
+                        <svg class="icon">
+                          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
+                        </svg></span>
+                      <input name="password_2" class="form-control" type="password" placeholder="Confirm Password">
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                        <button class="btn btn-primary px-4" type="submit" name="newuser">Login</button>
+                      </div>
+                      <!-- <div class="col-6 text-end">
+                          <button class="btn btn-link px-0" type="button">Forgot password?</button>
+                        </div> -->
+                    </div>
+
+                  <?php }
+
+                  ?>
+
                 </div>
               </form>
             </div>
