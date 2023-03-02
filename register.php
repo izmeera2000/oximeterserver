@@ -10,10 +10,14 @@ if (isset($_POST['rgt'])) {
   $email = $db_handle->escstring($_POST['email']);
   $password_1 = $db_handle->escstring($_POST['password_1']);
   $password_2 = $db_handle->escstring($_POST['password_2']);
+  $password_3 = $db_handle->escstring($_POST['password_3']);
 
 
   if ($password_1 != $password_2) {
     array_push($errors, "The two passwords do not match");
+  }
+  if ($password_3 != "oxiadmin") {
+    array_push($errors, "Wrong Admin password");
   }
 
   $checkexists = $db_handle->runQuery("SELECT * FROM users WHERE username='$username'  ");
@@ -30,7 +34,7 @@ if (isset($_POST['rgt'])) {
     $db_handle->uploadFOrder("INSERT INTO users (username,name,email,password) VALUES ('$username','$name','$email','$password') ");
 
     $_SESSION['username'] = $username;
-    header('location: index.php');
+    header('location: login.php');
 
   }
 }
@@ -138,6 +142,12 @@ if (isset($_POST['rgt'])) {
                       <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
                     </svg></span>
                   <input name="password_2" class="form-control" type="password" placeholder="Confirm password" required>
+                </div>
+                <div class="input-group mb-4"><span class="input-group-text">
+                    <svg class="icon">
+                      <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
+                    </svg></span>
+                  <input name="password_3" class="form-control" type="password" placeholder="Admin password" required>
                 </div>
                 <button class="btn btn-block btn-success" type="submit" name="rgt">Create Account</button>
                 <button class="btn btn-link px-0 float-end" type="button"  onclick="location.href='login.php'">Already got an account?</button>
