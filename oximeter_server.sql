@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Feb 21, 2023 at 08:28 PM
+-- Generation Time: Mar 02, 2023 at 10:25 AM
 -- Server version: 8.0.31
 -- PHP Version: 8.0.26
 
@@ -35,64 +35,18 @@ CREATE TABLE IF NOT EXISTS `sensordata` (
   `o2` varchar(10) DEFAULT NULL,
   `reading_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb3;
+) ENGINE=MyISAM AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb3;
 
 --
 -- Dumping data for table `sensordata`
 --
 
 INSERT INTO `sensordata` (`id`, `sensor`, `bpm`, `o2`, `reading_time`) VALUES
-(1, 'asdasd', '89', '99', '2023-01-06 10:05:57'),
-(2, 'asdasd', '89', '100', '2023-01-06 10:48:37'),
-(3, 'asdasd', '77', '100', '2023-01-07 11:19:28'),
-(4, 'asdasd', '77', '100', '2023-01-07 11:19:33'),
-(5, 'asdasd', '55', '99', '2023-01-07 12:32:51'),
-(6, 'asdasd', '55', '99', '2023-01-07 12:32:54'),
-(7, 'asdasd', '160', '99', '2023-01-07 13:10:47'),
-(8, 'asdasd', '160', '99', '2023-01-07 13:12:13'),
-(9, 'asdasd', '160', '99', '2023-01-07 13:12:26'),
-(10, 'asdasd', '97', '99', '2023-01-07 14:40:08'),
-(11, 'asdasd', '77', '95', '2023-01-07 14:41:13'),
-(12, 'asdasd', '77', '89', '2023-01-07 14:41:09'),
-(13, 'qweqwe', NULL, '12', '2023-02-15 14:20:07'),
-(14, 'qweqwe', NULL, '12', '2023-02-15 14:20:10'),
-(15, '', NULL, NULL, '2023-02-15 14:26:17'),
-(16, '', NULL, NULL, '2023-02-15 14:26:20'),
-(17, 'asdasdd', '99', '', '2023-02-16 07:14:02'),
-(18, 'asdasdd', '99', '122', '2023-02-16 07:14:08'),
-(19, 'asdasdd', '99', '122', '2023-02-16 07:15:19'),
-(20, 'asdasdd', '99', '122', '2023-02-16 07:15:21'),
-(21, 'asdasdd', '99', '122', '2023-02-16 07:15:45'),
-(22, 'asdasdd', '99', '122', '2023-02-16 07:15:47'),
-(23, 'asdasdd', '99', '122', '2023-02-16 07:16:11'),
-(24, 'asdasdd', '99', '122', '2023-02-16 07:16:47'),
-(25, 'asdasd', '99', '75', '2023-02-15 14:34:37'),
-(28, 'asdasd', '89', '99', '2023-01-06 10:05:57'),
-(27, 'asdasdd', '99', '122', '2023-02-19 16:20:03'),
-(29, 'asdasd', '89', '100', '2023-01-06 10:48:37'),
-(30, 'asdasd', '77', '100', '2023-01-07 11:19:28'),
-(31, 'asdasd', '77', '100', '2023-01-07 11:19:33'),
-(32, 'asdasd', '55', '99', '2023-01-07 12:32:51'),
-(33, 'asdasd', '55', '99', '2023-01-07 12:32:54'),
-(34, 'asdasd', '160', '99', '2023-01-07 13:10:47'),
-(35, 'asdasd', '160', '99', '2023-01-07 13:12:13'),
-(36, 'asdasd', '160', '99', '2023-01-07 13:12:26'),
-(37, 'asdasd', '97', '99', '2023-01-07 14:40:08'),
-(38, 'asdasd', '77', '95', '2023-01-07 14:41:13'),
-(39, 'asdasd', '77', '89', '2023-01-07 14:41:09'),
-(40, 'qweqwe', NULL, '12', '2023-02-15 14:20:07'),
-(41, 'qweqwe', NULL, '12', '2023-02-15 14:20:10'),
-(42, '', NULL, NULL, '2023-02-15 14:26:17'),
-(43, '', NULL, NULL, '2023-02-15 14:26:20'),
-(44, 'asdasdd', '99', '', '2023-02-16 07:14:02'),
-(45, 'asdasdd', '99', '122', '2023-02-16 07:14:08'),
-(46, 'asdasdd', '99', '122', '2023-02-16 07:15:19'),
-(47, 'asdasdd', '99', '122', '2023-02-16 07:15:21'),
-(48, 'asdasdd', '99', '122', '2023-02-16 07:15:45'),
-(49, 'asdasdd', '99', '122', '2023-02-16 07:15:47'),
-(50, 'asdasdd', '99', '122', '2023-02-16 07:16:11'),
-(51, 'asdasdd', '99', '122', '2023-02-16 07:16:47'),
-(52, 'asdasd', '99', '75', '2023-02-15 14:34:37');
+(58, 'test1', '85', '99', '2023-02-25 18:52:13'),
+(57, 'test1', '89', '100', '2023-02-25 18:52:05'),
+(56, 'test1', '88', '99', '2023-02-25 18:51:13'),
+(54, 'test1', '88', '99', '2023-02-25 18:50:26'),
+(55, 'test1', '88', '99', '2023-02-25 18:50:32');
 
 -- --------------------------------------------------------
 
@@ -107,18 +61,22 @@ CREATE TABLE IF NOT EXISTS `users` (
   `username` varchar(100) NOT NULL,
   `sensor` varchar(100) DEFAULT NULL,
   `name` varchar(100) NOT NULL,
-  `password` varchar(100) NOT NULL,
+  `email` text,
+  `password` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
+  `inserttime` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `accesslevel`, `username`, `sensor`, `name`, `password`) VALUES
-(15, 1, 'asdasd', 'asdasdd', 'asdasd', 'a8f5f167f44f4964e6c998dee827110c'),
-(17, 0, 'gaga', 'gagagaga', 'gaga', '811584043b844704c9bb9a6e99dd05d3'),
-(18, 1, 'fafa', 'asdasd', 'fafa', '05d251ea28c5be9426611a121db0c92a');
+INSERT INTO `users` (`id`, `accesslevel`, `username`, `sensor`, `name`, `email`, `password`, `inserttime`) VALUES
+(15, 1, 'asdasd', '', 'asdasd', NULL, 'a8f5f167f44f4964e6c998dee827110c', '2023-02-26 04:50:26'),
+(17, 0, 'gaga', 'gagagaga', 'gaga', NULL, '811584043b844704c9bb9a6e99dd05d3', '2023-02-26 04:50:26'),
+(18, 1, 'fafa', 'test1', 'fafa', NULL, '05d251ea28c5be9426611a121db0c92a', '2023-02-26 05:50:26'),
+(22, 0, 'dsa', NULL, 'dsa', 'dsa', '5f039b4ef0058a1d652f13d612375a5b', '2023-03-02 08:50:26'),
+(21, 1, 'izmeera2000', 'test2', 'Izmeer Aiman', 'izmeera2000@gmail.com', '476383da2ea21cb3b17a34f3336295ef', '2023-02-28 13:14:01');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

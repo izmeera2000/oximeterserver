@@ -19,7 +19,7 @@ class PDF extends FPDF
         // Move to the right
         $this->Cell(30);
         // Title
-        $this->Cell(10, 20, 'Oximeter Server Oxygen (%)');
+        $this->Cell(10, 20, 'Oximeter Server Beats Per Second(BPM)');
         // Line break
         $this->Ln(20);
     }
@@ -83,16 +83,19 @@ class PDF extends FPDF
         if (strstr($options, 'dB')) {
             $this->Rect($valX + $margin, $valY + $margin, $graphW, $graphH);
         }
-  
+        //draw key legend border
+        if (strstr($options, 'kB')) {
+            $this->Rect($keyX, $keyY, $keyW, $keyH);
+        }
         //draw graph value box
         if (strstr($options, 'vB')) {
             $this->Rect($graphValX, $graphValY, $graphValW, $graphValH);
         }
         //define colors
         if ($colors === null) {
-            $safeColors = array(0,36,95);
+            $safeColors = array(0, 51, 102, 153, 204, 225);
             for ($i = 0; $i < count($data); $i++) {
-                $colors[$keys[$i]] = array($safeColors[0], $safeColors[1], $safeColors[2]);
+                $colors[$keys[$i]] = array($safeColors[array_rand($safeColors)], $safeColors[array_rand($safeColors)], $safeColors[array_rand($safeColors)]);
             }
         }
         //form an array with all data values from the multi-demensional $data array
@@ -104,7 +107,7 @@ class PDF extends FPDF
         }
         //define max value
         if ($maxVal < ceil(max($ValArray))) {
-            $maxVal = 100;
+            $maxVal = ceil(max($ValArray));
         }
         //draw horizontal lines
         $vertDivH = $graphH / $nbDiv;
@@ -150,9 +153,28 @@ class PDF extends FPDF
                     );
                 }
             }
-
+            //Set the Key (legend)
+            $this->SetFont('Courier', '', 10);
+            if (!isset($n))
+                $n = 0;
+            $this->Line($keyX + 1, $keyY + $lineh / 2 + $n * $lineh, $keyX + 8, $keyY + $lineh / 2 + $n * $lineh);
+            $this->SetXY($keyX + 8, $keyY + $n * $lineh);
+            $this->Cell($keyW, $lineh, $key, 0, 1, 'L');
+            $n++;
         }
-
+        //print the abscissa values
+        foreach ($valueKeys as $key => $value) {
+            if ($key == 0) {
+                $this->SetXY($graphValX, $graphValY);
+                $this->Cell(30, $lineh, $value, 0, 0, 'L');
+            } else if ($key == count($valueKeys) - 1) {
+                $this->SetXY($graphValX + $graphValW - 30, $graphValY);
+                $this->Cell(30, $lineh, $value, 0, 0, 'R');
+            } else {
+                $this->SetXY($graphValX + $key * $horiDivW - 15, $graphValY);
+                $this->Cell(30, $lineh, $value, 0, 0, 'C');
+            }
+        }
         //print the ordinate values
         for ($i = 0; $i <= $nbDiv; $i++) {
             $this->SetXY($graphValX - 10, $graphY + ($nbDiv - $i) * $vertDivH - 3);
@@ -170,53 +192,29 @@ $pdf->AddPage();
 $pdf->SetY(40);
 // for($i=1;$i<=4z0;$i++)
 //     $pdf->Cell(0,10,'Printing line number '.$i,0,1);
-$newmin = $_SESSION["minrangeo2"];
-$newmax = $_SESSION["maxrangeo2"];
-$results = $db_handle->runQuery("SELECT sensor,o2,DATE_FORMAT(reading_time,  '%H:%i:%s %d-%m-%Y') FROM sensordata WHERE sensor='$sensor ' AND reading_time BETWEEN '$newmin' AND '$newmax' ORDER BY id ASC");
+$newmin = $_SESSION["minrangebpm"];
+$newmax = $_SESSION["maxrangebpm"];
+$results = $db_handle->runQuery("SELECT sensor,bpm,DATE_FORMAT(reading_time,  '%H:%i:%s %d-%m-%Y') FROM sensordata WHERE sensor='$sensor ' AND reading_time BETWEEN '$newmin' AND '$newmax' ORDER BY id ASC");
 $pdf->SetFont('Arial', 'B', 24);
 $data = array();
 
 $pdf->Cell(0, 10, "Sensor Data From " . $results[0]["sensor"], 0, 1);
 
 $pdf->SetFont('Arial', '', 12);
-$o2 = array_column($results, 'o2');
-$mino2 = min($o2);
-$maxo2 = max($o2);
-$pdf->Cell(0, 20, "From: " . $newmin. " To: " . $newmax, 0, 1);
+$bpm = array_column($results, 'bpm');
+$minbpm = min($bpm);
+$maxbpm = max($bpm);
+$pdf->Cell(0, 20, "Lowest Value: " . $minbpm . " Highest Value: " . $maxbpm, 0, 1);
 
-$pdf->Cell(0, 20, "Lowest Value: " . $mino2 . " Highest Value: " . $maxo2, 0, 1);
-
-$pdf->SetY(90);
+$pdf->SetY(70);
 $arraydata = array();
 
 foreach ($results as $row2) {
     $datetime = $row2["DATE_FORMAT(reading_time,  '%H:%i:%s %d-%m-%Y')"];
-    $o2 = $row2["o2"];
-$arraydata[$datetime] = $o2;
+    $bpm = $row2["bpm"];
+$arraydata[$datetime] = $bpm;
 
 
 }
-$data = array($arraydata);
-$colors = null;
-$pdf->LineGraph(190, 100, $data, 'H');
-$pdf->SetY(200);
-$pdf->SetFont('Arial', 'B', 12);
-
-$pdf->Cell(80, 10, "Oxygen (%)", 1, 0, 'C');
-$pdf->Cell(80, 10, "Date And Time", 1, 0, 'C');
-$pdf->Ln();
-$pdf->SetFont('Arial', '', 12);
-
-foreach ($results as $row) {
-
-    $pdf->Cell(80, 10, $row["o2"], 1, 0, 'C');
-    $pdf->Cell(80, 10, $row["DATE_FORMAT(reading_time,  '%H:%i:%s %d-%m-%Y')"], 1, 0, 'C');
-    $pdf->Ln();
-
-
-    // $pdf->Cell(0,15, " BPM: " . $row["bpm"] ." at ".$row["DATE_FORMAT(reading_time,  '%H:%i:%s %d-%m-%Y')"],0,1);
-
-}
-$filename = "O2_" . $results[0]["sensor"] . "_" . $newmin . "-" . $newmax;
-$pdf->Output('I', $filename);
+echo print_r($arraydata);
 ?>
