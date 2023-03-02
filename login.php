@@ -22,14 +22,17 @@ if (isset($_POST['lgn'])) {
 
       while ($row = $results->fetch_array()) {
         if ($row["accesslevel"] == 0) {
+          $_SESSION['accesslevel'] = $row["accesslevel"];
+
           header('location: index.php');
 
         } else {
+          $_SESSION['accesslevel'] = $row["accesslevel"];
+
 
           header('location: index2.php');
 
         }
-        $_SESSION['accesslevel'] = $row["accesslevel"];
 
       }
 
@@ -66,12 +69,21 @@ if (isset($_POST['newuser'])) {
 
 
 
-    $db_handle->uploadFOrder("UPDATE SET password='$passwordnew' WHERE  username='$username' ");
+    $db_handle->uploadFOrder("UPDATE users SET password='$passwordnew' WHERE  username='$username' ");
     unset($_SESSION['usernamenew']);
     $_SESSION['username'] = $username;
-    $_SESSION['accesslevel'] = $row["accesslevel"];
+    $results2 = $db_handle->uploadFOrder("SELECT * FROM users WHERE username='$username' LIMIT 1  ");
+    while ($row2 = $results2->fetch_array()) {
 
-    header('location: index2.php');
+      $_SESSION['accesslevel'] = $row2["accesslevel"];
+
+
+      header('location: index2.php');
+
+
+
+    }
+
 
   }
 }
@@ -168,8 +180,8 @@ if (isset($_POST['newuser'])) {
                         <button class="btn btn-primary px-4" type="submit" name="lgn">Login</button>
                       </div>
                       <!-- <div class="col-6 text-end">
-                          <button class="btn btn-link px-0" type="button">Forgot password?</button>
-                        </div> -->
+                            <button class="btn btn-link px-0" type="button">Forgot password?</button>
+                          </div> -->
                     </div>
                   <?php } else { ?>
 
@@ -187,16 +199,13 @@ if (isset($_POST['newuser'])) {
                     </div>
                     <div class="row">
                       <div class="col-6">
-                        <button class="btn btn-primary px-4" type="submit" name="newuser">Login</button>
+                        <button class="btn btn-primary px-4" type="submit" name="newuser">Login
+                        </button>
                       </div>
-                      <!-- <div class="col-6 text-end">
-                          <button class="btn btn-link px-0" type="button">Forgot password?</button>
-                        </div> -->
+
                     </div>
 
-                  <?php }
-
-                  ?>
+                  <?php } ?>
 
                 </div>
               </form>
