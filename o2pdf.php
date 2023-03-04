@@ -173,6 +173,8 @@ $pdf->SetY(40);
 $newmin = $_SESSION["minrangeo2"];
 $newmax = $_SESSION["maxrangeo2"];
 $results = $db_handle->runQuery("SELECT sensor,o2,DATE_FORMAT(reading_time,  '%H:%i:%s %d-%m-%Y') FROM sensordata WHERE sensor='$sensor ' AND reading_time BETWEEN '$newmin' AND '$newmax' ORDER BY id ASC");
+$results2 = $db_handle->runQuery("SELECT username,name FROM users WHERE sensor='$sensor' LIMIT 1");
+
 $pdf->SetFont('Arial', 'B', 24);
 $data = array();
 
@@ -182,11 +184,13 @@ $pdf->SetFont('Arial', '', 12);
 $o2 = array_column($results, 'o2');
 $mino2 = min($o2);
 $maxo2 = max($o2);
-$pdf->Cell(0, 20, "From: " . $newmin. " To: " . $newmax, 0, 1);
+$pdf->Cell(0, 10, "Username: " . $results2[0]["username"], 0, 1);
+$pdf->Cell(0, 10, "Name: " . $results2[0]["name"], 0, 1);
+$pdf->Cell(0, 10, "From: " . $newmin. " To: " . $newmax, 0, 1);
 
-$pdf->Cell(0, 20, "Lowest Value: " . $mino2 . " Highest Value: " . $maxo2, 0, 1);
+$pdf->Cell(0, 10, "Lowest Value: " . $mino2 . " Highest Value: " . $maxo2, 0, 1);
 
-$pdf->SetY(90);
+$pdf->SetY(100);
 $arraydata = array();
 
 foreach ($results as $row2) {
@@ -199,7 +203,7 @@ $arraydata[$datetime] = $o2;
 $data = array($arraydata);
 $colors = null;
 $pdf->LineGraph(190, 100, $data, 'H');
-$pdf->SetY(200);
+$pdf->SetY(210);
 $pdf->SetFont('Arial', 'B', 12);
 
 $pdf->Cell(80, 10, "Oxygen (%)", 1, 0, 'C');

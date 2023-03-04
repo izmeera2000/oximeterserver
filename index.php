@@ -13,12 +13,15 @@ if (isset($_GET['logout'])) {
 }
 
 if (isset($_POST['findpatient'])) {
-  $username = $_POST['patientname'];
-  $results = $db_handle->runQuery("SELECT * FROM users WHERE username='$username' ");
-  $_SESSION['patient_username'] = $username;
-  $_SESSION['sensor'] = $results[0]["sensor"];
+  if (isset($_POST['patientname'])) {
+    $username = $_POST['patientname'];
+    $results = $db_handle->runQuery("SELECT * FROM users WHERE username='$username' ");
+    $_SESSION['patient_username'] = $username;
+    $_SESSION['patient_name'] = $results[0]["name"];
 
+    $_SESSION['sensor'] = $results[0]["sensor"];
 
+  }
 }
 if (($_SESSION["accesslevel"] == 1)) {
   header('location: index2.php');
@@ -43,7 +46,7 @@ if (isset($_POST['sensor'])) {
 
 
       $result = $db_handle->uploadFOrder("UPDATE users SET sensor='$sensor' WHERE username='$patient' ");
- 
+
       array_push($errors, "Sensor name changed");
 
       $_SESSION['sensor'] = $sensor;
@@ -148,7 +151,7 @@ if (isset($_POST['sensor'])) {
         <ul class="header-nav ms-3">
           <li class="nav-item dropdown"><a class="nav-link py-0" data-coreui-toggle="dropdown" href="#" role="button"
               aria-haspopup="true" aria-expanded="false">
-     
+
               <div class="avatar bg-primary text-white">
                 <?php echo substr(ucfirst($_SESSION['username']), 0, 1); ?>
               </div>
@@ -194,42 +197,231 @@ if (isset($_POST['sensor'])) {
 
                   <div class="d-flex justify-content-between">
                     <div>
-                      <h4 class="card-title mb-0">Patient
-                        <?php
+                      <h4 class="card-title mb-0">Patient</h4>
+                      <?php
 
-                        if (isset($_SESSION['patient_username'])) {
-                          ;
-                          $patientname = ($_SESSION['patient_username']);
-                          echo "($patientname)";
-                        }
-
-                        ?>
-                      </h4>
+                      if (isset($_SESSION['patient_username'])) {
+                        echo '<div class="fs-4 ">Username : ';
+                        echo $_SESSION['patient_username'];
+                        echo '</div>';
+                        echo '<div class="fs-4 ">Name : ';
+                        echo $_SESSION['patient_name'];
+                        echo '</div>';
+                      } ?>
                     </div>
+
                     <div class="btn-toolbar d-block d-md-block" role="toolbar" aria-label="Toolbar with buttons">
 
                       <?php
                       if (isset($_SESSION['patient_username'])) {
-                        ?>
-                        <button type="button" class="btn btn-light" data-coreui-toggle="modal"
-                          data-coreui-target="#Sensor">
-                          <svg class="icon">
-                            <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
-                          </svg>
-                        </button>
-                      <?php } ?>
+
+                        echo '<button type="button" class="btn btn-light mx-3" data-coreui-toggle="modal" data-coreui-target="#Sensor">';
+                        echo '<svg class="icon">';
+                        echo '<use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>';
+                        echo '</svg>';
+                        echo '</button>';
+                        echo '<button type="button" class="btn btn-light" data-coreui-toggle="modal" data-coreui-target="#find">';
+                        echo '<svg class="icon">';
+                        echo '<use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-find-in-page"></use>';
+                        echo '</svg>';
+                        echo '</button>';
+                      } else {
+
+                        echo '<button class="btn btn-light" type="submit" name="findpatient">';
+                        echo '<svg class="icon">';
+                        echo '<use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-find-in-page"></use>';
+                        echo '</svg>';
+                        echo '</button>';
+
+                      }
+
+                      ?>
                       <!-- daa -->
-                      <button class="btn btn-light" type="submit" name="findpatient">
-                        <svg class="icon">
-                          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-find-in-page"></use>
-                        </svg>
-                      </button>
+
                     </div>
                   </div>
-                  <div class="c-chart-wrapper">
-                    <div class="tab-pane p-3 active preview" id="preview-839">
-                      <select class="form-select" name="patientname">
+                  <?php
+                  if (!isset($_SESSION['patient_username'])) {
 
+                    echo '<div class="c-chart-wrapper">';
+                    echo '<div class="tab-pane p-3 active preview" id="preview-839">';
+
+
+                    echo '<select class="form-select" name="patientname">';
+
+                    $resultpatient = $db_handle->runQuery("SELECT username FROM users WHERE accesslevel='1' ");
+
+                    if (!isset($_SESSION['sensor'])) {
+                      echo '<option selected="" disabled>Please Select Patient</option>';
+                    } else {
+
+                    }
+                    foreach ($resultpatient as $value => $key) {
+                      echo "<option value=" . $key["username"] . ">" . $key["username"] . "</option>";
+                    }
+                    echo '</select>';
+                    echo '</div>';
+                    echo '</div>';
+                  }
+                  ?>
+
+                </form>
+
+              </div>
+
+
+            </div>
+          </div>
+
+          <?php
+          if (isset($_SESSION['sensor'])) {
+            echo '<div class="col-sm-6 col-lg-6">';
+            echo '<div class="card mb-4 text-white bg-primary">';
+            echo '<div class="card-body pb-0 d-flex justify-content-between align-items-start">';
+            echo '<div>';
+            echo '<div class="fs-4 fw-semibold">';
+            echo '<asd id="latestbpm">26K</asd>';
+            echo '<svg class="icon">';
+            echo '<use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-heart"></use>';
+            echo '</svg>';
+            echo '</div>';
+            echo '<div>BPM</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '<div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">';
+            echo '<canvas class="chart" id="card-chart1" height="70"></canvas>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '<div class="col-sm-6 col-lg-6">';
+            echo '<div class="card mb-4 text-white bg-info">';
+            echo '<div class="card-body pb-0 d-flex justify-content-between align-items-start">';
+            echo '<div>';
+            echo '<div class="fs-4 fw-semibold">';
+            echo '<asd id="latesto2">26K</asd>';
+            echo '%';
+            echo '</div>';
+            echo '<div>Oxygen</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '<div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">';
+            echo '<canvas class="chart" id="card-chart1" height="70"></canvas>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+          } ?>
+        </div>
+        <!-- /.row-->
+
+        <div class="row">
+          <?php
+          if (isset($_SESSION['sensor'])) {
+
+            echo '<div class="col-sm-12 col-lg-6">';
+            echo '<div class="card mb-4">';
+            echo '<div class="card-body">';
+            echo '<div class="d-flex justify-content-between">';
+            echo '<div id="test">';
+            echo '<h4 class="card-title mb-0">Beats Per Minute (BPM)</h4>';
+            echo '</div>';
+            echo '<div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">';
+            echo '<div class="dropdown">';
+            echo '<button class="btn btn-transparent " type="button" data-coreui-toggle="dropdown" aria-haspopup="true"';
+            echo 'aria-expanded="false">';
+            echo '<svg class="icon">';
+            echo '<use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-options"></use>';
+            echo '</svg>';
+            echo '</button>';
+            echo '<div class="dropdown-menu dropdown-menu-end">';
+            echo '<a class="dropdown-item" href="bpm.php">See more</a>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '<div class="c-chart-wrapper" style="height:300px;margin-top:40px;">';
+            echo '<canvas class="chart" id="main-chart1" height="300"></canvas>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '<div class="col-sm-12 col-lg-6">';
+            echo '<div class="card mb-4">';
+            echo '<div class="card-body">';
+            echo '<div class="d-flex justify-content-between">';
+            echo '<div>';
+            echo '<h4 class="card-title mb-0">Oxygen (%)</h4>';
+            echo '</div>';
+            echo '<div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">';
+            echo '<div class="dropdown">';
+            echo '<button class="btn btn-transparent " type="button" data-coreui-toggle="dropdown" aria-haspopup="true"';
+            echo 'aria-expanded="false">';
+            echo '<svg class="icon">';
+            echo '<use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-options"></use>';
+            echo '</svg>';
+            echo '</button>';
+            echo '<div class="dropdown-menu dropdown-menu-end">';
+            echo '<a class="dropdown-item" href="o2.php">See more</a>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '<div class="c-chart-wrapper" style="height:300px;margin-top:40px;">';
+            echo '<canvas class="chart" id="main-chart2" height="300"></canvas>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+
+          } ?>
+
+          <form action="index.php" method="post">
+
+            <div class="modal fade" id="Sensor" data-coreui-backdrop="static" data-coreui-keyboard="false" tabindex="-1"
+              aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Settings</h5>
+                    <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+
+                    <label for="buatmodal" class="form-label">Sensor Name</label>
+
+                    <div class="input-group mb-3" id="buatmodal">
+
+                      <span class="input-group-text">
+                        <svg class="icon">
+                          <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-heart"></use>
+                        </svg></span>
+                      <input name="sensorname" class="form-control" type="text"
+                        placeholder="<?php echo $_SESSION['sensor'] ?>">
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button class="btn btn-primary px-4" type="submit" name="sensor">Apply</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          <form action="index.php" method="post">
+
+            <div class="modal fade" id="find" data-coreui-backdrop="static" data-coreui-keyboard="false" tabindex="-1"
+              aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Search</h5>
+                    <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+
+                    <label for="buatmodal" class="form-label">Patient Name</label>
+
+                    <div class="input-group mb-3" id="buatmodal">
+
+                      <select class="form-select" name="patientname">
 
                         <?php
 
@@ -247,192 +439,37 @@ if (isset($_POST['sensor'])) {
                         ?>
 
                       </select>
-                </form>
-              </div>
-            </div>
-          </div>
-
-
-        </div>
-      </div>
-
-      <?php
-      if (isset($_SESSION['sensor'])) { ?>
-        <!-- /.col-->
-        <div class="col-sm-6 col-lg-6">
-          <div class="card mb-4 text-white bg-primary">
-            <div class="card-body pb-0 d-flex justify-content-between align-items-start">
-              <div>
-
-                <div class="fs-4 fw-semibold">
-                  <asd id="latestbpm">26K</asd>
-                  <svg class="icon">
-                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-heart"></use>
-                  </svg>
-                </div>
-
-                <div>BPM</div>
-              </div>
-
-            </div>
-            <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
-              <canvas class="chart" id="card-chart1" height="70"></canvas>
-            </div>
-          </div>
-        </div>
-        <!-- /.col-->
-        <div class="col-sm-6 col-lg-6">
-          <div class="card mb-4 text-white bg-info">
-            <div class="card-body pb-0 d-flex justify-content-between align-items-start">
-              <div>
-
-                <div class="fs-4 fw-semibold">
-                  <asd id="latesto2">26K</asd>
-                  %
-                </div>
-
-                <div>Oxygen</div>
-              </div>
-
-            </div>
-            <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
-              <canvas class="chart" id="card-chart1" height="70"></canvas>
-            </div>
-          </div>
-        </div>
-        <!-- /.col-->
-      <?php } ?>
-    </div>
-    <!-- /.row-->
-
-    <div class="row">
-      <?php
-      if (isset($_SESSION['sensor'])) { ?>
-
-        <div class="col-sm-12 col-lg-6">
-          <div class="card mb-4">
-            <div class="card-body">
-
-              <div class="d-flex justify-content-between">
-                <div id="test">
-                  <h4 class="card-title mb-0">Beats Per Minute (BPM)</h4>
-                </div>
-
-                <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
-                  <div class="dropdown">
-
-                    <button class="btn btn-transparent " type="button" data-coreui-toggle="dropdown" aria-haspopup="true"
-                      aria-expanded="false">
-                      <svg class="icon">
-                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-options"></use>
-                      </svg>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end">
-                      <a class="dropdown-item" href="bpm.php">See more</a>
+                    </div>
+                    <div class="modal-footer">
+                      <button class="btn btn-primary px-4" type="submit" name="findpatient">Apply</button>
                     </div>
                   </div>
                 </div>
-
               </div>
-              <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-                <canvas class="chart" id="main-chart1" height="300"></canvas>
+          </form>
+          <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="toast-header">
+                <img src="assets/favicon/android-icon-48x48.png" class="img" alt="Oximeter Logo">
+
+                <strong class="me-auto">Oximeter</strong>
+                <button type="button" class="btn-close" data-coreui-dismiss="toast" aria-label="Close"></button>
               </div>
-            </div>
-
-          </div>
-
-        </div>
-
-        <div class="col-sm-12 col-lg-6">
-          <div class="card mb-4">
-            <div class="card-body">
-
-              <div class="d-flex justify-content-between">
-                <div>
-                  <h4 class="card-title mb-0">Oxygen (%)</h4>
-
-                </div>
-
-                <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
-                  <div class="dropdown">
-                    <button class="btn btn-transparent " type="button" data-coreui-toggle="dropdown" aria-haspopup="true"
-                      aria-expanded="false">
-                      <svg class="icon">
-                        <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-options"></use>
-                      </svg>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-end">
-                      <a class="dropdown-item" href="o2.php">See more</a>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-              <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-                <canvas class="chart" id="main-chart2" height="300"></canvas>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
-      <?php } ?>
-
-      <form action="index.php" method="post">
-
-        <div class="modal fade" id="Sensor" data-coreui-backdrop="static" data-coreui-keyboard="false" tabindex="-1"
-          aria-labelledby="staticBackdropLabel" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="staticBackdropLabel">Settings</h5>
-                <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-
-                <label for="buatmodal" class="form-label">Sensor Name</label>
-
-                <div class="input-group mb-3" id="buatmodal">
-
-                  <span class="input-group-text">
-                    <svg class="icon">
-                      <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-heart"></use>
-                    </svg></span>
-                  <input name="sensorname" class="form-control" type="text"
-                    placeholder="<?php echo $_SESSION['sensor'] ?>">
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button class="btn btn-primary px-4" type="submit" name="sensor">Apply</button>
-              </div>
+              <div class="toast-body" id="content">
+                Sensor name has already been used</div>
             </div>
           </div>
-        </div>
-      </form>
-      <div class="toast-container position-fixed bottom-0 end-0 p-3">
-        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-          <div class="toast-header">
-            <img src="assets/favicon/android-icon-48x48.png" class="img" alt="Oximeter Logo">
 
-            <strong class="me-auto">Oximeter</strong>
-            <button type="button" class="btn-close" data-coreui-dismiss="toast" aria-label="Close"></button>
-          </div>
-          <div class="toast-body" id="content">
-            Sensor name has already been used</div>
         </div>
+        <!-- /.row-->
+        <!-- /.card.mb-4-->
+
       </div>
-
     </div>
-    <!-- /.row-->
-    <!-- /.card.mb-4-->
-
-  </div>
-  </div>
-  <footer class="footer">
-    <div>Impeccable Vision Sdn Bhd © 2022</div>
-    <div class="ms-auto">Powered by&nbsp;<a href="https://coreui.io/docs/">CoreUI UI Components</a></div>
-  </footer>
+    <footer class="footer">
+      <div>Impeccable Vision Sdn Bhd © 2022</div>
+      <div class="ms-auto">Powered by&nbsp;<a href="https://coreui.io/docs/">CoreUI UI Components</a></div>
+    </footer>
   </div>
   <!-- CoreUI and necessary plugins-->
   <script src="vendors/@coreui/coreui/js/coreui.bundle.min.js"></script>
@@ -444,18 +481,18 @@ if (isset($_POST['sensor'])) {
   <script src="js/main.js"></script>
 
 
-<?php 
-   if (isset($_SESSION['sensor'])) {
-echo "<script>indexchart();</script>";
+  <?php
+  if (isset($_SESSION['sensor'])) {
+    echo "<script>indexchart();</script>";
 
-   }
+  }
   if (!count($errors) == 0) {
 
     foreach ($errors as $error) {
 
-   echo '<script type="text/javascript">coretoast("'.$error.'")</script>';
- }
- }?>
+      echo '<script type="text/javascript">coretoast("' . $error . '")</script>';
+    }
+  } ?>
 
 
 </body>
