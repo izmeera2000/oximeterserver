@@ -127,6 +127,7 @@ void loop()
     display.println("SpO2");
     display.setCursor(90, 8);   // 82,18
     display.println(SpO2);
+  display.display();
 
     Serial.print("BPM: ");
     Serial.println(BPM);
