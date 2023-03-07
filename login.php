@@ -213,9 +213,8 @@ if (isset($_POST['newuser'])) {
             <div class="card col-md-5 text-white bg-primary py-5">
               <div class="card-body text-center">
                 <div>
-                  <h2>Sign up</h2>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
-                    labore et dolore magna aliqua.</p>
+                  <h2>Register</h2>
+                  <p>Register as admininstrator to manage patients and get sensor data from patients. </p>
                   <button class="btn btn-lg btn-outline-light mt-3" type="button"
                     onclick="location.href='register.php'">Register Now!</button>
                 </div>

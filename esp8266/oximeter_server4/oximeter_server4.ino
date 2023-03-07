@@ -39,14 +39,20 @@ String apiKeyValue = "oxytest";
 String sensorname = "oxy1";
 float BPM, SpO2;
 
-// OLED
-#define SCREEN_WIDTH 128                                                  // OLED display width, in pixels
-#define SCREEN_HEIGHT 32                                                  // OLED display height, in pixels 32
-#define OLED_RESET -1                                                     // Reset pin # (or -1 if sharing Arduino reset pin)
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET); // Declaring the display name (display)
+//OLED
+#define SCREEN_WIDTH 128 // OLED display width, in pixels
+#define SCREEN_HEIGHT 32 // OLED display height, in pixels 32
+#define OLED_RESET    -1 // Reset pin # (or -1 if sharing Arduino reset pin)
 
-// Callback (registered below) fired when a pulse is detected
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET); //Declaring the display name (display)
 
+//LED
+#define LED_pin7 D7           // tentukan nama device pada pin
+#define LED_pin6 D6
+#define LED_pin5 D5
+#define LED_pin4 D4
+#define LED_pin3 D3
+#define LED_pin8 D8
 void setup()
 {
   Serial.begin(115200);
@@ -76,14 +82,13 @@ void setup()
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C); // Start the OLED display
   display.display();
   delay(3000);
-  // asalnya
-  //  The default current for the IR LED is 50mA and it could be changed
-  //    by uncommenting the following line. Check MAX30100_Registers.h for all the
-  //    available options.
-  //  pox.setIRLedCurrent(MAX30100_LED_CURR_7_6MA);
 
-  // Register a callback for the beat detection
-  // pox.setOnBeatDetectedCallback(onBeatDetected);
+  pinMode(LED_pin7, OUTPUT);  // declare pin samada input @ output
+  pinMode(LED_pin6, OUTPUT);
+  pinMode(LED_pin5, OUTPUT);
+  pinMode(LED_pin4, OUTPUT);
+  pinMode(LED_pin3, OUTPUT);
+  pinMode(LED_pin8, OUTPUT);
 
   Serial.print("Initializing pulse oximeter..");
   if (!pox.begin())
@@ -111,16 +116,16 @@ void loop()
     BPM = pox.getHeartRate();
     SpO2 = pox.getSpO2();
 
-    display.clearDisplay(); // Clear the display
-    display.setTextSize(1); // Near it display the average BPM you can display the BPM if you want
+    display.clearDisplay();                                   //Clear the display
+    display.setTextSize(1);                                   //Near it display the average BPM you can display the BPM if you want
     display.setTextColor(WHITE);
     display.setCursor(30, 0);
     display.println("BPM");
     display.setCursor(30, 8);
-    display.println(BPM);
-    display.setCursor(90, 0); // 80,0
+    display.println( BPM);
+    display.setCursor(90, 0);    //80,0
     display.println("SpO2");
-    display.setCursor(90, 8); // 82,18
+    display.setCursor(90, 8);   // 82,18
     display.println(SpO2);
 
     Serial.print("BPM: ");
@@ -132,6 +137,49 @@ void loop()
 
     Serial.println("*********************************");
     Serial.println();
+
+
+       if (BPM < 60)
+        {
+        digitalWrite(LED_pin5, HIGH);  //LED MERAH on
+        digitalWrite(LED_pin7, LOW);  //LED HIJAU on
+        digitalWrite(LED_pin6, LOW);  //LED KUNING on
+        }
+      if (BPM > 100)
+        {
+        digitalWrite(LED_pin6, HIGH);  //LED KUNING on
+        digitalWrite(LED_pin5, LOW);  //LED MERAH on
+        digitalWrite(LED_pin7, LOW);  //LED HIJAU on
+        
+       }
+      if (BPM > 60 && BPM < 100)
+        {
+        digitalWrite(LED_pin7, HIGH);  //LED HIJAU on
+        digitalWrite(LED_pin5, LOW);  //LED MERAH on
+        digitalWrite(LED_pin6, LOW);  //LED KUNING on
+        }  
+
+
+       if (SpO2 > 94)
+        {
+        digitalWrite(LED_pin3, LOW);  //LED MERAH oFF
+        digitalWrite(LED_pin4, HIGH);  //LED HIJAU ON
+        digitalWrite(LED_pin8, LOW);  //LED KUNING oFF
+        }
+        
+       if (SpO2 > 89 && SpO2 < 95)
+        {
+        digitalWrite(LED_pin3, LOW);  //LED MERAH oFF
+        digitalWrite(LED_pin4, LOW);  //LED HIJAU oFF
+        digitalWrite(LED_pin8, HIGH);  //LED KUNING ON
+        }  
+
+       if (SpO2 < 90)
+        {
+        digitalWrite(LED_pin3, HIGH);  //LED MERAH ON
+        digitalWrite(LED_pin4, LOW);  //LED HIJAU oFF
+        digitalWrite(LED_pin8, LOW);  //LED KUNING oFF
+        } 
 
     if (WiFi.status() == WL_CONNECTED)
     {
