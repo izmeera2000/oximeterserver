@@ -327,12 +327,13 @@ function indexchart() {
           segment: {
             borderColor: (ctx) => {
               val = ctx.p0.parsed.y;
-              if (val >= 90 && val <= 100) {
+              if (val >= 60 && val <= 100) {
                 return "green";
               }
-              if ((val >= 70 && val < 90) || (val > 100 && val <= 120)) {
+              if ((val >100) ) {
                 return "yellow";
-              } else {
+              } 
+              if ((val <60) ){
                 return "red";
               }
             },
@@ -489,12 +490,13 @@ function bpm1() {
           segment: {
             borderColor: (ctx) => {
               val = ctx.p0.parsed.y;
-              if (val >= 90 && val <= 100) {
+              if (val >= 60 && val <= 100) {
                 return "green";
               }
-              if ((val >= 70 && val < 90) || (val > 100 && val <= 120)) {
+              if ((val >100) ) {
                 return "yellow";
-              } else {
+              } 
+              if ((val <60) ){
                 return "red";
               }
             },
@@ -570,7 +572,7 @@ function bpm2() {
       labels: [],
       datasets: [
         {
-          label: "O2",
+          label: "BPM",
           backgroundColor: coreui.Utils.hexToRgba(
             coreui.Utils.getStyle("--cui-info"),
             10
@@ -584,12 +586,13 @@ function bpm2() {
           segment: {
             borderColor: (ctx) => {
               val = ctx.p0.parsed.y;
-              if (val >= 90 && val <= 100) {
+              if (val >= 60 && val <= 100) {
                 return "green";
               }
-              if ((val >= 70 && val < 90) || (val > 100 && val <= 120)) {
+              if ((val >100) ) {
                 return "yellow";
-              } else {
+              } 
+              if ((val <60) ){
                 return "red";
               }
             },
@@ -666,7 +669,7 @@ function o21() {
       labels: [],
       datasets: [
         {
-          label: "BPM",
+          label: "O2",
           backgroundColor: coreui.Utils.hexToRgba(
             coreui.Utils.getStyle("--cui-info"),
             10
