@@ -142,41 +142,41 @@ void loop()
     if (BPM < 60)
     {
       digitalWrite(LED_pin5, HIGH); // LED MERAH on
-      digitalWrite(LED_pin7, LOW);  // LED HIJAU on
       digitalWrite(LED_pin6, LOW);  // LED KUNING on
+      digitalWrite(LED_pin7, LOW);  // LED HIJAU on
     }
     if (BPM > 100)
     {
-      digitalWrite(LED_pin6, HIGH); // LED KUNING on
       digitalWrite(LED_pin5, LOW);  // LED MERAH on
+      digitalWrite(LED_pin6, HIGH); // LED KUNING on
       digitalWrite(LED_pin7, LOW);  // LED HIJAU on
     }
     if (BPM > 60 && BPM < 100)
     {
-      digitalWrite(LED_pin7, HIGH); // LED HIJAU on
       digitalWrite(LED_pin5, LOW);  // LED MERAH on
       digitalWrite(LED_pin6, LOW);  // LED KUNING on
+      digitalWrite(LED_pin7, HIGH); // LED HIJAU on
     }
 
     if (SpO2 > 94)
     {
       digitalWrite(LED_pin3, LOW);  // LED MERAH oFF
-      digitalWrite(LED_pin4, HIGH); // LED HIJAU ON
       digitalWrite(LED_pin8, LOW);  // LED KUNING oFF
+      digitalWrite(LED_pin4, HIGH); // LED HIJAU ON
     }
 
     if (SpO2 > 89 && SpO2 < 95)
     {
       digitalWrite(LED_pin3, LOW);  // LED MERAH oFF
-      digitalWrite(LED_pin4, LOW);  // LED HIJAU oFF
       digitalWrite(LED_pin8, HIGH); // LED KUNING ON
+      digitalWrite(LED_pin4, LOW);  // LED HIJAU oFF
     }
 
     if (SpO2 < 90)
     {
       digitalWrite(LED_pin3, HIGH); // LED MERAH ON
-      digitalWrite(LED_pin4, LOW);  // LED HIJAU oFF
       digitalWrite(LED_pin8, LOW);  // LED KUNING oFF
+      digitalWrite(LED_pin4, LOW);  // LED HIJAU oFF
     }
 
     if (WiFi.status() == WL_CONNECTED)
