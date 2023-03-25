@@ -19,7 +19,7 @@
             "includePath": [
                 "C:\\Users\\Izmeer\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.1.1\\tools\\sdk\\include",
                 "C:\\Users\\Izmeer\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.1.1\\tools\\sdk\\lwip2\\include",
-                "C:\\Users\\Izmeer\\AppData\\Local\\Temp\\arduino\\sketch-C8DCDBA8C63F88A6B63EBD3135791EEA\\core",
+                "C:\\Users\\Izmeer\\AppData\\Local\\Temp\\arduino\\sketches\\C8DCDBA8C63F88A6B63EBD3135791EEA\\core",
                 "C:\\Users\\Izmeer\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.1.1\\cores\\esp8266",
                 "C:\\Users\\Izmeer\\AppData\\Local\\Arduino15\\packages\\esp8266\\hardware\\esp8266\\3.1.1\\variants\\nodemcu",
                 "C:\\Users\\Izmeer\\Documents\\Arduino\\libraries\\Adafruit_GFX_Library",

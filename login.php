@@ -7,11 +7,8 @@ $db_handle = new DBController();
 
 
 if (isset($_POST['lgn'])) {
-
   $username = $db_handle->escstring($_POST['username']);
   $password = $db_handle->escstring($_POST['password']);
-
-
   if (count($errors) == 0) {
     $password = md5($password);
 
@@ -23,25 +20,15 @@ if (isset($_POST['lgn'])) {
       while ($row = $results->fetch_array()) {
         if ($row["accesslevel"] == 0) {
           $_SESSION['accesslevel'] = $row["accesslevel"];
-
           header('location: index.php');
-
         } else {
           $_SESSION['accesslevel'] = $row["accesslevel"];
-
-
           header('location: index2.php');
-
         }
-
       }
-
     } else if (mysqli_num_rows($results) == 1 && $password == md5("oximeter")) {
       $_SESSION['usernamenew'] = $username;
-
       array_push($errors, "New patient, please insert new password");
-
-
     } else {
       array_push($errors, "Wrong username/password combination");
     }
@@ -57,34 +44,19 @@ if (isset($_POST['newuser'])) {
   $password_1 = $db_handle->escstring($_POST['password_1']);
   $password_2 = $db_handle->escstring($_POST['password_2']);
 
-
   if ($password_1 != $password_2) {
     array_push($errors, "The two passwords do not match");
   }
-
-
-
   if (count($errors) == 0) {
     $passwordnew = md5($password_1); //encrypt the password before saving in the database
-
-
-
     $db_handle->uploadFOrder("UPDATE users SET password='$passwordnew' WHERE  username='$username' ");
     unset($_SESSION['usernamenew']);
     $_SESSION['username'] = $username;
     $results2 = $db_handle->uploadFOrder("SELECT * FROM users WHERE username='$username' LIMIT 1  ");
     while ($row2 = $results2->fetch_array()) {
-
       $_SESSION['accesslevel'] = $row2["accesslevel"];
-
-
       header('location: index2.php');
-
-
-
     }
-
-
   }
 }
 ?>
@@ -179,10 +151,8 @@ if (isset($_POST['newuser'])) {
                       <div class="col-6">
                         <button class="btn btn-primary px-4" type="submit" name="lgn">Login</button>
                       </div>
-                      <!-- <div class="col-6 text-end">
-                            <button class="btn btn-link px-0" type="button">Forgot password?</button>
-                          </div> -->
                     </div>
+
                   <?php } else { ?>
 
                     <div class="input-group mb-4"><span class="input-group-text">

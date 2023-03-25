@@ -260,12 +260,10 @@ if (isset($_POST['bpmrangereset'])) {
                         $_SESSION["mintime"] = $mintime;
 
 
-
-                        $newmax = date("Y-m-d H:i:s", strtotime($maxtime, strtotime($max)));
+                        $newmax = date("Y-m-d H:i:s", strtotime('+59 seconds', strtotime($maxtime, strtotime($max))));
                         // echo $newmax;
                         $newmin = date("Y-m-d H:i:s", strtotime($mintime, strtotime($min)));
                         // echo $newmin;
-                      
                         $_SESSION["minrangebpm"] = $newmin;
                         $_SESSION["maxrangebpm"] = $newmax;
                         $results = $db_handle->runQuery("SELECT sensor,bpm,DATE_FORMAT(reading_time,  '%H:%i:%s %d-%m-%Y') FROM sensordata WHERE sensor='$sensor ' AND reading_time BETWEEN '$newmin' AND '$newmax'");
@@ -279,7 +277,8 @@ if (isset($_POST['bpmrangereset'])) {
                       
                           foreach ($results as $element) {
                             echo '<tr class="align-middle">';
-                            echo '    <td> <div>' . $element["sensor"] . '</div></td>';
+                            echo '    <td> <div>' . $_SESSION['patient_username'] . '</div><div class="small text-medium-emphasis">Sensor: ' . $element["sensor"] . '</div>
+                            </td>';
                             $barwidth = $element["bpm"] / $maxbpm * 100;
 
                             if ($element["bpm"] >= 90 && $element["bpm"] <= 100) {
@@ -371,7 +370,7 @@ if (isset($_POST['bpmrangereset'])) {
                         <tbody>
                           <?php
                           $sensor = $_SESSION['sensor'];
-    
+
                           $max = $_SESSION["max"];
                           $min = $_SESSION["min"];
                           $maxtime = $_SESSION["maxtime"];
@@ -392,18 +391,19 @@ if (isset($_POST['bpmrangereset'])) {
                             $bpm = array_column($results, 'bpm');
                             $minbpm = min($bpm);
                             $maxbpm = max($bpm);
-                            $answer = 55 / 160 * 100;
-                            // echo $answer;
+                           
                       
                             foreach ($results as $element) {
                               echo '<tr class="align-middle">';
-                              echo '    <td> <div>' . $element["sensor"] . '</div></td>';
+                              echo '    <td> <div>' . $_SESSION['patient_username'] . '</div><div class="small text-medium-emphasis">Sensor: ' . $element["sensor"] . '</div>
+                              </td>';
+
                               $barwidth = $element["bpm"] / $maxbpm * 100;
 
-                              if ($element["bpm"] >= 90 && $element["bpm"] <= 100) {
+                              if ($element["bpm"] >= 60 && $element["bpm"] <= 100) {
                                 echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["bpm"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-success" style="width: ' . $barwidth . '%"></div></div></td>';
 
-                              } else if (($element["bpm"] >= 70 && $element["bpm"] < 90) || ($element["bpm"] > 100 && $element["bpm"] <= 120)) {
+                              } else if ($element["bpm"] > 100)  {
                                 echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["bpm"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-warning" style="width: ' . $barwidth . '%"></div></div></td>';
 
                               } else {
@@ -463,7 +463,6 @@ if (isset($_POST['bpmrangereset'])) {
     <!-- /.row-->
 
     <form action="bpm.php" method="post">
-
       <div class="modal fade" id="Sensor" data-coreui-backdrop="static" data-coreui-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -473,11 +472,7 @@ if (isset($_POST['bpmrangereset'])) {
               <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-
               <label for="buatmodal" class="form-label">Date And Time Range</label>
-
-
-
               <div class="input-group mb-3" id="buatmodal">
                 <?php
                 if (isset($_SESSION['sensor'])) {
@@ -486,22 +481,16 @@ if (isset($_POST['bpmrangereset'])) {
                   $min = $results[0]["DATE_FORMAT(reading_time, '%Y-%m-%d')"];
                   $max = end($results)["DATE_FORMAT(reading_time, '%Y-%m-%d')"];
                   echo '<input type="date" class="form-control text-center" name="daterange1" max=' . $max . ' min=' . $min . '>';
-
                   echo '<span class="input-group-text">-</span>';
                   echo '<input type="date" class="form-control text-center" name="daterange2" max=' . $max . ' min=' . $min . '>';
-
-
                 }
                 ?>
-
-
               </div>
               <div class="input-group">
                 <?php
                 echo '<input type="time" class="form-control text-center" name="timerange1" >';
                 echo '<span class="input-group-text">-</span>';
                 echo '<input type="time" class="form-control text-center" name="timerange2" >';
-
                 ?>
               </div>
             </div>

@@ -18,20 +18,13 @@ if (isset($_POST['registerpatient'])) {
   $name = $db_handle->escstring($_POST['name']);
   $email = $db_handle->escstring($_POST['email']);
 
-
   $password = md5("oximeter"); //encrypt the password before saving in the database
-
-
+  
   $checkexists = $db_handle->runQuery("SELECT * FROM users WHERE username='$username'  ");
   if (!empty($checkexists)) {
     array_push($errors, "Username already exists");
-
   }
-
   if (count($errors) == 0) {
-
-
-
     $db_handle->uploadFOrder("INSERT INTO users (username,name,email,password,accesslevel) VALUES ('$username','$name','$email','$password','1') ");
 
 
@@ -170,36 +163,26 @@ if (isset($_POST['registerpatient'])) {
             <li class="breadcrumb-item active"><span>BPM</span></li>
           </ol>
         </nav>
-      </div>
+      </div>  
     </header>
     <div class="body flex-grow-1 px-3">
       <div class="container-lg">
-
         <div class="row">
-
-
-
           <div class="col-sm-12 col-lg-12">
             <div class="card mb-4">
               <div class="card-body">
-
                 <div class="d-flex justify-content-between mb-4">
                   <div>
                     <h4 class="card-title mb-0">
                       Patient List
                     </h4>
                   </div>
-
-
-
                   <div class="btn-toolbar d-block d-md-block" role="toolbar" aria-label="Toolbar with buttons">
                     <button type="button" class="btn btn-light" data-coreui-toggle="modal" data-coreui-target="#Sensor">
                       <svg class="icon">
                         <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-input"></use>
                       </svg>
                     </button>
-
-
                   </div>
                 </div>
                 <div class="table-responsive">
@@ -215,15 +198,8 @@ if (isset($_POST['registerpatient'])) {
                     </thead>
                     <tbody>
                       <?php
-
-
-
-
                       $results = $db_handle->runQuery("SELECT username,sensor,name,DATE_FORMAT(inserttime,  '%d %M, %Y') FROM users WHERE accesslevel='1' ");
-
                       if ($results) {
-
-
                         foreach ($results as $element) {
                           echo '<tr class="align-middle">';
                           echo '    <td> <div>' . $element["username"] . '</div><div class="small text-medium-emphasis">Registered: ' . $element["DATE_FORMAT(inserttime,  '%d %M, %Y')"] . '</div>
@@ -254,19 +230,12 @@ if (isset($_POST['registerpatient'])) {
                             echo '</tr>';
 
                           }
-
-
                         }
                       } else {
                         array_push($errors, "No Data Found From Patient List");
 
                       }
-
-
-
                       ?>
-
-
                     </tbody>
                   </table>
                 </div>
@@ -305,30 +274,24 @@ if (isset($_POST['registerpatient'])) {
     <!-- /.row-->
 
     <form action="list.php" method="post">
-
       <div class="modal fade" id="Sensor" data-coreui-backdrop="static" data-coreui-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="staticBackdropLabel">Settings</h5>
+              <h5 class="modal-title" id="staticBackdropLabel">Register Patient</h5>
               <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-
-              <label for="buatmodal" class="form-label mb-3">Register patient</label>
-
               <div class="input-group mb-3"><span class="input-group-text">
                   <svg class="icon">
                     <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
-
                   </svg></span>
                 <input name="username" class="form-control" type="text" placeholder="Username" required>
               </div>
               <div class="input-group mb-3"><span class="input-group-text">
                   <svg class="icon">
                     <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
-
                   </svg></span>
                 <input name="name" class="form-control" type="text" placeholder="Name" required>
               </div>
@@ -338,7 +301,6 @@ if (isset($_POST['registerpatient'])) {
                   </svg></span>
                 <input name="email" class="form-control" type="text" placeholder="Email" required>
               </div>
-
             </div>
             <div class="modal-footer">
               <button class="btn btn-primary px-4" type="submit" name="registerpatient">Register</button>

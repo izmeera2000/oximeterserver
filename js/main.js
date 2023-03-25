@@ -304,9 +304,7 @@ function indexchart() {
     };
     xhttp.send();
   }
-
   var ctx = document.getElementById("main-chart1").getContext("2d");
-
   const mainChart1 = new Chart(document.getElementById("main-chart1"), {
     type: "line",
     data: {
@@ -375,7 +373,6 @@ function indexchart() {
     },
   });
   var ctx2 = document.getElementById("main-chart2").getContext("2d");
-
   const mainChart2 = new Chart(document.getElementById("main-chart2"), {
     type: "line",
     data: {
@@ -441,7 +438,6 @@ function indexchart() {
       },
     },
   });
-
   setInterval(replay, 1000);
 }
 
@@ -681,12 +677,12 @@ function o21() {
           fill: true,
 
           segment: {
-            borderColor: (ctx) => {
-              val = ctx.p0.parsed.y;
-              if (val >= 90 && val <= 100) {
+            borderColor: (ctx2) => {
+              val = ctx2.p0.parsed.y;
+              if (val >= 97 && val <= 100) {
                 return "green";
               }
-              if ((val >= 70 && val < 90) || (val > 100 && val <= 120)) {
+              if (val >= 95 && val < 97) {
                 return "yellow";
               } else {
                 return "red";
@@ -776,12 +772,12 @@ function o22() {
           fill: true,
 
           segment: {
-            borderColor: (ctx) => {
-              val = ctx.p0.parsed.y;
-              if (val >= 90 && val <= 100) {
+            borderColor: (ctx2) => {
+              val = ctx2.p0.parsed.y;
+              if (val >= 97 && val <= 100) {
                 return "green";
               }
-              if ((val >= 70 && val < 90) || (val > 100 && val <= 120)) {
+              if (val >= 95 && val < 97) {
                 return "yellow";
               } else {
                 return "red";

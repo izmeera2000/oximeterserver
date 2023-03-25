@@ -226,8 +226,6 @@ if (isset($_POST['findpatient'])) {
 
                     <div class="btn-toolbar d-block d-md-block" role="toolbar" aria-label="Toolbar with buttons">
                       <a href="o2pdf.php" target="_blank" class="btn btn-light">
-
-                        <!-- <a class="btn btn-light" href="bpmpdf.php" target="_blank"> -->
                         <svg class="icon">
                           <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-print"></use>
                         </svg>
@@ -261,7 +259,7 @@ if (isset($_POST['findpatient'])) {
 
 
 
-                        $newmax = date("Y-m-d H:i:s", strtotime($maxtime, strtotime($max)));
+                        $newmax = date("Y-m-d H:i:s", strtotime('+59 seconds', strtotime($maxtime, strtotime($max))));
                         // echo $newmax;
                         $newmin = date("Y-m-d H:i:s", strtotime($mintime, strtotime($min)));
                         // echo $newmin;
@@ -274,11 +272,12 @@ if (isset($_POST['findpatient'])) {
                           $o2 = array_column($results, 'o2');
                           $mino2 = min($o2);
                           $maxo2 = max($o2);
-                      
+
                           foreach ($results as $element) {
                             echo '<tr class="align-middle">';
-                            echo '    <td> <div>' . $element["sensor"] . '</div></td>';
-                            $barwidth = $element["o2"] /  100;
+                            echo '    <td> <div>' . $_SESSION['patient_username'] . '</div><div class="small text-medium-emphasis">Sensor: ' . $element["sensor"] . '</div>
+                            </td>';
+                            $barwidth = $element["o2"] / 100;
 
                             if ($element["o2"] >= 90 && $element["o2"] <= 100) {
                               echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["o2"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-success" style="width: ' . $barwidth . '%"></div></div></td>';
@@ -315,7 +314,7 @@ if (isset($_POST['findpatient'])) {
           <?php } else {
 
 
-            if (isset($_SESSION['maxrangeo2']) &&isset($_SESSION['minrangeo2']) ) { ?>
+            if (isset($_SESSION['maxrangeo2']) && isset($_SESSION['minrangeo2'])) { ?>
               <div class="col-sm-12 col-lg-12">
                 <div class="card mb-4">
                   <div class="card-body">
@@ -345,7 +344,6 @@ if (isset($_POST['findpatient'])) {
                       <div class="btn-toolbar d-block d-md-block" role="toolbar" aria-label="Toolbar with buttons">
                         <a href="o2pdf.php" target="_blank" class="btn btn-light">
 
-                          <!-- <a class="btn btn-light" href="bpmpdf.php" target="_blank"> -->
                           <svg class="icon">
                             <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-print"></use>
                           </svg>
@@ -368,7 +366,7 @@ if (isset($_POST['findpatient'])) {
                         <tbody>
                           <?php
                           $sensor = $_SESSION['sensor'];
-    
+
                           $max = $_SESSION["max"];
                           $min = $_SESSION["min"];
                           $maxtime = $_SESSION["maxtime"];
@@ -389,23 +387,23 @@ if (isset($_POST['findpatient'])) {
                             $o2 = array_column($results, 'o2');
                             $mino2 = min($o2);
                             $maxo2 = max($o2);
-                        
-                      
+
+
                             foreach ($results as $element) {
                               echo '<tr class="align-middle">';
-                              echo '    <td> <div>' . $element["sensor"] . '</div></td>';
-                              $barwidth = $element["o2"] / 100;
+                              echo '    <td> <div>' . $_SESSION['patient_username'] . '</div><div class="small text-medium-emphasis">Sensor: ' . $element["sensor"] . '</div>
+                              </td>';
+                              $barwidth = $element["o2"] ;
 
-                              if ($element["o2"] >= 90 && $element["o2"] <= 100) {
+                              if ($element["o2"] >= 97 && $element["o2"] <= 100) {
                                 echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["o2"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-success" style="width: ' . $barwidth . '%"></div></div></td>';
 
-                              } else if (($element["o2"] >= 70 && $element["o2"] < 90) || ($element["o2"] > 100 && $element["o2"] <= 120)) {
+                              } else if ($element["o2"] >= 95 && $element["o2"] < 97) {
                                 echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["o2"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-warning" style="width: ' . $barwidth . '%"></div></div></td>';
 
                               } else {
 
                                 echo '<td><div class="clearfix"><div class="float-start"><div class="fw-semibold">' . $element["o2"] . '</div></div></div><div class="progress progress-thin"><div class="progress-bar bg-danger" style="width: ' . $barwidth . '%"></div></div></td>';
-
                               }
 
                               echo '<td><div class="fw-semibold">' . $element["DATE_FORMAT(reading_time,  '%H:%i:%s %d-%m-%Y')"] . '</div></td>';
@@ -468,11 +466,7 @@ if (isset($_POST['findpatient'])) {
               <button type="button" class="btn-close" data-coreui-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-
               <label for="buatmodal" class="form-label">Date And Time Range</label>
-
-
-
               <div class="input-group mb-3" id="buatmodal">
                 <?php
                 if (isset($_SESSION['sensor'])) {
@@ -484,8 +478,6 @@ if (isset($_POST['findpatient'])) {
 
                   echo '<span class="input-group-text">-</span>';
                   echo '<input type="date" class="form-control text-center" name="daterange2" max=' . $max . ' min=' . $min . '>';
-
-
                 }
                 ?>
 
@@ -545,6 +537,7 @@ if (isset($_POST['findpatient'])) {
           echo "<script>o22();</script>";
           echo "<script>console.log('o22');</script>";
         } else {
+
           echo "<script>o21();</script>";
 
         }

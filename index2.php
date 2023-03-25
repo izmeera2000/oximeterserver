@@ -355,55 +355,11 @@ if (($_SESSION["accesslevel"] == 0)) {
   <script src="vendors/@coreui/chartjs/js/coreui-chartjs.js"></script>
   <script src="vendors/@coreui/utils/js/coreui-utils.js"></script>
   <script src="js/main.js"></script>
+  <script>indexchart();</script>
   <script>
 
 
-    function table() {
-      const xhttp = new XMLHttpRequest();
-      xhttp.open("GET", "db.php", true);
-
-      xhttp.onload = function () {
-
-        var data = JSON.parse(this.responseText);
-        if (data.length !== 0) {
-          const labelsc = [];
-          const bpm = [];
-          const o2 = [];
-          for (var i = 0; i < data.length; i++) {
-
-            labelsc.push(data[i]["DATE_FORMAT(reading_time, '%H:%i:%s')"]);
-            bpm.push(data[i]["bpm"]);
-            o2.push(data[i]["o2"]);
-
-          }
-
-          document.getElementById("latestbpm").innerHTML = bpm[0];
-          document.getElementById("latesto2").innerHTML = o2[0];
-
-          mainChart1.data.labels = labelsc;
-          mainChart1.data.datasets[0].data = bpm;
-          mainChart1.update();
-          mainChart2.data.labels = labelsc;
-          mainChart2.data.datasets[0].data = o2;
-          mainChart2.update();
-          // var lineGraph = new CoreUI.LineGraph('main-chart', data);
-
-        }
-        else {
-
-          // coretoast2();
-        }
-
-
-      }
-
-      xhttp.send();
-
-    }
-
-    setInterval(function () {
-      table();
-    }, 1000);
+ 
 
     function coretoast() {
       const toastLiveExample = document.getElementById("liveToast");

@@ -12,7 +12,6 @@ if (isset($_POST['rgt'])) {
   $password_2 = $db_handle->escstring($_POST['password_2']);
   $password_3 = $db_handle->escstring($_POST['password_3']);
 
-
   if ($password_1 != $password_2) {
     array_push($errors, "The two passwords do not match");
   }
@@ -23,16 +22,11 @@ if (isset($_POST['rgt'])) {
   $checkexists = $db_handle->runQuery("SELECT * FROM users WHERE username='$username'  ");
   if (!empty($checkexists)) {
     array_push($errors, "Username already exists");
-
   }
 
   if (count($errors) == 0) {
     $password = md5($password_1); //encrypt the password before saving in the database
-
-
-
     $db_handle->uploadFOrder("INSERT INTO users (username,name,email,password) VALUES ('$username','$name','$email','$password') ");
-
     $_SESSION['username'] = $username;
     header('location: login.php');
 
@@ -113,40 +107,27 @@ if (isset($_POST['rgt'])) {
 
               <form action="register.php" method="post">
                 <div class="input-group mb-3"><span class="input-group-text">
-                    <svg class="icon">
-                      <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
-
-                    </svg></span>
+                    <svg class="icon"><use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use></svg></span>
                   <input name="username" class="form-control" type="text" placeholder="Username" required>
                 </div>
                 <div class="input-group mb-3"><span class="input-group-text">
-                    <svg class="icon">
-                      <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use>
-                    </svg></span>
+                    <svg class="icon"><use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-user"></use></svg></span>
                   <input name="name" class="form-control" type="text" placeholder="Name" required>
                 </div>
                 <div class="input-group mb-3"><span class="input-group-text">
-                    <svg class="icon">
-                      <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-envelope-open"></use>
-                    </svg></span>
+                    <svg class="icon"><use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-envelope-open"></use></svg></span>
                   <input name="email" class="form-control" type="text" placeholder="Email" required>
                 </div>
                 <div class="input-group mb-3"><span class="input-group-text">
-                    <svg class="icon">
-                      <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
-                    </svg></span>
+                    <svg class="icon"><use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use></svg></span>
                   <input name="password_1" class="form-control" type="password" placeholder="Password" required>
                 </div>
                 <div class="input-group mb-4"><span class="input-group-text">
-                    <svg class="icon">
-                      <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
-                    </svg></span>
+                    <svg class="icon"><use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use></svg></span>
                   <input name="password_2" class="form-control" type="password" placeholder="Confirm password" required>
                 </div>
                 <div class="input-group mb-4"><span class="input-group-text">
-                    <svg class="icon">
-                      <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use>
-                    </svg></span>
+                    <svg class="icon"><use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-lock-locked"></use></svg></span>
                   <input name="password_3" class="form-control" type="password" placeholder="Admin password" required>
                 </div>
                 <button class="btn btn-block btn-success" type="submit" name="rgt">Create Account</button>
