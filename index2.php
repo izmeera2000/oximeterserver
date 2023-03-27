@@ -11,6 +11,7 @@ if (isset($_GET['logout'])) {
   unset($_SESSION['username']);
   header("location: login.php");
 }
+
 if (!isset($_SESSION['sensor'])) {
   $username = $_SESSION['username'];
   $results = $db_handle->runQuery("SELECT * FROM users WHERE username='$username' ");
@@ -221,32 +222,12 @@ if (($_SESSION["accesslevel"] == 0)) {
                   <div id="test">
                     <h4 class="card-title mb-0">Beats Per Minute (BPM)</h4>
                   </div>
-                  <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
-
-                    <!-- <div class="btn-group btn-group-toggle mx-3" data-coreui-toggle="buttons">
-                  <input class="btn-check" id="option1" type="radio" name="options" autocomplete="off">
-                  <label class="btn btn-outline-secondary"> Day</label>
-                  <input class="btn-check" id="option2" type="radio" name="options" autocomplete="off" checked="">
-                  <label class="btn btn-outline-secondary active"> Month</label>
-                  <input class="btn-check" id="option3" type="radio" name="options" autocomplete="off">
-                  <label class="btn btn-outline-secondary"> Year</label>
-                </div> -->
-                    <!-- <button class="btn btn-primary" type="button">
-                  <svg class="icon">
-                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-cloud-download"></use>
-                  </svg>
-                </button> -->
-
-     
-                  </div>
                 </div>
                 <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
                   <canvas class="chart" id="main-chart1" height="300"></canvas>
                 </div>
               </div>
-
             </div>
-
           </div>
 
           <div class="col-sm-12 col-lg-6">
@@ -258,21 +239,7 @@ if (($_SESSION["accesslevel"] == 0)) {
                     <h4 class="card-title mb-0">Oxygen (%)</h4>
 
                   </div>
-                  <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
-                    <!-- <div class="btn-group btn-group-toggle mx-3" data-coreui-toggle="buttons">
-                  <input class="btn-check" id="option1" type="radio" name="options" autocomplete="off">
-                  <label class="btn btn-outline-secondary"> Day</label>
-                  <input class="btn-check" id="option2" type="radio" name="options" autocomplete="off" checked="">
-                  <label class="btn btn-outline-secondary active"> Month</label>
-                  <input class="btn-check" id="option3" type="radio" name="options" autocomplete="off">
-                  <label class="btn btn-outline-secondary"> Year</label>
-                </div> -->
-                    <!-- <button class="btn btn-primary" type="button">
-                  <svg class="icon">
-                    <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-cloud-download"></use>
-                  </svg>
-                </button> -->
-                  </div>
+
                 </div>
                 <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
                   <canvas class="chart" id="main-chart2" height="300"></canvas>
@@ -355,7 +322,13 @@ if (($_SESSION["accesslevel"] == 0)) {
   <script src="vendors/@coreui/chartjs/js/coreui-chartjs.js"></script>
   <script src="vendors/@coreui/utils/js/coreui-utils.js"></script>
   <script src="js/main.js"></script>
-  <script>indexchart();</script>
+
+  <?php
+  if (isset($_SESSION['sensor'])) {
+    echo "<script>indexchart();</script>";
+
+  }
+  ?>
   <script>
 
 
