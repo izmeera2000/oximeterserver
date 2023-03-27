@@ -44,7 +44,7 @@ void Task1code(void *pvParameters) {
     if (WiFi.status() == WL_CONNECTED) {
       // Serial.println("still connected");
 
-      if (millis() - tsLastReport > 10000) {
+      if (millis() - tsLastReport > 1000) {
         Serial.print("Task1 running on core ");
         Serial.println(xPortGetCoreID());
         WiFiClient client;
