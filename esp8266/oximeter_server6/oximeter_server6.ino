@@ -41,7 +41,6 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);  // De
 
 void Task1code(void *pvParameters) {
 
-
   for (;;) {
     if (WiFi.status() == WL_CONNECTED) {
       // Serial.println("still connected");
@@ -195,11 +194,12 @@ void loop() {
       digitalWrite(LED_pin5, LOW);    // LED HIJAU oFF
     }
 
-    if (SpO2 < 90)
+    if (SpO2 < 90){
 
       digitalWrite(LED_pin19, HIGH);  // LED MERAH ON
     digitalWrite(LED_pin18, LOW);     // LED KUNING oFF
     digitalWrite(LED_pin5, LOW);      // LED HIJAU oFF
+    }
   }
 
 
