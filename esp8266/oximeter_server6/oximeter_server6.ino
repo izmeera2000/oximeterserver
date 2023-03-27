@@ -14,6 +14,8 @@
 //  * SpO2 (oxidation level) calculation
 PulseOximeter pox;
 TaskHandle_t Task1;
+TaskHandle_t Task2;
+
 uint32_t tsLastReport = 0;
 
 const char *ssid = "afa2020_2.4Ghz@unifi";                           // afa2020_2.4Ghz@unifi , KOMPUTER, vivo1713
@@ -72,9 +74,19 @@ void setup() {
     "Task1",   /* name of task. */
     10000,     /* Stack size of task */
     NULL,      /* parameter of the task */
-    0,         /* priority of the task */
+    1,         /* priority of the task */
     &Task1,    /* Task handle to keep track of created task */
     0);        /* pin task to core 0 */
+  delay(500);
+
+    xTaskCreatePinnedToCore(
+    Task2code, /* Task function. */
+    "Task2",   /* name of task. */
+    10000,     /* Stack size of task */
+    NULL,      /* parameter of the task */
+    1,         /* priority of the task */
+    &Task2,    /* Task handle to keep track of created task */
+    1);        /* pin task to core 0 */
   delay(500);
 
   // pinMode(LED_pin4, OUTPUT);  // declare pin samada input @ output
@@ -94,7 +106,42 @@ void setup() {
   }
 }
 
-void loop() {
+void Task1code(void *pvParameters) {
+
+  for (;;) {
+    if (WiFi.status() == WL_CONNECTED) {
+    
+        Serial.print("Task1 running on core ");
+        Serial.println(xPortGetCoreID());
+        WiFiClient client;
+        HTTPClient http;
+        http.begin(client, serverName);
+        http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(BPM) + "&o2=" + String(SpO2) + "&sensorname=" + sensorname;
+        Serial.print("httpRequestData: ");
+        Serial.println(httpRequestData);
+        int httpResponseCode = http.POST(httpRequestData);
+        String payload = http.getString();
+        Serial.println("PAYLOAD");
+        Serial.println(payload);
+        if (httpResponseCode > 0) {
+          Serial.print("HTTP Response code: ");
+          Serial.println(httpResponseCode);
+        } else {
+          Serial.print("Error code: ");
+          Serial.println(httpResponseCode);
+        }
+        http.end();
+    
+    }
+    delay(1000);
+  }
+}
+
+void Task2code(void *pvParameters) {
+
+  for (;;) {
   // Make sure to call update as fast as possible
   pox.update();
 
@@ -103,7 +150,7 @@ void loop() {
   if (millis() - tsLastReport > REPORTING_PERIOD_MS) {
     Serial.print("loop() running on core ");
     Serial.println(xPortGetCoreID());
-    
+
     BPM = pox.getHeartRate();
     SpO2 = pox.getSpO2();
 
@@ -171,37 +218,10 @@ void loop() {
 
 
   tsLastReport = millis();
+  }
 }
 
-void Task1code(void *pvParameters) {
 
-  for (;;) {
-    if (WiFi.status() == WL_CONNECTED) {
-    
-        Serial.print("Task1 running on core ");
-        Serial.println(xPortGetCoreID());
-        WiFiClient client;
-        HTTPClient http;
-        http.begin(client, serverName);
-        http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-
-        String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(BPM) + "&o2=" + String(SpO2) + "&sensorname=" + sensorname;
-        Serial.print("httpRequestData: ");
-        Serial.println(httpRequestData);
-        int httpResponseCode = http.POST(httpRequestData);
-        String payload = http.getString();
-        Serial.println("PAYLOAD");
-        Serial.println(payload);
-        if (httpResponseCode > 0) {
-          Serial.print("HTTP Response code: ");
-          Serial.println(httpResponseCode);
-        } else {
-          Serial.print("Error code: ");
-          Serial.println(httpResponseCode);
-        }
-        http.end();
-    
-    }
-    delay(1000);
-  }
+void loop() {
+  
 }
