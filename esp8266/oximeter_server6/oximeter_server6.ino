@@ -180,18 +180,18 @@ void loop()
 
       if (BPM < 60) {
         digitalWrite(LED_pin4, HIGH);  // LED MERAH on
-        digitalWrite(LED_pin2, LOW);   // LED KUNING off
-        digitalWrite(LED_pin15, LOW);  // LED HIJAU off
+        digitalWrite(LED_pin15, LOW);   // LED KUNING off
+        digitalWrite(LED_pin2, LOW);  // LED HIJAU off
       }
       if (BPM > 100) {
         digitalWrite(LED_pin4, LOW);   // LED MERAH off
-        digitalWrite(LED_pin2, HIGH);  // LED KUNING on
-        digitalWrite(LED_pin15, LOW);  // LED HIJAU off
+        digitalWrite(LED_pin15, HIGH);  // LED KUNING on
+        digitalWrite(LED_pin2, LOW);  // LED HIJAU off
       }
       if (BPM > 60 && BPM < 100) {
         digitalWrite(LED_pin4, LOW);    // LED MERAH off
-        digitalWrite(LED_pin2, LOW);    // LED KUNING off
-        digitalWrite(LED_pin15, HIGH);  // LED HIJAU on
+        digitalWrite(LED_pin15, LOW);    // LED KUNING off
+        digitalWrite(LED_pin2, HIGH);  // LED HIJAU on
       }
 
       if (SpO2 > 94) {
