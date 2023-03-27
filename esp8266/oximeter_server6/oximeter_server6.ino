@@ -68,7 +68,14 @@ void setup() {
   display.display();
   delay(3000);
 
-
+  xTaskCreatePinnedToCore(
+    Task1code, /* Task function. */
+    "Task1",   /* name of task. */
+    10000,     /* Stack size of task */
+    NULL,      /* parameter of the task */
+    1,         /* priority of the task */
+    &Task1,    /* Task handle to keep track of created task */
+    0);        /* pin task to core 0 */
   delay(500);
 
   pinMode(LED_pin4, OUTPUT);  // declare pin samada input @ output
@@ -170,8 +177,7 @@ void Task1code(void *pvParameters) {
 
   for (;;) {
     if (WiFi.status() == WL_CONNECTED) {
-      // Serial.println("still connected");
-      if (millis() - tsLastReport2 > 1000) {
+    
         Serial.print("Task1 running on core ");
         Serial.println(xPortGetCoreID());
         WiFiClient client;
@@ -194,9 +200,8 @@ void Task1code(void *pvParameters) {
           Serial.println(httpResponseCode);
         }
         http.end();
-      }
-        tsLastReport2 = millis();
-
+    
     }
+    delay(1000);
   }
 }
