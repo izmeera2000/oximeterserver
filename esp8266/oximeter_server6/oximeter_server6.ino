@@ -112,18 +112,18 @@ void loop() {
     display.setCursor(30, 0);
     display.println("BPM");
     display.setCursor(30, 8);
-    display.println(pox.getHeartRate());
+    display.println(BPM);
     display.setCursor(90, 0);  // 80,0
     display.println("SpO2");
     display.setCursor(90, 8);  // 82,18
-    display.println(pox.getSpO2());
+    display.println(SpO2);
     display.display();
 
     Serial.print("BPM: ");
-    Serial.println(pox.getHeartRate());
+    Serial.println(BPM);
 
     Serial.print("SpO2: ");
-    Serial.print(pox.getSpO2());
+    Serial.print(SpO2);
     Serial.println("%");
 
     Serial.println("*********************************");
@@ -186,7 +186,7 @@ void Task1code(void *pvParameters) {
         http.begin(client, serverName);
         http.addHeader("Content-Type", "application/x-www-form-urlencoded");
 
-        String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(pox.getHeartRate()) + "&o2=" + String(pox.getSpO2()) + "&sensorname=" + sensorname;
+        String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(BPM) + "&o2=" + String(SpO2) + "&sensorname=" + sensorname;
         Serial.print("httpRequestData: ");
         Serial.println(httpRequestData);
         int httpResponseCode = http.POST(httpRequestData);
