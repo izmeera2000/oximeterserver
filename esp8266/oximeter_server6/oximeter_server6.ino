@@ -32,12 +32,12 @@ float BPM, SpO2;
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);  // Declaring the display name (display)
 
 // LED
-#define LED_pin4 4  // tentukan nama device pada pin
-#define LED_pin2 2
-#define LED_pin15 15
-#define LED_pin19 19
-#define LED_pin18 18
-#define LED_pin5 5
+// #define LED_pin4 4  // tentukan nama device pada pin
+// #define LED_pin2 2
+// #define LED_pin15 15
+// #define LED_pin19 19
+// #define LED_pin18 18
+// #define LED_pin5 5
 
 
 void setup() {
@@ -78,12 +78,12 @@ void setup() {
     0);        /* pin task to core 0 */
   delay(500);
 
-  pinMode(LED_pin4, OUTPUT);  // declare pin samada input @ output
-  pinMode(LED_pin2, OUTPUT);
-  pinMode(LED_pin15, OUTPUT);
-  pinMode(LED_pin19, OUTPUT);
-  pinMode(LED_pin18, OUTPUT);
-  pinMode(LED_pin5, OUTPUT);
+  // pinMode(LED_pin4, OUTPUT);  // declare pin samada input @ output
+  // pinMode(LED_pin2, OUTPUT);
+  // pinMode(LED_pin15, OUTPUT);
+  // pinMode(LED_pin19, OUTPUT);
+  // pinMode(LED_pin18, OUTPUT);
+  // pinMode(LED_pin5, OUTPUT);
 
   Serial.print("Initializing pulse oximeter..");
   if (!pox.begin()) {
@@ -132,40 +132,40 @@ void loop() {
     Serial.print("loop() running on core ");
     Serial.println(xPortGetCoreID());
 
-    if (BPM < 60) {
-      digitalWrite(LED_pin4, HIGH);  // LED MERAH on
-      digitalWrite(LED_pin2, LOW);   // LED KUNING off
-      digitalWrite(LED_pin15, LOW);  // LED HIJAU off
-    }
-    if (BPM > 100) {
-      digitalWrite(LED_pin4, LOW);   // LED MERAH off
-      digitalWrite(LED_pin2, HIGH);  // LED KUNING on
-      digitalWrite(LED_pin15, LOW);  // LED HIJAU off
-    }
-    if (BPM > 60 && BPM < 100) {
-      digitalWrite(LED_pin4, LOW);    // LED MERAH off
-      digitalWrite(LED_pin2, LOW);    // LED KUNING off
-      digitalWrite(LED_pin15, HIGH);  // LED HIJAU on
-    }
+    // if (BPM < 60) {
+    //   digitalWrite(LED_pin4, HIGH);  // LED MERAH on
+    //   digitalWrite(LED_pin2, LOW);   // LED KUNING off
+    //   digitalWrite(LED_pin15, LOW);  // LED HIJAU off
+    // }
+    // if (BPM > 100) {
+    //   digitalWrite(LED_pin4, LOW);   // LED MERAH off
+    //   digitalWrite(LED_pin2, HIGH);  // LED KUNING on
+    //   digitalWrite(LED_pin15, LOW);  // LED HIJAU off
+    // }
+    // if (BPM > 60 && BPM < 100) {
+    //   digitalWrite(LED_pin4, LOW);    // LED MERAH off
+    //   digitalWrite(LED_pin2, LOW);    // LED KUNING off
+    //   digitalWrite(LED_pin15, HIGH);  // LED HIJAU on
+    // }
 
-    if (SpO2 > 94) {
-      digitalWrite(LED_pin19, LOW);  // LED MERAH oFF
-      digitalWrite(LED_pin18, LOW);  // LED KUNING oFF
-      digitalWrite(LED_pin5, HIGH);  // LED HIJAU ON
-    }
+    // if (SpO2 > 94) {
+    //   digitalWrite(LED_pin19, LOW);  // LED MERAH oFF
+    //   digitalWrite(LED_pin18, LOW);  // LED KUNING oFF
+    //   digitalWrite(LED_pin5, HIGH);  // LED HIJAU ON
+    // }
 
-    if (SpO2 > 89 && SpO2 < 95) {
-      digitalWrite(LED_pin19, LOW);   // LED MERAH oFF
-      digitalWrite(LED_pin18, HIGH);  // LED KUNING ON
-      digitalWrite(LED_pin5, LOW);    // LED HIJAU oFF
-    }
+    // if (SpO2 > 89 && SpO2 < 95) {
+    //   digitalWrite(LED_pin19, LOW);   // LED MERAH oFF
+    //   digitalWrite(LED_pin18, HIGH);  // LED KUNING ON
+    //   digitalWrite(LED_pin5, LOW);    // LED HIJAU oFF
+    // }
 
-    if (SpO2 < 90){
+    // if (SpO2 < 90){
 
-      digitalWrite(LED_pin19, HIGH);  // LED MERAH ON
-    digitalWrite(LED_pin18, LOW);     // LED KUNING oFF
-    digitalWrite(LED_pin5, LOW);      // LED HIJAU oFF
-    }
+    //   digitalWrite(LED_pin19, HIGH);  // LED MERAH ON
+    // digitalWrite(LED_pin18, LOW);     // LED KUNING oFF
+    // digitalWrite(LED_pin5, LOW);      // LED HIJAU oFF
+    // }
   }
 
 
