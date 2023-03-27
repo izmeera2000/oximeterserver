@@ -39,40 +39,6 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);  // De
 #define LED_pin18 18
 #define LED_pin5 5
 
-void Task1code(void *pvParameters) {
-
-  for (;;) {
-    if (WiFi.status() == WL_CONNECTED) {
-      // Serial.println("still connected");
-      if (millis() - tsLastReport2 > 1000) {
-        Serial.print("Task1 running on core ");
-        Serial.println(xPortGetCoreID());
-        WiFiClient client;
-        HTTPClient http;
-        http.begin(client, serverName);
-        http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-
-        String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(pox.getHeartRate()) + "&o2=" + String(pox.getSpO2()) + "&sensorname=" + sensorname;
-        Serial.print("httpRequestData: ");
-        Serial.println(httpRequestData);
-        int httpResponseCode = http.POST(httpRequestData);
-        String payload = http.getString();
-        Serial.println("PAYLOAD");
-        Serial.println(payload);
-        if (httpResponseCode > 0) {
-          Serial.print("HTTP Response code: ");
-          Serial.println(httpResponseCode);
-        } else {
-          Serial.print("Error code: ");
-          Serial.println(httpResponseCode);
-        }
-        http.end();
-      }
-        tsLastReport2 = millis();
-
-    }
-  }
-}
 
 void setup() {
   Serial.begin(115200);
@@ -207,4 +173,37 @@ void loop() {
   tsLastReport = millis();
 }
 
+void Task1code(void *pvParameters) {
 
+  for (;;) {
+    if (WiFi.status() == WL_CONNECTED) {
+      // Serial.println("still connected");
+      if (millis() - tsLastReport2 > 1000) {
+        Serial.print("Task1 running on core ");
+        Serial.println(xPortGetCoreID());
+        WiFiClient client;
+        HTTPClient http;
+        http.begin(client, serverName);
+        http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(pox.getHeartRate()) + "&o2=" + String(pox.getSpO2()) + "&sensorname=" + sensorname;
+        Serial.print("httpRequestData: ");
+        Serial.println(httpRequestData);
+        int httpResponseCode = http.POST(httpRequestData);
+        String payload = http.getString();
+        Serial.println("PAYLOAD");
+        Serial.println(payload);
+        if (httpResponseCode > 0) {
+          Serial.print("HTTP Response code: ");
+          Serial.println(httpResponseCode);
+        } else {
+          Serial.print("Error code: ");
+          Serial.println(httpResponseCode);
+        }
+        http.end();
+      }
+        tsLastReport2 = millis();
+
+    }
+  }
+}
