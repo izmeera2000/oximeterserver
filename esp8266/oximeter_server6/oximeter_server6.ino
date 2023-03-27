@@ -68,14 +68,7 @@ void setup() {
   display.display();
   delay(3000);
 
-  xTaskCreatePinnedToCore(
-    Task1code, /* Task function. */
-    "Task1",   /* name of task. */
-    10000,     /* Stack size of task */
-    NULL,      /* parameter of the task */
-    1,         /* priority of the task */
-    &Task1,    /* Task handle to keep track of created task */
-    0);        /* pin task to core 0 */
+
   delay(500);
 
   pinMode(LED_pin4, OUTPUT);  // declare pin samada input @ output
