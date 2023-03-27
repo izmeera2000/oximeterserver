@@ -14,7 +14,6 @@
 //  * SpO2 (oxidation level) calculation
 PulseOximeter pox;
 TaskHandle_t Task1;
-TaskHandle_t Task2;
 
 uint32_t tsLastReport = 0;
 
@@ -80,15 +79,6 @@ void setup()
       0);        /* pin task to core 0 */
   delay(500);
 
-  xTaskCreatePinnedToCore(
-      Task2code, /* Task function. */
-      "Task2",   /* name of task. */
-      10000,     /* Stack size of task */
-      NULL,      /* parameter of the task */
-      1,         /* priority of the task */
-      &Task2,    /* Task handle to keep track of created task */
-      1);        /* pin task to core 0 */
-  delay(500);
 
   pinMode(LED_pin4, OUTPUT);  // declare pin samada input @ output
   pinMode(LED_pin2, OUTPUT);
@@ -148,12 +138,11 @@ void Task1code(void *pvParameters)
   }
 }
 
-void Task2code(void *pvParameters)
-{
 
-  for (;;)
-  {
-    // Make sure to call update as fast as possible
+
+void loop()
+{
+   // Make sure to call update as fast as possible
     pox.update();
 
     // Asynchronously dump heart rate and oxidation levels to the serial
@@ -226,9 +215,4 @@ void Task2code(void *pvParameters)
 
       tsLastReport = millis();
     }
-  }
-}
-
-void loop()
-{
 }
