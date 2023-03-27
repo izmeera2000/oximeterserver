@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //  * heart rate calculation
 //  * SpO2 (oxidation level) calculation
 PulseOximeter pox;
-
+TaskHandle_t Task1;
 uint32_t tsLastReport = 0;
 const char *ssid = "afa2020_2.4Ghz@unifi";                           // afa2020_2.4Ghz@unifi , KOMPUTER, vivo1713
 const char *pass = "vae585910";                                      // vae585910 , NIL, vae585910
@@ -82,6 +82,16 @@ void setup()
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C); // Start the OLED display
   display.display();
   delay(3000);
+
+    xTaskCreatePinnedToCore(
+                    Task1code,   /* Task function. */
+                    "Task1",     /* name of task. */
+                    10000,       /* Stack size of task */
+                    NULL,        /* parameter of the task */
+                    1,           /* priority of the task */
+                    &Task1,      /* Task handle to keep track of created task */
+                    0);          /* pin task to core 0 */                  
+  delay(500); 
 
   // pinMode(LED_pin7, OUTPUT); // declare pin samada input @ output
   // pinMode(LED_pin6, OUTPUT);
@@ -215,4 +225,43 @@ void loop()
 
     tsLastReport = millis();
   }
+}
+
+void Task1code( void * pvParameters ){
+  Serial.print("Task1 running on core ");
+  Serial.println(xPortGetCoreID());
+
+  for(;;){
+    if (WiFi.status() == WL_CONNECTED)
+    {
+      Serial.println("still connected");
+
+      if (millis() - tsLastReport > 10000)
+      {
+        WiFiClient client;
+        HTTPClient http;
+        http.begin(client, serverName);
+        http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+
+        String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(pox.getHeartRate()) + "&o2=" + String(pox.getSpO2()) + "&sensorname=" + sensorname;
+        Serial.print("httpRequestData: ");
+        Serial.println(httpRequestData);
+        int httpResponseCode = http.POST(httpRequestData);
+        String payload = http.getString();
+        Serial.println("PAYLOAD");
+        Serial.println(payload);
+        if (httpResponseCode > 0)
+        {
+          Serial.print("HTTP Response code: ");
+          Serial.println(httpResponseCode);
+        }
+        else
+        {
+          Serial.print("Error code: ");
+          Serial.println(httpResponseCode);
+        }
+        http.end();
+      }
+    }
+  } 
 }
