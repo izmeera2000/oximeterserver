@@ -32,9 +32,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 PulseOximeter pox;
 
 uint32_t tsLastReport = 0;
-const char *ssid = "afa2020_2.4Ghz@unifi";                          // afa2020_2.4Ghz@unifi , KOMPUTER, vivo1713
-const char *pass = "vae585910";                                     // vae585910 , NIL, vae585910
-String serverName = "http://192.168.1.10/oximeterserver/insert.php"; // check sebelum upload
+const char *ssid = "afa2020_2.4Ghz@unifi";                           // afa2020_2.4Ghz@unifi , KOMPUTER, vivo1713
+const char *pass = "vae585910";                                      // vae585910 , NIL, vae585910
+String serverName = "http://192.168.1.9/oximeterserver/insert.php"; // check sebelum upload
 String apiKeyValue = "oxytest";
 String sensorname = "oxy1";
 float BPM, SpO2;
@@ -139,6 +139,8 @@ void loop()
     Serial.println("*********************************");
     Serial.println();
 
+    Serial.print("loop() running on core ");
+    Serial.println(xPortGetCoreID());
     // if (BPM < 60)
     // {
     //   digitalWrite(LED_pin5, HIGH); // LED MERAH on
@@ -179,37 +181,37 @@ void loop()
     //   digitalWrite(LED_pin4, LOW);  // LED HIJAU oFF
     // }
 
-    if (WiFi.status() == WL_CONNECTED)
-    {
-      Serial.println("still connected");
+    // if (WiFi.status() == WL_CONNECTED)
+    // {
+    //   Serial.println("still connected");
 
-      if (millis() - tsLastReport > 10000)
-      {
-        WiFiClient client;
-        HTTPClient http;
-        http.begin(client, serverName);
-        http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+    //   if (millis() - tsLastReport > 10000)
+    //   {
+    //     WiFiClient client;
+    //     HTTPClient http;
+    //     http.begin(client, serverName);
+    //     http.addHeader("Content-Type", "application/x-www-form-urlencoded");
 
-        String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(pox.getHeartRate()) + "&o2=" + String(pox.getSpO2()) + "&sensorname=" + sensorname;
-        Serial.print("httpRequestData: ");
-        Serial.println(httpRequestData);
-        int httpResponseCode = http.POST(httpRequestData);
-        String payload = http.getString();
-        Serial.println("PAYLOAD");
-        Serial.println(payload);
-        if (httpResponseCode > 0)
-        {
-          Serial.print("HTTP Response code: ");
-          Serial.println(httpResponseCode);
-        }
-        else
-        {
-          Serial.print("Error code: ");
-          Serial.println(httpResponseCode);
-        }
-        http.end();
-      }
-    }
+    //     String httpRequestData = "api_key=" + apiKeyValue + "&bpm=" + String(pox.getHeartRate()) + "&o2=" + String(pox.getSpO2()) + "&sensorname=" + sensorname;
+    //     Serial.print("httpRequestData: ");
+    //     Serial.println(httpRequestData);
+    //     int httpResponseCode = http.POST(httpRequestData);
+    //     String payload = http.getString();
+    //     Serial.println("PAYLOAD");
+    //     Serial.println(payload);
+    //     if (httpResponseCode > 0)
+    //     {
+    //       Serial.print("HTTP Response code: ");
+    //       Serial.println(httpResponseCode);
+    //     }
+    //     else
+    //     {
+    //       Serial.print("Error code: ");
+    //       Serial.println(httpResponseCode);
+    //     }
+    //     http.end();
+    //   }
+    // }
 
     tsLastReport = millis();
   }
