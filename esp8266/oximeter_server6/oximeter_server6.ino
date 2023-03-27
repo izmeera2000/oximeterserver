@@ -15,6 +15,8 @@
 PulseOximeter pox;
 TaskHandle_t Task1;
 uint32_t tsLastReport = 0;
+uint32_t tsLastReport2 = 0;
+
 const char *ssid = "afa2020_2.4Ghz@unifi";                           // afa2020_2.4Ghz@unifi , KOMPUTER, vivo1713
 const char *pass = "vae585910";                                      // vae585910 , NIL, vae585910
 String serverName = "http://192.168.1.9/oximeterserver/insert.php";  // check sebelum upload
@@ -43,8 +45,7 @@ void Task1code(void *pvParameters) {
   for (;;) {
     if (WiFi.status() == WL_CONNECTED) {
       // Serial.println("still connected");
-
-      if (millis() - tsLastReport > 1000) {
+      if (millis() - tsLastReport2 > 1000) {
         Serial.print("Task1 running on core ");
         Serial.println(xPortGetCoreID());
         WiFiClient client;
@@ -68,6 +69,8 @@ void Task1code(void *pvParameters) {
         }
         http.end();
       }
+        tsLastReport2 = millis();
+
     }
   }
 }
@@ -144,18 +147,18 @@ void loop() {
     display.setCursor(30, 0);
     display.println("BPM");
     display.setCursor(30, 8);
-    display.println(BPM);
+    display.println(pox.getHeartRate());
     display.setCursor(90, 0);  // 80,0
     display.println("SpO2");
     display.setCursor(90, 8);  // 82,18
-    display.println(SpO2);
+    display.println(pox.getSpO2());
     display.display();
 
     Serial.print("BPM: ");
-    Serial.println(BPM);
+    Serial.println(pox.getHeartRate());
 
     Serial.print("SpO2: ");
-    Serial.print(SpO2);
+    Serial.print(pox.getSpO2());
     Serial.println("%");
 
     Serial.println("*********************************");
