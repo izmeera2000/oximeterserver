@@ -213,11 +213,13 @@ void Task2code(void *pvParameters) {
     // digitalWrite(LED_pin18, LOW);     // LED KUNING oFF
     // digitalWrite(LED_pin5, LOW);      // LED HIJAU oFF
     // }
+
+      tsLastReport = millis();
+
   }
 
 
 
-  tsLastReport = millis();
   }
 }
 
