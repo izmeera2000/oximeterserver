@@ -228,16 +228,17 @@ void loop()
 }
 
 void Task1code( void * pvParameters ){
-  Serial.print("Task1 running on core ");
-  Serial.println(xPortGetCoreID());
+
 
   for(;;){
     if (WiFi.status() == WL_CONNECTED)
     {
-      Serial.println("still connected");
+      // Serial.println("still connected");
 
       if (millis() - tsLastReport > 10000)
       {
+          Serial.print("Task1 running on core ");
+  Serial.println(xPortGetCoreID());
         WiFiClient client;
         HTTPClient http;
         http.begin(client, serverName);
