@@ -15,7 +15,6 @@
 PulseOximeter pox;
 TaskHandle_t Task1;
 uint32_t tsLastReport = 0;
-uint32_t tsLastReport2 = 0;
 
 const char *ssid = "afa2020_2.4Ghz@unifi";                           // afa2020_2.4Ghz@unifi , KOMPUTER, vivo1713
 const char *pass = "vae585910";                                      // vae585910 , NIL, vae585910
@@ -73,7 +72,7 @@ void setup() {
     "Task1",   /* name of task. */
     10000,     /* Stack size of task */
     NULL,      /* parameter of the task */
-    1,         /* priority of the task */
+    0,         /* priority of the task */
     &Task1,    /* Task handle to keep track of created task */
     0);        /* pin task to core 0 */
   delay(500);
@@ -102,7 +101,9 @@ void loop() {
   // Asynchronously dump heart rate and oxidation levels to the serial
   // For both, a value of 0 means "invalid"
   if (millis() - tsLastReport > REPORTING_PERIOD_MS) {
-
+    Serial.print("loop() running on core ");
+    Serial.println(xPortGetCoreID());
+    
     BPM = pox.getHeartRate();
     SpO2 = pox.getSpO2();
 
@@ -129,8 +130,7 @@ void loop() {
     Serial.println("*********************************");
     Serial.println();
 
-    Serial.print("loop() running on core ");
-    Serial.println(xPortGetCoreID());
+
 
     // if (BPM < 60) {
     //   digitalWrite(LED_pin4, HIGH);  // LED MERAH on
