@@ -7,6 +7,8 @@
  * --------------------------------------------------------------------------
  */
 
+// setup
+
 function coretoast($content) {
   const toastLiveExample = document.getElementById("liveToast");
   const toastcontent = document.getElementById("content");
@@ -283,161 +285,193 @@ function indexchart() {
       var data = JSON.parse(this.responseText);
       if (data.length !== 0) {
         const labelsc = [];
-        const bpm = [];
-        const o2 = [];
+        const value1 = [];
+        const value2 = [];
+        const value3 = [];
         for (var i = 0; i < data.length; i++) {
           labelsc.push(data[i]["DATE_FORMAT(reading_time, '%H:%i:%s')"]);
-          bpm.push(data[i]["bpm"]);
-          o2.push(data[i]["o2"]);
+          value1.push(data[i]["value1"]);
+          value2.push(data[i]["value2"]);
+          value3.push(data[i]["value3"]);
         }
 
-        document.getElementById("latestbpm").innerHTML = bpm[0];
-        document.getElementById("latesto2").innerHTML = o2[0];
-
-        mainChart1.data.labels = labelsc;
-        mainChart1.data.datasets[0].data = bpm;
-        mainChart1.update();
-        mainChart2.data.labels = labelsc;
-        mainChart2.data.datasets[0].data = o2;
-        mainChart2.update();
+        // mainChart1.data.labels = labelsc;
+        // mainChart1.data.datasets[0].data = bpm;
+        // mainChart1.update();
+        // mainChart2.data.labels = labelsc;
+        // mainChart2.data.datasets[0].data = o2;
+        // mainChart2.update();
+        suhuchart.data.datasets[0].needleValue = value1[0];
+        suhuchart.update();
+        kelembapanchart.data.datasets[0].needleValue = value2[0];
+        kelembapanchart.update();
+        gaschart.data.datasets[0].needleValue = value3[0];
+        gaschart.update();
+        //  console.log(suhuchart.data.datasets[0].needleValue);
       }
     };
     xhttp.send();
   }
-  var ctx = document.getElementById("main-chart1").getContext("2d");
-  const mainChart1 = new Chart(document.getElementById("main-chart1"), {
-    type: "line",
-    data: {
-      labels: [],
-      datasets: [
-        {
-          label: "BPM",
-          backgroundColor: coreui.Utils.hexToRgba(
-            coreui.Utils.getStyle("--cui-info"),
-            10
-          ),
-          // borderColor: coreui.Utils.getStyle('--cui-info'),
-          pointHoverBackgroundColor: "#fff",
-          borderWidth: 2,
-          data: [],
-          fill: true,
 
-          segment: {
-            borderColor: (ctx) => {
-              val = ctx.p0.parsed.y;
-              if (val >= 60 && val <= 100) {
-                return "green";
-              }
-              if ((val >100) ) {
-                return "yellow";
-              } 
-              if ((val <60) ){
-                return "red";
-              }
-            },
-          },
-        },
-      ],
+  //gaugeNeedle
+  const gaugeNeedle = {
+    id: "gaugeNeedle",
+    afterDatasetDraw(chart, args, options) {
+      const {
+        ctx,
+        config,
+        data,
+        chartArea: { top, right, bottom, left, width, height },
+      } = chart;
+      ctx.save();
+      const needleValue = data.datasets[0].needleValue;
+      const dataTotal = data.datasets[0].data.reduce((a, b) => a + b, 0);
+
+      var angle = Math.PI + (1 / dataTotal) * needleValue * Math.PI;
+      // console.log(angle);
+      // console.log(dataTotal);
+
+      const cx = width / 2;
+      const cy = chart._metasets[0].data[0].y;
+
+      //needle
+      ctx.translate(cx, cy);
+      ctx.rotate(angle);
+      ctx.beginPath();
+      ctx.moveTo(0, -2);
+      ctx.lineTo(height - ctx.canvas.offsetTop - 160, 0); // change 160 value if the needle size gets changed
+      ctx.lineTo(0, 2);
+      ctx.fillStyle = "#444";
+      ctx.fill();
+      //needle dot
+      ctx.translate(-cx, -cy);
+      ctx.beginPath();
+      ctx.arc(cx, cy, 5, 0, 10);
+      ctx.fill();
+      ctx.restore();
+
+      //text
+      ctx.font = "20px Sans-Serif";
+      ctx.fillStyle = "#444";
+      ctx.fillText(needleValue + " °C", cx, cy + 50);
+      ctx.font = "10px Sans-Serif";
+
+      ctx.textAlign = "center";
+      ctx.restore();
     },
-    options: {
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          display: false,
-        },
-      },
-      scales: {
-        x: {
-          grid: {
-            drawOnChartArea: false,
-          },
-        },
-        y: {
-          ticks: {
-            beginAtZero: true,
-            maxTicksLimit: 10,
-            stepSize: Math.ceil(250 / 25),
-            max: 250,
-          },
-        },
-      },
-      elements: {
-        line: {},
-        point: {
-          radius: 0,
-          hitRadius: 10,
-          hoverRadius: 4,
-          hoverBorderWidth: 3,
-        },
-      },
-    },
-  });
-  var ctx2 = document.getElementById("main-chart2").getContext("2d");
-  const mainChart2 = new Chart(document.getElementById("main-chart2"), {
-    type: "line",
+  };
+  // config
+  const config = {
+    type: "doughnut",
     data: {
-      labels: [],
+      labels: ["Safe", "Risky", "High Risk"],
       datasets: [
         {
-          label: "O2 (%)",
-          backgroundColor: coreui.Utils.hexToRgba(
-            coreui.Utils.getStyle("--cui-info"),
-            10
-          ),
-          // borderColor: coreui.Utils.getStyle('--cui-info'),
-          pointHoverBackgroundColor: "#fff",
+          label: "Gauge",
+          data: [20, 5, 25],
+          backgroundColor: [
+            "rgba(255, 206, 86, 0.8)",
+            "rgba(34,139,34, 0.8)",
+            "rgba(255, 26, 104, 0.8)",
+          ],
+          needleValue: 0,
+          borderColor: "white",
           borderWidth: 2,
-          data: [],
-          fill: true,
-          segment: {
-            borderColor: (ctx2) => {
-              val = ctx2.p0.parsed.y;
-              if (val >= 97 && val <= 100) {
-                return "green";
-              }
-              if (val >= 95 && val < 97) {
-                return "yellow";
-              } else {
-                return "red";
-              }
-            },
-          },
+          cutout: "95%",
+          circumference: 180,
+          rotation: 270,
+          borderRadius: 5,
         },
       ],
     },
     options: {
-      maintainAspectRatio: false,
       plugins: {
         legend: {
           display: false,
         },
       },
-      scales: {
-        x: {
-          grid: {
-            drawOnChartArea: false,
-          },
+    },
+    plugins: [gaugeNeedle],
+  };
+
+  // render init bloconsck
+  const suhuchart = new Chart(document.getElementById("suhu"), config);
+
+  // config
+  const config2 = {
+    type: "doughnut",
+    data: {
+      labels: ["Safe", "Risky", "High Risk"],
+      datasets: [
+        {
+          label: "Gauge",
+          data: [60, 10, 30],
+          backgroundColor: [
+            "rgba(255, 206, 86, 0.8)",
+            "rgba(34,139,34, 0.8)",
+            "rgba(255, 26, 104, 0.8)",
+          ],
+          needleValue: 0,
+          borderColor: "white",
+          borderWidth: 2,
+          cutout: "95%",
+          circumference: 180,
+          rotation: 270,
+          borderRadius: 5,
         },
-        y: {
-          ticks: {
-            beginAtZero: true,
-            maxTicksLimit: 10,
-            stepSize: Math.ceil(250 / 25),
-            max: 250,
-          },
-        },
-      },
-      elements: {
-        line: {},
-        point: {
-          radius: 0,
-          hitRadius: 10,
-          hoverRadius: 4,
-          hoverBorderWidth: 3,
+      ],
+    },
+    options: {
+      plugins: {
+        legend: {
+          display: false,
         },
       },
     },
-  });
+    plugins: [gaugeNeedle],
+  };
+
+  // render init bloconsck
+  const kelembapanchart = new Chart(
+    document.getElementById("kelembapan"),
+    config2
+  );
+
+  const config3 = {
+    type: "doughnut",
+    data: {
+      labels: ["Safe", "Risky", "High Risk"],
+      datasets: [
+        {
+          label: "Gauge",
+          data: [250, 1750, 2000],
+          backgroundColor: [
+            "rgba(255, 206, 86, 0.8)",
+            "rgba(34,139,34, 0.8)",
+            "rgba(255, 26, 104, 0.8)",
+          ],
+          needleValue: 0,
+          borderColor: "white",
+          borderWidth: 2,
+          cutout: "95%",
+          circumference: 180,
+          rotation: 270,
+          borderRadius: 5,
+        },
+      ],
+    },
+    options: {
+      plugins: {
+        legend: {
+          display: false,
+        },
+      },
+    },
+    plugins: [gaugeNeedle],
+  };
+
+  // render init bloconsck
+  const gaschart = new Chart(document.getElementById("gas"), config3);
   setInterval(replay, 1000);
 }
 
@@ -489,10 +523,10 @@ function bpm1() {
               if (val >= 60 && val <= 100) {
                 return "green";
               }
-              if ((val >100) ) {
+              if (val > 100) {
                 return "yellow";
-              } 
-              if ((val <60) ){
+              }
+              if (val < 60) {
                 return "red";
               }
             },
@@ -585,10 +619,10 @@ function bpm2() {
               if (val >= 60 && val <= 100) {
                 return "green";
               }
-              if ((val >100) ) {
+              if (val > 100) {
                 return "yellow";
-              } 
-              if ((val <60) ){
+              }
+              if (val < 60) {
                 return "red";
               }
             },
@@ -632,7 +666,6 @@ function bpm2() {
 
   replay();
 }
-
 
 function o21() {
   function replay() {
@@ -831,7 +864,6 @@ function o22() {
 //   var logo = new Image()
 //   logo.src = 'assets/favicon/android-icon-144x144.png'
 
-
 //   doc.addImage(logo, "png", 20, 20, 40, 40);
 
 //   doc.text(50, 20, "Oximeter");
@@ -842,7 +874,7 @@ function o22() {
 
 //   doc.autoTable({
 //     html: "#tablebpm",
-//     theme: "grid",  
+//     theme: "grid",
 //     startY: 180,
 //   });
 

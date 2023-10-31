@@ -8,7 +8,7 @@ $sensor = $_SESSION['sensor'];
 
 // Retrieve the data from the database
 // $result = $conn->query($sql);
-$result = $db_handle->runQuery2("SELECT id , sensor , DATE_FORMAT(reading_time, '%H:%i:%s'),DATE_FORMAT(reading_time, '%d-%m-%Y'), bpm , o2 FROM sensordata WHERE sensor ='$sensor' ORDER BY id DESC LIMIT 10 ");
+$result = $db_handle->runQuery2("SELECT id , sensor , DATE_FORMAT(reading_time, '%H:%i:%s'),DATE_FORMAT(reading_time, '%d-%m-%Y'), value1, value2,value3 FROM sensordata WHERE sensor ='$sensor' ORDER BY id DESC LIMIT 10 ");
 // Store the data in an array
 
 $data = array();

@@ -124,6 +124,11 @@ if (isset($_POST['newuser'])) {
   <div class="bg-light min-vh-100 d-flex flex-row align-items-center">
     <div class="container">
       <div class="row justify-content-center">
+
+        <div class="col-12">
+        <h1 class="text-center">Tajuk</h1>
+
+        </div>
         <div class="col-lg-8">
           <div class="card-group d-block d-md-flex row">
             <div class="card col-md-7 p-4 mb-0">
