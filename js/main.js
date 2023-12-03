@@ -1,13 +1,4 @@
-/* global Chart, coreui */
 
-/**
- * --------------------------------------------------------------------------
- * CoreUI Boostrap Admin Template (v4.2.2): main.js
- * Licensed under MIT (https://coreui.io/license)
- * --------------------------------------------------------------------------
- */
-
-// setup
 
 function coretoast($content) {
   const toastLiveExample = document.getElementById("liveToast");
@@ -28,253 +19,6 @@ const random = (min, max) =>
   // eslint-disable-next-line no-mixed-operators
   Math.floor(Math.random() * (max - min + 1) + min);
 
-// eslint-disable-next-line no-unused-vars
-// const cardChart1 = new Chart(document.getElementById('card-chart1'), {
-//   type: 'line',
-//   data: {
-//     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-//     datasets: [{
-//       label: 'My First dataset',
-//       backgroundColor: 'transparent',
-//       borderColor: 'rgba(255,255,255,.55)',
-//       pointBackgroundColor: coreui.Utils.getStyle('--cui-primary'),
-//       data: [65, 59, 84, 84, 51, 55, 40]
-//     }]
-//   },
-//   options: {
-//     plugins: {
-//       legend: {
-//         display: false
-//       }
-//     },
-//     maintainAspectRatio: false,
-//     scales: {
-//       x: {
-//         grid: {
-//           display: false,
-//           drawBorder: false
-//         },
-//         ticks: {
-//           display: false
-//         }
-//       },
-//       y: {
-//         min: 30,
-//         max: 89,
-//         display: false,
-//         grid: {
-//           display: false
-//         },
-//         ticks: {
-//           display: false
-//         }
-//       }
-//     },
-//     elements: {
-//       line: {
-//         borderWidth: 1,
-//         tension: 0.4
-//       },
-//       point: {
-//         radius: 4,
-//         hitRadius: 10,
-//         hoverRadius: 4
-//       }
-//     }
-//   }
-// });
-
-// eslint-disable-next-line no-unused-vars
-// const cardChart2 = new Chart(document.getElementById('card-chart2'), {
-//   type: 'line',
-//   data: {
-//     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-//     datasets: [{
-//       label: 'My First dataset',
-//       backgroundColor: 'transparent',
-//       borderColor: 'rgba(255,255,255,.55)',
-//       pointBackgroundColor: coreui.Utils.getStyle('--cui-info'),
-//       data: [1, 18, 9, 17, 34, 22, 11]
-//     }]
-//   },
-//   options: {
-//     plugins: {
-//       legend: {
-//         display: false
-//       }
-//     },
-//     maintainAspectRatio: false,
-//     scales: {
-//       x: {
-//         grid: {
-//           display: false,
-//           drawBorder: false
-//         },
-//         ticks: {
-//           display: false
-//         }
-//       },
-//       y: {
-//         min: -9,
-//         max: 39,
-//         display: false,
-//         grid: {
-//           display: false
-//         },
-//         ticks: {
-//           display: false
-//         }
-//       }
-//     },
-//     elements: {
-//       line: {
-//         borderWidth: 1
-//       },
-//       point: {
-//         radius: 4,
-//         hitRadius: 10,
-//         hoverRadius: 4
-//       }
-//     }
-//   }
-// });
-
-// eslint-disable-next-line no-unused-vars
-// const cardChart3 = new Chart(document.getElementById('card-chart3'), {
-//   type: 'line',
-//   data: {
-//     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-//     datasets: [{
-//       label: 'My First dataset',
-//       backgroundColor: 'rgba(255,255,255,.2)',
-//       borderColor: 'rgba(255,255,255,.55)',
-//       data: [78, 81, 80, 45, 34, 12, 40],
-//       fill: true
-//     }]
-//   },
-//   options: {
-//     plugins: {
-//       legend: {
-//         display: false
-//       }
-//     },
-//     maintainAspectRatio: false,
-//     scales: {
-//       x: {
-//         display: false
-//       },
-//       y: {
-//         display: false
-//       }
-//     },
-//     elements: {
-//       line: {
-//         borderWidth: 2,
-//         tension: 0.4
-//       },
-//       point: {
-//         radius: 0,
-//         hitRadius: 10,
-//         hoverRadius: 4
-//       }
-//     }
-//   }
-// });
-
-// eslint-disable-next-line no-unused-vars
-// const cardChart4 = new Chart(document.getElementById('card-chart4'), {
-//   type: 'bar',
-//   data: {
-//     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April'],
-//     datasets: [{
-//       label: 'My First dataset',
-//       backgroundColor: 'rgba(255,255,255,.2)',
-//       borderColor: 'rgba(255,255,255,.55)',
-//       data: [78, 81, 80, 45, 34, 12, 40, 85, 65, 23, 12, 98, 34, 84, 67, 82],
-//       barPercentage: 0.6
-//     }]
-//   },
-//   options: {
-//     maintainAspectRatio: false,
-//     plugins: {
-//       legend: {
-//         display: false
-//       }
-//     },
-//     scales: {
-//       x: {
-//         grid: {
-//           display: false,
-//           drawTicks: false
-//         },
-//         ticks: {
-//           display: false
-//         }
-//       },
-//       y: {
-//         grid: {
-//           display: false,
-//           drawBorder: false,
-//           drawTicks: false
-//         },
-//         ticks: {
-//           display: false
-//         }
-//       }
-//     }
-//   }
-// });
-
-// eslint-disable-next-line no-unused-vars
-// const mainChart1 = new Chart(document.getElementById('main-chart'), {
-//   type: 'line',
-//   data: {
-//     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-//     datasets: [{
-//       label: 'My First dataset',
-//       backgroundColor: coreui.Utils.hexToRgba(coreui.Utils.getStyle('--cui-info'), 10),
-//       borderColor: coreui.Utils.getStyle('--cui-info'),
-//       pointHoverBackgroundColor: '#fff',
-//       borderWidth: 2,
-//       data: [random(50, 200), random(50, 200), random(50, 200), random(50, 200), random(50, 200), random(50, 200), random(50, 200)],
-//       fill: true
-//     }]
-//   },
-//   options: {
-//     maintainAspectRatio: false,
-//     plugins: {
-//       legend: {
-//         display: false
-//       }
-//     },
-//     scales: {
-//       x: {
-//         grid: {
-//           drawOnChartArea: false
-//         }
-//       },
-//       y: {
-//         ticks: {
-//           beginAtZero: true,
-//           maxTicksLimit: 5,
-//           stepSize: Math.ceil(250 / 5),
-//           max: 250
-//         }
-//       }
-//     },
-//     elements: {
-//       line: {
-//         tension: 0.4
-//       },
-//       point: {
-//         radius: 0,
-//         hitRadius: 10,
-//         hoverRadius: 4,
-//         hoverBorderWidth: 3
-//       }
-//     }
-//   }
-// });
 
 function indexchart() {
   function replay() {
@@ -290,9 +34,9 @@ function indexchart() {
         const value3 = [];
         for (var i = 0; i < data.length; i++) {
           labelsc.push(data[i]["DATE_FORMAT(reading_time, '%H:%i:%s')"]);
-          value1.push(data[i]["value1"]);
-          value2.push(data[i]["value2"]);
-          value3.push(data[i]["value3"]);
+          value1.push(data[i]["gas"]);
+          value2.push(data[i]["kelembapan"]);
+          value3.push(data[i]["suhu"]);
         }
 
         // mainChart1.data.labels = labelsc;
@@ -301,11 +45,11 @@ function indexchart() {
         // mainChart2.data.labels = labelsc;
         // mainChart2.data.datasets[0].data = o2;
         // mainChart2.update();
-        suhuchart.data.datasets[0].needleValue = value1[0];
+        suhuchart.data.datasets[0].needleValue = value3[0];
         suhuchart.update();
         kelembapanchart.data.datasets[0].needleValue = value2[0];
         kelembapanchart.update();
-        gaschart.data.datasets[0].needleValue = value3[0];
+        gaschart.data.datasets[0].needleValue = value1[0];
         gaschart.update();
         //  console.log(suhuchart.data.datasets[0].needleValue);
       }
@@ -314,7 +58,7 @@ function indexchart() {
   }
 
   //gaugeNeedle
-  const gaugeNeedle = {
+  const gaugeNeedle3 = {
     id: "gaugeNeedle",
     afterDatasetDraw(chart, args, options) {
       const {
@@ -360,6 +104,100 @@ function indexchart() {
       ctx.restore();
     },
   };
+
+  const gaugeNeedle = {
+    id: "gaugeNeedle",
+    afterDatasetDraw(chart, args, options) {
+      const {
+        ctx,
+        config,
+        data,
+        chartArea: { top, right, bottom, left, width, height },
+      } = chart;
+      ctx.save();
+      const needleValue = data.datasets[0].needleValue;
+      const dataTotal = data.datasets[0].data.reduce((a, b) => a + b, 0);
+
+      var angle = Math.PI + (1 / dataTotal) * needleValue * Math.PI;
+      // console.log(angle);
+      // console.log(dataTotal);
+
+      const cx = width / 2;
+      const cy = chart._metasets[0].data[0].y;
+
+      //needle
+      ctx.translate(cx, cy);
+      ctx.rotate(angle);
+      ctx.beginPath();
+      ctx.moveTo(0, -2);
+      ctx.lineTo(height - ctx.canvas.offsetTop - 160, 0); // change 160 value if the needle size gets changed
+      ctx.lineTo(0, 2);
+      ctx.fillStyle = "#444";
+      ctx.fill();
+      //needle dot
+      ctx.translate(-cx, -cy);
+      ctx.beginPath();
+      ctx.arc(cx, cy, 5, 0, 10);
+      ctx.fill();
+      ctx.restore();
+
+      //text
+      ctx.font = "20px Sans-Serif";
+      ctx.fillStyle = "#444";
+      ctx.fillText(needleValue + " ppb", cx, cy + 50);
+      ctx.font = "10px Sans-Serif";
+
+      ctx.textAlign = "center";
+      ctx.restore();
+    },
+  };
+
+  const gaugeNeedle2 = {
+    id: "gaugeNeedle",
+    afterDatasetDraw(chart, args, options) {
+      const {
+        ctx,
+        config,
+        data,
+        chartArea: { top, right, bottom, left, width, height },
+      } = chart;
+      ctx.save();
+      const needleValue = data.datasets[0].needleValue;
+      const dataTotal = data.datasets[0].data.reduce((a, b) => a + b, 0);
+
+      var angle = Math.PI + (1 / dataTotal) * needleValue * Math.PI;
+      // console.log(angle);
+      // console.log(dataTotal);
+
+      const cx = width / 2;
+      const cy = chart._metasets[0].data[0].y;
+
+      //needle
+      ctx.translate(cx, cy);
+      ctx.rotate(angle);
+      ctx.beginPath();
+      ctx.moveTo(0, -2);
+      ctx.lineTo(height - ctx.canvas.offsetTop - 160, 0); // change 160 value if the needle size gets changed
+      ctx.lineTo(0, 2);
+      ctx.fillStyle = "#444";
+      ctx.fill();
+      //needle dot
+      ctx.translate(-cx, -cy);
+      ctx.beginPath();
+      ctx.arc(cx, cy, 5, 0, 10);
+      ctx.fill();
+      ctx.restore();
+
+      //text
+      ctx.font = "20px Sans-Serif";
+      ctx.fillStyle = "#444";
+      ctx.fillText(needleValue + " %", cx, cy + 50);
+      ctx.font = "10px Sans-Serif";
+
+      ctx.textAlign = "center";
+      ctx.restore();
+    },
+  };
   // config
   const config = {
     type: "doughnut",
@@ -391,7 +229,7 @@ function indexchart() {
         },
       },
     },
-    plugins: [gaugeNeedle],
+    plugins: [gaugeNeedle3],
   };
 
   // render init bloconsck
@@ -428,7 +266,7 @@ function indexchart() {
         },
       },
     },
-    plugins: [gaugeNeedle],
+    plugins: [gaugeNeedle2],
   };
 
   // render init bloconsck
@@ -475,10 +313,19 @@ function indexchart() {
   setInterval(replay, 1000);
 }
 
-function bpm1() {
+function suhuchart1(time1,time2) {
   function replay() {
     const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "db.php", true);
+
+    if (typeof time1 == 'undefined' && typeof time2 == 'undefined' )  {
+      xhttp.open("GET", "db.php?",  true);
+
+    }else{
+      xhttp.open("GET", "db.php?time1="+time1+"&time2="+time2,  true);
+
+    }
+
+
 
     xhttp.onload = function () {
       var data = JSON.parse(this.responseText);
@@ -487,7 +334,7 @@ function bpm1() {
         const bpm = [];
         for (var i = 0; i < data.length; i++) {
           labelsc.push(data[i]["DATE_FORMAT(reading_time, '%H:%i:%s')"]);
-          bpm.push(data[i]["bpm"]);
+          bpm.push(data[i]["suhu"]);
         }
 
         mainChart1.data.labels = labelsc;
@@ -506,7 +353,7 @@ function bpm1() {
       labels: [],
       datasets: [
         {
-          label: "BPM",
+          label: "Suhu",
           backgroundColor: coreui.Utils.hexToRgba(
             coreui.Utils.getStyle("--cui-info"),
             10
@@ -520,13 +367,13 @@ function bpm1() {
           segment: {
             borderColor: (ctx) => {
               val = ctx.p0.parsed.y;
-              if (val >= 60 && val <= 100) {
+              if (val > 20 && val <= 25) {
                 return "green";
               }
-              if (val > 100) {
+              if (val >= 0 && val <= 20) {
                 return "yellow";
               }
-              if (val < 60) {
+              if (val >  25) {
                 return "red";
               }
             },
@@ -571,10 +418,19 @@ function bpm1() {
   setInterval(replay, 1000);
 }
 
-function bpm2() {
+function gaschart1(time1,time2) {
   function replay() {
     const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "db2.php", true);
+
+    if (typeof time1 == 'undefined' && typeof time2 == 'undefined' )  {
+      xhttp.open("GET", "db.php?",  true);
+
+    }else{
+      xhttp.open("GET", "db.php?time1="+time1+"&time2="+time2,  true);
+
+    }
+
+
 
     xhttp.onload = function () {
       var data = JSON.parse(this.responseText);
@@ -583,7 +439,7 @@ function bpm2() {
         const bpm = [];
         for (var i = 0; i < data.length; i++) {
           labelsc.push(data[i]["DATE_FORMAT(reading_time, '%H:%i:%s')"]);
-          bpm.push(data[i]["bpm"]);
+          bpm.push(data[i]["gas"]);
         }
 
         mainChart1.data.labels = labelsc;
@@ -602,7 +458,7 @@ function bpm2() {
       labels: [],
       datasets: [
         {
-          label: "BPM",
+          label: "Suhu",
           backgroundColor: coreui.Utils.hexToRgba(
             coreui.Utils.getStyle("--cui-info"),
             10
@@ -616,108 +472,13 @@ function bpm2() {
           segment: {
             borderColor: (ctx) => {
               val = ctx.p0.parsed.y;
-              if (val >= 60 && val <= 100) {
+              if (val > 20 && val <= 25) {
                 return "green";
               }
-              if (val > 100) {
+              if (val >= 0 && val <= 20) {
                 return "yellow";
               }
-              if (val < 60) {
-                return "red";
-              }
-            },
-          },
-        },
-      ],
-    },
-    options: {
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-          display: false,
-        },
-      },
-      scales: {
-        x: {
-          grid: {
-            drawOnChartArea: false,
-          },
-        },
-        y: {
-          ticks: {
-            beginAtZero: true,
-            maxTicksLimit: 10,
-            stepSize: Math.ceil(250 / 25),
-            max: 250,
-          },
-        },
-      },
-      elements: {
-        line: {},
-        point: {
-          radius: 0,
-          hitRadius: 10,
-          hoverRadius: 4,
-          hoverBorderWidth: 3,
-        },
-      },
-    },
-  });
-
-  replay();
-}
-
-function o21() {
-  function replay() {
-    const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "db.php", true);
-
-    xhttp.onload = function () {
-      var data = JSON.parse(this.responseText);
-      if (data.length !== 0) {
-        const labelsc = [];
-        const o2 = [];
-        for (var i = 0; i < data.length; i++) {
-          labelsc.push(data[i]["DATE_FORMAT(reading_time, '%H:%i:%s')"]);
-          o2.push(data[i]["o2"]);
-        }
-
-        mainChart1.data.labels = labelsc;
-        mainChart1.data.datasets[0].data = o2;
-        mainChart1.update();
-      }
-    };
-    xhttp.send();
-  }
-
-  var ctx = document.getElementById("main-chart1").getContext("2d");
-
-  const mainChart1 = new Chart(document.getElementById("main-chart1"), {
-    type: "line",
-    data: {
-      labels: [],
-      datasets: [
-        {
-          label: "O2",
-          backgroundColor: coreui.Utils.hexToRgba(
-            coreui.Utils.getStyle("--cui-info"),
-            10
-          ),
-          // borderColor: coreui.Utils.getStyle('--cui-info'),
-          pointHoverBackgroundColor: "#fff",
-          borderWidth: 2,
-          data: [],
-          fill: true,
-
-          segment: {
-            borderColor: (ctx2) => {
-              val = ctx2.p0.parsed.y;
-              if (val >= 97 && val <= 100) {
-                return "green";
-              }
-              if (val >= 95 && val < 97) {
-                return "yellow";
-              } else {
+              if (val >  25) {
                 return "red";
               }
             },
@@ -762,23 +523,32 @@ function o21() {
   setInterval(replay, 1000);
 }
 
-function o22() {
+function kelembapanchart1(time1,time2) {
   function replay() {
     const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "db2.php", true);
+
+    if (typeof time1 == 'undefined' && typeof time2 == 'undefined' )  {
+      xhttp.open("GET", "db.php?",  true);
+
+    }else{
+      xhttp.open("GET", "db.php?time1="+time1+"&time2="+time2,  true);
+
+    }
+
+
 
     xhttp.onload = function () {
       var data = JSON.parse(this.responseText);
       if (data.length !== 0) {
         const labelsc = [];
-        const o2 = [];
+        const bpm = [];
         for (var i = 0; i < data.length; i++) {
           labelsc.push(data[i]["DATE_FORMAT(reading_time, '%H:%i:%s')"]);
-          o2.push(data[i]["o2"]);
+          bpm.push(data[i]["kelembapan"]);
         }
 
         mainChart1.data.labels = labelsc;
-        mainChart1.data.datasets[0].data = o2;
+        mainChart1.data.datasets[0].data = bpm;
         mainChart1.update();
       }
     };
@@ -793,7 +563,7 @@ function o22() {
       labels: [],
       datasets: [
         {
-          label: "O2",
+          label: "Suhu",
           backgroundColor: coreui.Utils.hexToRgba(
             coreui.Utils.getStyle("--cui-info"),
             10
@@ -805,14 +575,15 @@ function o22() {
           fill: true,
 
           segment: {
-            borderColor: (ctx2) => {
-              val = ctx2.p0.parsed.y;
-              if (val >= 97 && val <= 100) {
+            borderColor: (ctx) => {
+              val = ctx.p0.parsed.y;
+              if (val > 20 && val <= 25) {
                 return "green";
               }
-              if (val >= 95 && val < 97) {
+              if (val >= 0 && val <= 20) {
                 return "yellow";
-              } else {
+              }
+              if (val >  25) {
                 return "red";
               }
             },
@@ -854,32 +625,5 @@ function o22() {
     },
   });
 
-  replay();
+  setInterval(replay, 1000);
 }
-// function printdocbpm() {
-//   var doc = new jsPDF({ orientation: "p", unit: "mm", format: "a4" });
-//   doc.setProperties({
-//     title: "Oximeter BPM",
-//   });
-//   var logo = new Image()
-//   logo.src = 'assets/favicon/android-icon-144x144.png'
-
-//   doc.addImage(logo, "png", 20, 20, 40, 40);
-
-//   doc.text(50, 20, "Oximeter");
-
-//   var canvas = document.getElementById("main-chart1");
-
-//   doc.addImage(canvas.toDataURL("image/png"), "png", 20, 50, 170, 80);
-
-//   doc.autoTable({
-//     html: "#tablebpm",
-//     theme: "grid",
-//     startY: 180,
-//   });
-
-//   const blobPDF = doc.output("bloburl", "file.pdf");
-//   window.open(blobPDF, "_blank");
-// }
-
-//# sourceMappingURL=main.js.map

@@ -64,7 +64,7 @@ include("header.php");
 
                 <div class="d-flex justify-content-between">
                   <div id="test">
-                    <h4 class="card-title mb-0">Suhu</h4>
+                    <h4 class="card-title mb-0">Kelembapan</h4>
                   </div>
                   <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
                     <?php
@@ -199,10 +199,10 @@ include("footer.php");
       $_SESSION["minrangeo2"] = $newmin;
       $_SESSION["maxrangeo2"] = $newmax;
 
-      echo "<script>suhuchart1('" . $_SESSION["minrangeo2"] . "','" . $_SESSION["maxrangeo2"] . "');</script>";
+      echo "<script>kelembapanchart1('" . $_SESSION["minrangeo2"] . "','" . $_SESSION["maxrangeo2"] . "');</script>";
 
     } else {
-      echo "<script>suhuchart1();</script>";
+      echo "<script>kelembapanchart1();</script>";
 
     }
 
