@@ -48,7 +48,7 @@ include("header.php");
 
   <div class="wrapper d-flex flex-column min-vh-100 bg-light">
     <?php
-    $pagetitle = "Suhu";
+    $pagetitle = "Gas";
 
     include("topbar.php");
     ?>
