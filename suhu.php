@@ -89,7 +89,7 @@ include("header.php");
                         ?>
                         <a href="pdf.php?time1=<?php echo $newmin ?>&time2=<?php echo $newmin ?>&type=suhu" class="btn btn-light" >
                           <svg class="icon">
-                            <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
+                            <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-file"></use>
                           </svg>
                       </a>
                         <?php

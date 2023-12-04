@@ -60,7 +60,7 @@ if ($type == "suhu") {
 
     $tablelist->endTable(5);
 }
-if ($type == "Kelembapan") {
+if ($type == "kelembapan") {
 
     $tableb = new easyTable($pdf, '%{100}', 'border:0;font-size:8;');
     $tableb->easyCell('', 'img:assets/favicon/parameter-removebg-preview.png,w40;valign:M;  align:C');

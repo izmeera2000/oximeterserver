@@ -69,6 +69,33 @@ include("header.php");
                   <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
                     <?php
                     if (isset($_SESSION['sensor'])) {
+                      if (isset($_POST['range'])) {
+                        $sensor = $_SESSION['sensor'];
+                        $max = $_POST['daterange2'];
+                        $min = $_POST['daterange1'];
+                        $maxtime = $_POST['timerange2'];
+                        $mintime = $_POST['timerange1'];
+                        $_SESSION["max"] = $max;
+                        $_SESSION["min"] = $min;
+                        $_SESSION["maxtime"] = $maxtime;
+                        $_SESSION["mintime"] = $mintime;
+                        $newmax = date("Y-m-d H:i:s", strtotime('+59 seconds', strtotime($maxtime, strtotime($max))));
+                        // echo $newmax;
+                        $newmin = date("Y-m-d H:i:s", strtotime($mintime, strtotime($min)));
+                        // echo $newmin;
+                    
+                        $_SESSION["minrange"] = $newmin;
+                        $_SESSION["maxrange"] = $newmax;
+                        ?>
+                        <a href="pdf.php?time1=<?php echo $newmin ?>&time2=<?php echo $newmin ?>&type=gas" class="btn btn-light" >
+                          <svg class="icon">
+                            <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-file"></use>
+                          </svg>
+                      </a>
+                        <?php
+
+
+                      }
                       ?>
                       <button type="button" class="btn btn-light" data-coreui-toggle="modal" data-coreui-target="#Sensor">
                         <svg class="icon">
@@ -115,7 +142,7 @@ include("header.php");
     </div>
     <!-- /.row-->
 
-    <form action="suhu.php" method="post">
+    <form action="gas.php" method="post">
       <div class="modal fade" id="Sensor" data-coreui-backdrop="static" data-coreui-keyboard="false" tabindex="-1"
         aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
