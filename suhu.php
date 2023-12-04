@@ -69,6 +69,33 @@ include("header.php");
                   <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
                     <?php
                     if (isset($_SESSION['sensor'])) {
+                      if (isset($_POST['range'])) {
+                        $sensor = $_SESSION['sensor'];
+                        $max = $_POST['daterange2'];
+                        $min = $_POST['daterange1'];
+                        $maxtime = $_POST['timerange2'];
+                        $mintime = $_POST['timerange1'];
+                        $_SESSION["max"] = $max;
+                        $_SESSION["min"] = $min;
+                        $_SESSION["maxtime"] = $maxtime;
+                        $_SESSION["mintime"] = $mintime;
+                        $newmax = date("Y-m-d H:i:s", strtotime('+59 seconds', strtotime($maxtime, strtotime($max))));
+                        // echo $newmax;
+                        $newmin = date("Y-m-d H:i:s", strtotime($mintime, strtotime($min)));
+                        // echo $newmin;
+                    
+                        $_SESSION["minrange"] = $newmin;
+                        $_SESSION["maxrange"] = $newmax;
+                        ?>
+                        <a href="pdf.php?time1=<?php echo $newmin ?>&time2=<?php echo $newmin ?>&type=suhu" class="btn btn-light" >
+                          <svg class="icon">
+                            <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-settings"></use>
+                          </svg>
+                      </a>
+                        <?php
+
+
+                      }
                       ?>
                       <button type="button" class="btn btn-light" data-coreui-toggle="modal" data-coreui-target="#Sensor">
                         <svg class="icon">
@@ -158,8 +185,8 @@ include("header.php");
 
     <?php
 
-include("footer.php");
-?>
+    include("footer.php");
+    ?>
   </div>
   <!-- CoreUI and necessary plugins-->
   <script src="vendors/@coreui/coreui/js/coreui.bundle.min.js"></script>
