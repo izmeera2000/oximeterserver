@@ -284,8 +284,8 @@ function indexchart() {
           label: "Gauge",
           data: [250, 1750, 2000],
           backgroundColor: [
-            "rgba(255, 206, 86, 0.8)",
             "rgba(34,139,34, 0.8)",
+            "rgba(255, 206, 86, 0.8)",
             "rgba(255, 26, 104, 0.8)",
           ],
           needleValue: 0,
@@ -367,13 +367,13 @@ function suhuchart1(time1,time2) {
           segment: {
             borderColor: (ctx) => {
               val = ctx.p0.parsed.y;
-              if (val > 20 && val <= 25) {
+              if (val > 24 && val <= 28) {
                 return "green";
               }
-              if (val >= 0 && val <= 20) {
+              if (val < 25) {
                 return "yellow";
               }
-              if (val >  25) {
+              if (val >  28) {
                 return "red";
               }
             },
@@ -458,7 +458,7 @@ function gaschart1(time1,time2) {
       labels: [],
       datasets: [
         {
-          label: "Suhu",
+          label: "Gas",
           backgroundColor: coreui.Utils.hexToRgba(
             coreui.Utils.getStyle("--cui-info"),
             10
@@ -472,13 +472,13 @@ function gaschart1(time1,time2) {
           segment: {
             borderColor: (ctx) => {
               val = ctx.p0.parsed.y;
-              if (val > 20 && val <= 25) {
+              if (val < 251) {
                 return "green";
               }
-              if (val >= 0 && val <= 20) {
+              if (val > 250 && val < 2001) {
                 return "yellow";
               }
-              if (val >  25) {
+              if (val >  2000) {
                 return "red";
               }
             },
@@ -563,7 +563,7 @@ function kelembapanchart1(time1,time2) {
       labels: [],
       datasets: [
         {
-          label: "Suhu",
+          label: "Kelembapan",
           backgroundColor: coreui.Utils.hexToRgba(
             coreui.Utils.getStyle("--cui-info"),
             10
@@ -577,13 +577,13 @@ function kelembapanchart1(time1,time2) {
           segment: {
             borderColor: (ctx) => {
               val = ctx.p0.parsed.y;
-              if (val > 20 && val <= 25) {
+              if (val > 59 && val < 76) {
                 return "green";
               }
-              if (val >= 0 && val <= 20) {
+              if (val < 60) {
                 return "yellow";
               }
-              if (val >  25) {
+              if (val >  75) {
                 return "red";
               }
             },
