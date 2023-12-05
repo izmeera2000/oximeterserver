@@ -87,7 +87,7 @@ include("header.php");
                         $_SESSION["minrange"] = $newmin;
                         $_SESSION["maxrange"] = $newmax;
                         ?>
-                        <a href="pdf.php?time1=<?php echo $newmin ?>&time2=<?php echo $newmin ?>&type=suhu" class="btn btn-light" >
+                        <a href="pdf.php?time1=<?php echo $newmin ?>&time2=<?php echo $newmin ?>&type=suhu" class="btn btn-light" target="_blank" >
                           <svg class="icon">
                             <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-file"></use>
                           </svg>

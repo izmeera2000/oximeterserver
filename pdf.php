@@ -44,6 +44,8 @@ if ($type == "suhu") {
     $tableb->printRow();
     $tableb->easyCell("Suhu", 'valign:M;  align:C');
     $tableb->printRow();
+    $tableb->easyCell($time1." - ".$time2, 'valign:M;  align:C');
+    $tableb->printRow();
     $tableb->endTable(5);
 
     $tablelist = new easyTable($pdf, 2, 'border:1;font-size:8;');
@@ -66,6 +68,8 @@ if ($type == "kelembapan") {
     $tableb->easyCell('', 'img:assets/favicon/parameter-removebg-preview.png,w40;valign:M;  align:C');
     $tableb->printRow();
     $tableb->easyCell("Kelembapan", 'valign:M;  align:C');
+    $tableb->printRow();
+    $tableb->easyCell($time1." - ".$time2, 'valign:M;  align:C');
     $tableb->printRow();
     $tableb->endTable(5);
 
@@ -90,6 +94,8 @@ if ($type == "gas") {
     $tableb->easyCell('', 'img:assets/favicon/parameter-removebg-preview.png,w40;valign:M;  align:C');
     $tableb->printRow();
     $tableb->easyCell("Gas", 'valign:M;  align:C');
+    $tableb->printRow();
+    $tableb->easyCell($time1." - ".$time2, 'valign:M;  align:C');
     $tableb->printRow();
     $tableb->endTable(5);
 
